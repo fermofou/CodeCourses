@@ -1,4 +1,4 @@
-import { ArrowRight, Code2, Trophy, Gift, User, Brain, Target, Sparkles, Crown, Menu } from "lucide-react"
+import { ArrowRight, Code2, Trophy, Gift, User, Brain, Target, Sparkles, Crown, Menu, Coins } from "lucide-react"
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 
@@ -80,28 +80,28 @@ export default function Home() {
             <div className="container flex flex-col space-y-4 py-4 px-4">
               <Link 
                 to="#challenges" 
-                className="text-black transition-colors hover:text-primary px-2 py-1.5"
+                className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Coding Challenges
               </Link>
               <Link 
                 to="#leaderboard" 
-                className="text-black transition-colors hover:text-primary px-2 py-1.5"
+                className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Leaderboard
               </Link>
               <Link 
                 to="#rewards" 
-                className="text-black transition-colors hover:text-primary px-2 py-1.5"
+                className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Rewards
               </Link>
               <Link 
                 to="#profile" 
-                className="text-black transition-colors hover:text-primary px-2 py-1.5"
+                className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Mi Perfil
@@ -135,14 +135,14 @@ export default function Home() {
               <div className="space-y-8">
                 <div className="space-y-6">
                   <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                    Mejora tus habilidades,{" "}
+                    Desarrolla tu talento,{" "}
                     <span className="bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent">
-                      gana recompensas
+                      crece con nosotros
                     </span>
                   </h1>
                   <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-                    La plataforma exclusiva para programadores de Tech Mahindra México donde los desafíos de código se
-                    convierten en oportunidades de crecimiento y reconocimiento.
+                    Tu plataforma exclusiva como Mahindra para mejorar tus habilidades de programación, 
+                    participar en desafíos técnicos y obtener reconocimiento dentro de la empresa.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-4">
@@ -155,46 +155,101 @@ export default function Home() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-8">
                   <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">100+</h4>
-                    <p className="text-sm text-muted-foreground">Desafíos Activos</p>
+                    <h4 className="text-4xl font-bold text-primary">50+</h4>
+                    <p className="text-sm text-muted-foreground">Desafíos Internos</p>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">500+</h4>
-                    <p className="text-sm text-muted-foreground">Desarrolladores</p>
+                    <h4 className="text-4xl font-bold text-primary">300+</h4>
+                    <p className="text-sm text-muted-foreground">Mahindras Activos</p>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">10k</h4>
-                    <p className="text-sm text-muted-foreground">TechCoins Ganados</p>
+                    <h4 className="text-4xl font-bold text-primary">5k</h4>
+                    <p className="text-sm text-muted-foreground">MCoins Ganados</p>
                   </div>
                 </div>
               </div>
               <div className="relative hidden lg:block">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur-3xl" />
                 <div className="relative bg-card rounded-2xl border p-6 shadow-2xl">
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
                         <h3 className="font-semibold">Desafío Destacado</h3>
-                        <p className="text-sm text-muted-foreground">Algoritmos Avanzados</p>
+                        <p className="text-sm text-muted-foreground">Algoritmos y Estructuras</p>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Ver Desafío
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
+                          <Coins className="h-3 w-3 inline mr-1" />
+                          500 MC
+                        </span>
+                        <Button variant="outline" size="sm">
+                          Resolver
+                        </Button>
+                      </div>
                     </div>
-                    <div className="aspect-[4/3] rounded-lg bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 p-6">
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                          <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-sm">Difícil</span>
-                          <span className="flex items-center gap-1">
-                            <Trophy className="h-4 w-4 text-primary" />
-                            <span className="text-sm">500 TechCoins</span>
-                          </span>
-                        </div>
-                        <h4 className="font-medium">Optimización de Microservicios</h4>
+
+                    <div className="rounded-lg bg-black/95 p-4 font-mono text-sm text-green-400 space-y-4">
+                      <div className="flex items-center justify-between text-xs text-muted-foreground border-b border-muted pb-2">
+                        <span>Inversión de Cadenas</span>
                         <div className="flex gap-2">
-                          <span className="bg-muted px-2 py-1 rounded-full text-xs">Algoritmos</span>
-                          <span className="bg-muted px-2 py-1 rounded-full text-xs">System Design</span>
+                          <span className="text-primary">Tiempo: 1s</span>
+                          <span>Memoria: 128MB</span>
                         </div>
+                      </div>
+                      <pre className="space-y-2 overflow-x-auto">
+                        <code>{`Problema:
+Implementa una función que invierta una cadena de texto
+sin utilizar métodos incorporados de inversión.
+
+Input:
+Una cadena S (1 ≤ |S| ≤ 100) conteniendo letras y números.
+
+Output:
+La cadena S invertida.
+
+Ejemplo Input:
+"TechMahindra2024"
+
+Ejemplo Output:
+"4202ardnihaMhceT"`}</code>
+                      </pre>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-muted pt-2">
+                        <span>Dificultad: Fácil</span>
+                        <span>Tasa de éxito: 85%</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Trophy className="h-5 w-5 text-primary" />
+                          <span className="font-medium">500 MCoins</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <span>•</span>
+                          <span>Intentos: 156</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="space-y-1">
+                          <span className="text-muted-foreground">Complejidad esperada</span>
+                          <div className="h-2 rounded-full bg-muted overflow-hidden">
+                            <div className="h-full w-[30%] bg-green-500 rounded-full" />
+                          </div>
+                        </div>
+                        <div className="space-y-1">
+                          <span className="text-muted-foreground">Nivel de optimización</span>
+                          <div className="h-2 rounded-full bg-muted overflow-hidden">
+                            <div className="h-full w-[40%] bg-yellow-500 rounded-full" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        <span className="bg-muted px-2 py-1 rounded-full text-xs">Strings</span>
+                        <span className="bg-muted px-2 py-1 rounded-full text-xs">Arrays</span>
+                        <span className="bg-muted px-2 py-1 rounded-full text-xs">Básico</span>
                       </div>
                     </div>
                   </div>
@@ -207,33 +262,33 @@ export default function Home() {
         <section id="features" className="bg-muted/50 py-24">
           <div className="container space-y-12">
             <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl">
-              Características Principales
+              Beneficios para Mahindras
             </h2>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Brain className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Coding Challenges</h3>
+                  <h3 className="text-xl font-bold">Desafíos Técnicos</h3>
                   <p className="text-sm text-muted-foreground">
-                    Desafíos personalizados con temáticas de Tech Mahindra, evaluados por Judge0 y SonarQube.
+                    Retos diseñados por nuestros expertos, alineados con los proyectos y tecnologías de Tech Mahindra.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Target className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Sistema de XP</h3>
+                  <h3 className="text-xl font-bold">Desarrollo Profesional</h3>
                   <p className="text-sm text-muted-foreground">
-                    Gana experiencia y TechCoins resolviendo desafíos. ¡Sube de nivel y desbloquea recompensas!
+                    Gana MCoins y experiencia que se reflejarán en tu evaluación de desempeño y oportunidades de crecimiento.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Gift className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Rewards</h3>
+                  <h3 className="text-xl font-bold">Reconocimientos</h3>
                   <p className="text-sm text-muted-foreground">
-                    Canjea tus TechCoins por premios exclusivos y reconocimientos dentro de Tech Mahindra.
+                    Canjea tus MCoins por beneficios exclusivos como días libres, cursos premium y merchandising de la empresa.
                   </p>
                 </CardContent>
               </Card>
@@ -244,9 +299,9 @@ export default function Home() {
         <section id="leaderboard" className="py-24">
           <div className="container space-y-12">
             <div className="text-center space-y-4">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Top Developers</h2>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Top Mahindras</h2>
               <p className="text-xl text-muted-foreground max-w-[42rem] mx-auto">
-                Los desarrolladores más destacados de esta semana en Tech Mahindra México.
+                Los desarrolladores más destacados de esta semana en nuestra empresa.
               </p>
             </div>
             <div className="max-w-2xl mx-auto">
@@ -269,7 +324,10 @@ export default function Home() {
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="text-sm text-muted-foreground">{6000 - position * 1000} XP</span>
-                        <span className="text-sm text-primary">{1000 - position * 100} TC</span>
+                        <span className="text-sm text-primary">
+                          <Coins className="h-3 w-3 inline mr-1" />
+                          {1000 - position * 100} MC
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -290,9 +348,9 @@ export default function Home() {
                 <CardContent className="p-6 flex gap-4">
                   <Brain className="h-8 w-8 text-primary flex-shrink-0" />
                   <div>
-                    <h3 className="font-bold">Tech Trivia</h3>
+                    <h3 className="font-bold">Tech Mahindra Trivia</h3>
                     <p className="text-sm text-muted-foreground">
-                      Pon a prueba tus conocimientos técnicos con preguntas de opción múltiple y gana TechCoins extra.
+                      Demuestra tu conocimiento sobre nuestras tecnologías y procesos internos.
                     </p>
                   </div>
                 </CardContent>
@@ -301,9 +359,9 @@ export default function Home() {
                 <CardContent className="p-6 flex gap-4">
                   <Sparkles className="h-8 w-8 text-primary flex-shrink-0" />
                   <div>
-                    <h3 className="font-bold">Torneos en Vivo</h3>
+                    <h3 className="font-bold">Torneos por Área</h3>
                     <p className="text-sm text-muted-foreground">
-                      Compite en tiempo real contra otros desarrolladores en desafíos especiales.
+                      Compite con otros Mahindras de tu departamento en desafíos especializados.
                     </p>
                   </div>
                 </CardContent>
@@ -315,7 +373,7 @@ export default function Home() {
       <footer className="border-t py-8">
         <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm text-muted-foreground">
-            © Imanol Coorporations. Algunos derechos reservados.
+            © 2024 Tech Mahindra. Todos los derechos reservados.
           </p>
           <div className="flex items-center space-x-4">
             <Link to="#" className="text-sm text-muted-foreground hover:text-primary">
