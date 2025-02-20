@@ -1,6 +1,7 @@
 import { ArrowRight, Trophy, Gift, User, Brain, Target, Sparkles, Crown, Menu, Coins } from "lucide-react"
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -57,14 +58,48 @@ export default function Home() {
             </Link>
           </nav>
 
-          {/* Auth Buttons */}
+          {/* Updated Auth Section */}
           <div className="flex items-center gap-4">
-            <Button variant="outline" onClick={() => navigate('/login')} className="hidden sm:inline-flex">
-              Iniciar Sesión
-            </Button>
-            <Button onClick={() => navigate('/register')} className="hidden sm:inline-flex">
-              Registrarse
-            </Button>
+            <SignedOut>
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/login')} 
+                className="hidden sm:inline-flex"
+              >
+                Iniciar Sesión
+              </Button>
+              <Button 
+                onClick={() => navigate('/register')} 
+                className="hidden sm:inline-flex"
+              >
+                Registrarse
+              </Button>
+            </SignedOut>
+            
+            <SignedIn>
+              <div className="flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Coins className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-medium">2,500 MC</span>
+                  </div>
+                  <div className="h-4 w-px bg-border" />
+                  <div className="flex items-center gap-2">
+                    <Trophy className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-medium">Nivel 12</span>
+                  </div>
+                </div>
+                <UserButton 
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      avatarBox: "w-8 h-8 rounded-full ring-2 ring-primary/10 hover:ring-primary/30 transition-all",
+                      userButtonTrigger: "ring-0 outline-0"
+                    }
+                  }}
+                />
+              </div>
+            </SignedIn>
             
             {/* Mobile Menu Button */}
             <Button 
@@ -79,10 +114,23 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Updated Mobile Menu */}
         {isMobileMenuOpen && (
           <div ref={menuRef} className="md:hidden border-t">
             <div className="container flex flex-col space-y-4 py-4 px-4">
+              <SignedIn>
+                <div className="flex items-center justify-between p-2 mb-2 bg-muted/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Coins className="h-5 w-5 text-primary" />
+                    <span className="font-medium">2,500 MC</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Trophy className="h-5 w-5 text-primary" />
+                    <span className="font-medium">Nivel 12</span>
+                  </div>
+                </div>
+              </SignedIn>
+              
               <Link 
                 to="#challenges" 
                 className="text-black px-2 py-1.5"
@@ -111,20 +159,23 @@ export default function Home() {
               >
                 Mi Perfil
               </Link>
-              <div className="flex flex-col space-y-2 pt-2 border-t">
-                <Button variant="outline" onClick={() => {
-                  navigate('/login');
-                  setIsMobileMenuOpen(false);
-                }}>
-                  Iniciar Sesión
-                </Button>
-                <Button onClick={() => {
-                  navigate('/register');
-                  setIsMobileMenuOpen(false);
-                }}>
-                  Registrarse
-                </Button>
-              </div>
+
+              <SignedOut>
+                <div className="flex flex-col space-y-2 pt-2 border-t">
+                  <Button variant="outline" onClick={() => {
+                    navigate('/login');
+                    setIsMobileMenuOpen(false);
+                  }}>
+                    Iniciar Sesión
+                  </Button>
+                  <Button onClick={() => {
+                    navigate('/register');
+                    setIsMobileMenuOpen(false);
+                  }}>
+                    Registrarse
+                  </Button>
+                </div>
+              </SignedOut>
             </div>
           </div>
         )}
