@@ -1,4 +1,4 @@
-import { ArrowRight, Code2, Trophy, Gift, User, Brain, Target, Sparkles, Crown, Menu, Coins } from "lucide-react"
+import { ArrowRight, Trophy, Gift, User, Brain, Target, Sparkles, Crown, Menu, Coins } from "lucide-react"
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 
@@ -32,7 +32,12 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-8">
           <Link to="/" className="flex items-center space-x-2 text-black transition-colors hover:text-primary">
-            <Code2 className="h-6 w-6 text-primary" />
+            <div className="flex items-center justify-center w-8 h-8 border border-black rounded-md">
+              <div className="flex items-center">
+                <span className="text-[#6D6C71] text-lg font-bold leading-none">T</span>
+                <span className="text-[#ED2831] text-lg font-bold leading-none">M</span>
+              </div>
+            </div>
             <span className="text-xl font-bold">TechCraft</span>
           </Link>
           
@@ -304,30 +309,52 @@ Ejemplo Output:
                 Los desarrolladores más destacados de esta semana en nuestra empresa.
               </p>
             </div>
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-3xl mx-auto">
               <Card>
                 <CardContent className="p-6">
                   {[1, 2, 3, 4, 5].map((position) => (
-                    <div key={position} className="flex items-center justify-between py-3 border-b last:border-0">
-                      <div className="flex items-center gap-4">
-                        <span
-                          className={`text-lg font-bold ${position === 1 ? "text-primary" : "text-muted-foreground"}`}
-                        >
-                          {position === 1 && <Crown className="h-5 w-5 inline mr-1" />}#{position}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                            <User className="h-4 w-4 text-primary" />
+                    <div 
+                      key={position} 
+                      className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${
+                        position === 1 ? 'bg-primary/5 rounded-lg' : ''
+                      }`}
+                    >
+                      <div className="flex items-center gap-6">
+                        <div className={`text-2xl font-bold ${
+                          "text-muted-foreground"
+                        }`}>
+                          {position === 1 && <Crown className="h-7 w-7 inline mr-2 text-primary" />}
+                          {position}°
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                            position === 1 ? "bg-zinc-200" :
+                            "bg-muted"
+                          }`}>
+                            <User className={`h-6 w-6 ${
+
+                              "text-muted-foreground"
+                            }`} />
                           </div>
-                          <span className="font-medium">Developer_{position}</span>
+                          <div className="space-y-1">
+                            <span className="font-semibold">Developer_{position}</span>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <span>Nivel {Math.floor(Math.random() * 10) + 20}</span>
+                              <span>•</span>
+                              <span>{Math.floor(Math.random() * 50)} desafíos</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm text-muted-foreground">{6000 - position * 1000} XP</span>
-                        <span className="text-sm text-primary">
-                          <Coins className="h-3 w-3 inline mr-1" />
-                          {1000 - position * 100} MC
-                        </span>
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="h-4 w-4 text-primary" />
+                          <span className="font-semibold">{6000 - position * 1000} XP</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-primary">
+                          <Coins className="h-4 w-4" />
+                          <span className="font-medium">{1000 - position * 100} MC</span>
+                        </div>
                       </div>
                     </div>
                   ))}
