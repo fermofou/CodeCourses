@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/custom-button"
 import { Card, CardContent } from "@/components/ui/card"
 
 export default function Home() {

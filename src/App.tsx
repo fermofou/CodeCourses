@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuth } from '@clerk/clerk-react'
 import Home from './app/page'
 import LoginPage from './app/login/page'
+import ChallengePage from './app/challenge/page'
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth()
@@ -21,6 +22,7 @@ function App() {
             isSignedIn ? <Navigate to="/" replace /> : <LoginPage />
           } 
         />
+        <Route path="/challenge" element={<ChallengePage />} />
       </Routes>
     </Router>
   )
