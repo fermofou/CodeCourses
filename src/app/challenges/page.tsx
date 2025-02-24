@@ -1,4 +1,4 @@
-import { FaStar } from "react-icons/fa"
+import { FaStar, FaCheck } from "react-icons/fa"
 import { Link } from "react-router-dom"
 import { Table } from "antd"
 import { SignedIn, UserButton } from "@clerk/clerk-react"
@@ -8,39 +8,53 @@ import { Tag as AntdTag } from 'antd';
 
 interface ProblemsTableType {
   key: number;
+  status: boolean;
   name: string;
-  age: number;
-  address: string;
+  points: number;
+  difficulty: number;
   tags: string[];
 }
 
 const dataSource = Array.from<ProblemsTableType>({ length: 46 }).map<ProblemsTableType>((_, i) => ({
   key: i,
+  status: (i % 6) < 3,
   name: `Problema ${i + 1}`,
-  age: 20 + (i % 10),
-  address: `Calle ${i + 1}`,
+  points: 20 + (i % 10),
+  difficulty: (i % 5) + 1,
   tags: ['nice', 'developer'],
 }));
 
 const columns: ColumnsType<ProblemsTableType> = [
   {
-    title: 'Nombre del problema',
+    title: 'Estatus',
+    dataIndex: 'status',
+    key: 'status',
+    render: (_, { status }) => (
+      <DifficultyTag completed={status} />
+    )
+  }, 
+  {
+    title: 'Problema',
     dataIndex: 'name',
     key: 'name',
+    render: (_, { name, status }) => (
+      <Link 
+        to="/challenge"
+        className="hover:underline"
+        style={{ color: status ? "#2CBA5A" : "black"}} 
+      >
+          {name}
+      </Link> 
+    )
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    title: 'Puntos',
+    dataIndex: 'points',
+    key: 'points',
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Dificultad',
-    key: 'difficulty',
+    title: 'Tags',
+    key: 'tags',
     dataIndex: 'tags',
     render: (_: unknown, { tags }: ProblemsTableType) => (
       <>
@@ -55,6 +69,19 @@ const columns: ColumnsType<ProblemsTableType> = [
         })}
       </>
     ),
+  },
+  {
+    title: 'Dificultad',
+    dataIndex: 'difficulty',
+    key: 'difficulty',
+    render: (_, { difficulty }) => (
+      <div className="flex items-center gap-2">
+        {
+          Array.from({ length: difficulty }).map((_, i) => (
+            <FaStar />  )) 
+        }
+      </div>
+    )
   },
 ];
 
@@ -72,17 +99,28 @@ const ChallengeButton = ({ color, completed } : {color : string, completed : boo
     </div>
   );
 };
+const DifficultyTag = ({ completed } : {completed : boolean }) => {
+  // Difficulty is a number between 1 and 5
+  return (
+      <div
+      style={{backgroundColor: !completed ? "gray" : "#2DBB5C  "}}
+      className={`min-w-[1.4rem] min-h-[1.4rem] max-w-[1.4rem] max-h-[1.4rem] rounded-full flex justify-center items-center font-bold`} 
+      >
+        {completed && (
+          <FaCheck size={13} color="white"/>
+        )}
+        {!completed && (
+          <FaStar size={13} color="white"/>
+        )}
+      </div> 
+  );
+};
 
 const WeeklyChallenge = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-4">
       <span className="text-xl font-bold">Desafío Semanal</span>
       <div className="flex flex-row gap-5 flex-wrap justify-center align-center">
-        <ChallengeButton color="#77FF76" completed={false}/>
-        <ChallengeButton color="#AAAAFF" completed={false}/>
-        <ChallengeButton color="#FC88FF" completed={false}/>
-        <ChallengeButton color="#FDBB55" completed={false}/>
-        <ChallengeButton color="#FB3333" completed={false}/>
       </div>
     </div>
   )
@@ -90,7 +128,10 @@ const WeeklyChallenge = () => {
 
 const Gym = () => {
   return (
-    <Table pagination={{pageSize: 5}} dataSource={dataSource} columns={columns} />
+    <>
+      <span className="text-xl font-bold">Todos los problemas</span>
+      <Table<ProblemsTableType> pagination={{pageSize: 5}} dataSource={dataSource} columns={columns} />
+    </>
   )
 }
 
@@ -111,6 +152,18 @@ export default function ChallengesPage() {
             </Link>
             <div className="h-4 w-px bg-border" />
           </div>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
+            <Link to="/challenges" className="text-black transition-colors hover:text-primary">
+              Retos de Programación
+            </Link>
+            <Link to="#leaderboard" className="text-black transition-colors hover:text-primary">
+              Tabla de Posiciones
+            </Link>
+            <Link to="#rewards" className="text-black transition-colors hover:text-primary">
+              Recompensas
+            </Link>
+          </nav>
           
           {/* User Section */}
           <SignedIn>
@@ -141,7 +194,6 @@ export default function ChallengesPage() {
       </header>
 
       <div className="flex flex-col w-full h-full items-center justify-center gap-4">
-        <WeeklyChallenge />
         <Gym />
       </div>
 
