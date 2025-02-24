@@ -5,12 +5,14 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react"
 
 import { Button } from "@/components/ui/custom-button"
 import { Card, CardContent } from "@/components/ui/card"
+import { AnimatedCounter } from "@/components/ui/animated-counter"
 
 export default function Home() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [mcoins, setMcoins] = useState(112750);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -26,6 +28,29 @@ export default function Home() {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const incrementCoins = () => {
+      setMcoins(prev => Math.min(prev + Math.floor(Math.random() * 20) + 1, 999999));
+    };
+
+    const scheduleNextIncrement = () => {
+      const delay = Math.random() * 1500 + 500;
+      return setTimeout(() => {
+        incrementCoins();
+        timeoutRef.current = scheduleNextIncrement();
+      }, delay);
+    };
+
+    const timeoutRef = { current: null as any };
+    timeoutRef.current = scheduleNextIncrement();
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -206,18 +231,31 @@ export default function Home() {
                     Ver Retos
                   </Button>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-8">
-                  <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">50+</h4>
-                    <p className="text-sm text-muted-foreground">Desafíos Internos</p>
+                <div className="flex flex-col space-y-12 pt-8">
+                  {/* Top stats in a grid */}
+                  <div className="grid grid-cols-2 gap-8 max-w-md mx-auto w-full">
+                    <div className="flex flex-col items-center text-center space-y-2">
+                      <h4 className="text-4xl font-bold text-primary">50+</h4>
+                      <p className="text-sm text-muted-foreground">Desafíos Internos</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center space-y-2">
+                      <h4 className="text-4xl font-bold text-primary">300+</h4>
+                      <p className="text-sm text-muted-foreground">Mahindras Activos</p>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">300+</h4>
-                    <p className="text-sm text-muted-foreground">Mahindras Activos</p>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">5k</h4>
-                    <p className="text-sm text-muted-foreground">MCoins Ganados</p>
+                  
+                  {/* MCoins counter centered below */}
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="bg-muted/30 px-8 py-6 rounded-2xl">
+                      <AnimatedCounter 
+                        value={mcoins} 
+                        className="text-5xl"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Coins className="h-5 w-5" />
+                      <p className="text-base font-medium">MCoins Ganados</p>
+                    </div>
                   </div>
                 </div>
               </div>
