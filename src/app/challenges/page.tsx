@@ -1,9 +1,10 @@
 import { FaStar, FaCheck } from "react-icons/fa"
 import { Link } from "react-router-dom"
-import { Table, Tag } from "antd" 
+import { Table } from "antd"
 import { SignedIn, UserButton } from "@clerk/clerk-react"
 import { Trophy,  Coins } from "lucide-react"
-import type { TableProps } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import { Tag as AntdTag } from 'antd';
 
 interface ProblemsTableType {
   key: number;
@@ -23,7 +24,7 @@ const dataSource = Array.from<ProblemsTableType>({ length: 46 }).map<ProblemsTab
   tags: ['nice', 'developer'],
 }));
 
-const columns: TableProps<ProblemsTableType>['columns'] = [
+const columns: ColumnsType<ProblemsTableType> = [
   {
     title: 'Estatus',
     dataIndex: 'status',
@@ -55,7 +56,7 @@ const columns: TableProps<ProblemsTableType>['columns'] = [
     title: 'Tags',
     key: 'tags',
     dataIndex: 'tags',
-    render: (_, { tags }) => (
+    render: (_: unknown, { tags }: ProblemsTableType) => (
       <>
         {tags.map((tag) => {
           let color = tag.length > 5 ? 'geekblue' : 'green';
@@ -63,9 +64,7 @@ const columns: TableProps<ProblemsTableType>['columns'] = [
             color = 'volcano';
           }
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
+            <AntdTag color={color} key={tag} value={tag} />
           );
         })}
       </>
@@ -84,7 +83,6 @@ const columns: TableProps<ProblemsTableType>['columns'] = [
       </div>
     )
   },
-
 ];
 
 const ChallengeButton = ({ color, completed } : {color : string, completed : boolean, children? : any}) => {
