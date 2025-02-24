@@ -294,14 +294,14 @@ export default function ChallengePage() {
                   </div>
                 </div>
 
-                <div className="flex-1">
+                <div className="flex-1 min-h-0 relative">
                   <CodeMirror
                     value={code}
                     height="100%"
                     theme={vscodeDark}
                     extensions={[selectedLanguage.extension({ jsx: true })]}
                     onChange={(value) => setCode(value)}
-                    className="text-sm"
+                    className="text-sm absolute inset-0"
                   />
                 </div>
               </Card>
