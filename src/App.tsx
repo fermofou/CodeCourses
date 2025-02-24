@@ -8,6 +8,7 @@ import { useAuth } from "@clerk/clerk-react";
 import Home from "./app/page";
 import LoginPage from "./app/login/page";
 import ChallengePage from "./app/challenge/page";
+import ChallengesPage from "./app/challenges/page";
 import RewardsPage from "./app/rewards/rewards";
 import { SignedIn, UserButton } from "@clerk/clerk-react";
 
