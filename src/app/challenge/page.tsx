@@ -8,7 +8,7 @@ import { cpp } from '@codemirror/lang-cpp'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Trophy, Clock, Brain, PlayCircle, CheckCircle2, XCircle, Coins } from "lucide-react"
+import { Trophy, Clock, Brain, PlayCircle, CheckCircle2, XCircle, Coins, Code } from "lucide-react"
 import { SignedIn, UserButton } from "@clerk/clerk-react"
 import { Container, Section, Bar } from '@column-resizer/react'
 import {
@@ -189,61 +189,73 @@ export default function ChallengePage() {
           style={{ minHeight: 0 }} // This is important for Firefox
           className="overflow-hidden"
         >
-          <div className="h-full p-6 overflow-y-auto">
-            {/* Challenge Description */}
-            <div className="space-y-6 overflow-y-auto flex-1">
-              <div>
-                <h1 className="text-3xl font-bold">{sampleChallenge.title}</h1>
-                <div className="flex items-center gap-4 mt-2">
-                  <span className="inline-flex items-center gap-1 text-sm">
-                    <Brain className="h-4 w-4" />
-                    {sampleChallenge.difficulty}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-sm">
-                    <Clock className="h-4 w-4" />
-                    {sampleChallenge.timeLimit}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-sm">
-                    <Trophy className="h-4 w-4 text-primary" />
-                    500 MC
-                  </span>
+          <div className="h-full">
+            {/* Wrapped the content in a Card */}
+            <Card className="h-full flex flex-col border-2">
+              <div className="bg-muted/50 p-4 border-b">
+                <h2 className="font-semibold flex items-center gap-1.5 text-sm">
+                  <Brain className="h-3.5 w-3.5" />
+                  Descripción del Reto
+                </h2>
+              </div>
+              
+              <div className="p-6 overflow-y-auto">
+                {/* Challenge Description */}
+                <div className="space-y-6">
+                  <div>
+                    <h1 className="text-3xl font-bold">{sampleChallenge.title}</h1>
+                    <div className="flex items-center gap-4 mt-2">
+                      <span className="inline-flex items-center gap-1 text-sm">
+                        <Brain className="h-4 w-4" />
+                        {sampleChallenge.difficulty}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-sm">
+                        <Clock className="h-4 w-4" />
+                        {sampleChallenge.timeLimit}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-sm">
+                        <Trophy className="h-4 w-4 text-primary" />
+                        500 MC
+                      </span>
+                    </div>
+                  </div>
+
+                  <Card className="p-6">
+                    <div className="prose prose-neutral dark:prose-invert max-w-none">
+                      <pre className="whitespace-pre-wrap text-sm">
+                        {sampleChallenge.description}
+                      </pre>
+                    </div>
+                  </Card>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Casos de Prueba</h3>
+                    <div className="grid gap-4">
+                      {sampleChallenge.testCases.map((testCase, index) => (
+                        <Card key={index} className="p-4">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">Entrada:</p>
+                              <pre className="mt-1 text-sm">{testCase.input}</pre>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-muted-foreground">Salida Esperada:</p>
+                              <pre className="mt-1 text-sm">{testCase.expectedOutput}</pre>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <Card className="p-6">
-                <div className="prose prose-neutral dark:prose-invert max-w-none">
-                  <pre className="whitespace-pre-wrap text-sm">
-                    {sampleChallenge.description}
-                  </pre>
-                </div>
-              </Card>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Casos de Prueba</h3>
-                <div className="grid gap-4">
-                  {sampleChallenge.testCases.map((testCase, index) => (
-                    <Card key={index} className="p-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm font-medium text-muted-foreground">Entrada:</p>
-                          <pre className="mt-1 text-sm">{testCase.input}</pre>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-muted-foreground">Salida Esperada:</p>
-                          <pre className="mt-1 text-sm">{testCase.expectedOutput}</pre>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </div>
+            </Card>
           </div>
         </Section>
 
         <Bar 
           size={4} 
-          className="bg-border hover:bg-primary/50 transition-colors" 
+          className="bg-transparent hover:bg-primary/50 transition-colors"
           style={{ cursor: 'col-resize' }} 
         />
 
@@ -253,72 +265,73 @@ export default function ChallengePage() {
           style={{ minHeight: 0 }}
           className="overflow-hidden"
         >
-          <div className="h-full p-6 flex flex-col">
-            <div className="flex-1 flex flex-col">
-              <Card className="flex-1 overflow-hidden border-2 flex flex-col">
-                <div className="bg-muted/50 p-4 border-b">
-                  <h2 className="font-semibold">Código</h2>
+          <div className="h-full flex flex-col">
+            <Card className="h-full flex flex-col border-2">
+              <div className="bg-muted/50 p-4 border-b">
+                <h2 className="font-semibold flex items-center gap-1.5 text-sm">
+                  <Code className="h-3.5 w-3.5" />
+                  Código
+                </h2>
+              </div>
+              
+              <div className="border-b bg-background p-4">
+                <div className="flex justify-between items-center">
+                  <Select
+                    value={selectedLanguage.value}
+                    onValueChange={(value) => {
+                      const language = languageOptions.find(l => l.value === value)
+                      if (language) {
+                        setSelectedLanguage(language)
+                        setCode(startingCodeTemplates[value as keyof typeof startingCodeTemplates])
+                      }
+                    }}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select Language" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border">
+                      {languageOptions.map((lang) => (
+                        <SelectItem key={lang.value} value={lang.value}>
+                          {lang.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => setCode(startingCodeTemplates[selectedLanguage.value as keyof typeof startingCodeTemplates])}
+                    size="sm"
+                  >
+                    Reiniciar código
+                  </Button>
                 </div>
-                
-                <div className="border-b bg-background p-4">
-                  <div className="flex justify-between items-center">
-                    <Select
-                      value={selectedLanguage.value}
-                      onValueChange={(value) => {
-                        const language = languageOptions.find(l => l.value === value)
-                        if (language) {
-                          setSelectedLanguage(language)
-                          setCode(startingCodeTemplates[value as keyof typeof startingCodeTemplates])
-                        }
-                      }}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select Language" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-background border">
-                        {languageOptions.map((lang) => (
-                          <SelectItem key={lang.value} value={lang.value}>
-                            {lang.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    
-                    <Button
-                      variant="outline"
-                      onClick={() => setCode(startingCodeTemplates[selectedLanguage.value as keyof typeof startingCodeTemplates])}
-                      size="sm"
-                    >
-                      Reiniciar código
-                    </Button>
-                  </div>
-                </div>
+              </div>
 
-                <div className="flex-1 min-h-0 relative">
-                  <CodeMirror
-                    value={code}
-                    height="100%"
-                    theme={vscodeDark}
-                    extensions={[selectedLanguage.extension({ jsx: true })]}
-                    onChange={(value) => setCode(value)}
-                    className="text-sm absolute inset-0"
-                  />
+              <div className="flex-1 min-h-0 relative">
+                <CodeMirror
+                  value={code}
+                  height="100%"
+                  theme={vscodeDark}
+                  extensions={[selectedLanguage.extension({ jsx: true })]}
+                  onChange={(value) => setCode(value)}
+                  className="text-sm absolute inset-0"
+                />
+              </div>
+            </Card>
+
+            {results && (
+              <Card className={`p-4 mt-4 ${results.success ? 'border-green-500' : 'border-red-500'}`}>
+                <div className="flex items-center gap-2">
+                  {results.success ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <XCircle className="h-5 w-5 text-red-500" />
+                  )}
+                  <p className="text-sm">{results.message}</p>
                 </div>
               </Card>
-
-              {results && (
-                <Card className={`p-4 mt-4 ${results.success ? 'border-green-500' : 'border-red-500'}`}>
-                  <div className="flex items-center gap-2">
-                    {results.success ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-500" />
-                    ) : (
-                      <XCircle className="h-5 w-5 text-red-500" />
-                    )}
-                    <p className="text-sm">{results.message}</p>
-                  </div>
-                </Card>
-              )}
-            </div>
+            )}
           </div>
         </Section>
       </Container>
