@@ -1,7 +1,5 @@
 import { Search } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  ArrowRight,
   Trophy,
   Gift,
   User,
@@ -14,18 +12,17 @@ import {
 } from "lucide-react";
 
 import { SignedIn, UserButton, SignedOut } from "@clerk/clerk-react";
-
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/custom-button";
-import { Card, CardContent } from "@/components/ui/card";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+("use client");
 
 export default function RewardsPage() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
+  const [activeTab, setActiveTab] = React.useState("swag");
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -68,25 +65,19 @@ export default function RewardsPage() {
               to="#challenges"
               className="text-black transition-colors hover:text-primary"
             >
-              Coding Challenges
+              Retos de Programación
             </Link>
             <Link
               to="#leaderboard"
               className="text-black transition-colors hover:text-primary"
             >
-              Leaderboard
+              Tabla de Posiciones
             </Link>
             <Link
-              to="#rewards"
+              to="#"
               className="text-black transition-colors hover:text-primary"
             >
-              Rewards
-            </Link>
-            <Link
-              to="#profile"
-              className="text-black transition-colors hover:text-primary"
-            >
-              Mi Perfil
+              Recompensas
             </Link>
           </nav>
 
@@ -169,7 +160,7 @@ export default function RewardsPage() {
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Coding Challenges
+                Retos de Programación
               </Link>
               <Link
                 to="#leaderboard"
@@ -179,18 +170,11 @@ export default function RewardsPage() {
                 Leaderboard
               </Link>
               <Link
-                to="#rewards"
+                to="/rewards"
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Rewards
-              </Link>
-              <Link
-                to="#profile"
-                className="text-black px-2 py-1.5"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Mi Perfil
+                Recompensas
               </Link>
 
               <SignedOut>
@@ -275,20 +259,21 @@ export default function RewardsPage() {
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="mb-6">
-            <Tabs defaultValue="swag">
-              <TabsList>
-                <TabsTrigger value="swag">Swag</TabsTrigger>
-                <TabsTrigger value="gift-cards">Gift Cards</TabsTrigger>
-                <TabsTrigger value="more">More</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-1">Earn cool stuff!</h1>
-            <p className="text-gray-600 text-sm">
-              Top picks for you. Updated daily.
-            </p>
+            <div className="flex space-x-1 rounded-lg bg-gray-100 p-1">
+              {["Swag", "Gift Cards", "More"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab.toLowerCase())}
+                  className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                    activeTab === tab.toLowerCase()
+                      ? "bg-primary text-white"
+                      : "bg-white text-black hover:bg-gray-50"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
