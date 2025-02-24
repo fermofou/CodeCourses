@@ -3,6 +3,7 @@ import { useAuth } from '@clerk/clerk-react'
 import Home from './app/page'
 import LoginPage from './app/login/page'
 import ChallengePage from './app/challenge/page'
+import ChallengesPage from './app/challenges/page'
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth()
@@ -23,6 +24,7 @@ function App() {
           } 
         />
         <Route path="/challenge" element={<ChallengePage />} />
+        <Route path="/challenges" element={<ChallengesPage />} />
       </Routes>
     </Router>
   )
