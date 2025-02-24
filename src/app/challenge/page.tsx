@@ -189,7 +189,7 @@ export default function ChallengePage() {
           style={{ minHeight: 0 }} // This is important for Firefox
           className="overflow-hidden"
         >
-          <div className="h-full">
+          <div className="h-full py-2 pl-2">
             {/* Wrapped the content in a Card */}
             <Card className="h-full flex flex-col border-2">
               <div className="bg-muted/50 p-4 border-b">
@@ -265,8 +265,8 @@ export default function ChallengePage() {
           style={{ minHeight: 0 }}
           className="overflow-hidden"
         >
-          <div className="h-full flex flex-col">
-            <Card className="h-full flex flex-col border-2">
+          <div className="h-full py-2 pr-2">
+            <Card className="h-full flex flex-col border-2 overflow-hidden">
               <div className="bg-muted/50 p-4 border-b">
                 <h2 className="font-semibold flex items-center gap-1.5 text-sm">
                   <Code className="h-3.5 w-3.5" />
@@ -308,14 +308,14 @@ export default function ChallengePage() {
                 </div>
               </div>
 
-              <div className="flex-1 min-h-0 relative">
+              <div className="flex-1 min-h-0 relative overflow-hidden">
                 <CodeMirror
                   value={code}
                   height="100%"
                   theme={vscodeDark}
                   extensions={[selectedLanguage.extension({ jsx: true })]}
                   onChange={(value) => setCode(value)}
-                  className="text-sm absolute inset-0"
+                  className="text-sm absolute inset-0 overflow-hidden"
                 />
               </div>
             </Card>
