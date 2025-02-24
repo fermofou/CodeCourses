@@ -257,7 +257,7 @@ export default function ChallengePage() {
             <div className="flex-1 flex flex-col">
               <Card className="flex-1 overflow-hidden border-2 flex flex-col">
                 <div className="bg-muted/50 p-4 border-b">
-                  <h2 className="font-semibold">Code</h2>
+                  <h2 className="font-semibold">Código</h2>
                 </div>
                 
                 <div className="border-b bg-background p-4">
@@ -289,7 +289,7 @@ export default function ChallengePage() {
                       onClick={() => setCode(startingCodeTemplates[selectedLanguage.value as keyof typeof startingCodeTemplates])}
                       size="sm"
                     >
-                      Reset Code
+                      Reiniciar código
                     </Button>
                   </div>
                 </div>

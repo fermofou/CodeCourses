@@ -45,16 +45,13 @@ export default function Home() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <Link to="#challenges" className="text-black transition-colors hover:text-primary">
-              Coding Challenges
+              Retos de Programación
             </Link>
             <Link to="#leaderboard" className="text-black transition-colors hover:text-primary">
-              Leaderboard
+              Tabla de Posiciones
             </Link>
             <Link to="#rewards" className="text-black transition-colors hover:text-primary">
-              Rewards
-            </Link>
-            <Link to="#profile" className="text-black transition-colors hover:text-primary">
-              Mi Perfil
+              Recompensas
             </Link>
           </nav>
 
@@ -136,21 +133,21 @@ export default function Home() {
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Coding Challenges
+                Retos de Programación
               </Link>
               <Link 
                 to="#leaderboard" 
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Leaderboard
+                Tabla de Posiciones
               </Link>
               <Link 
                 to="#rewards" 
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Rewards
+                Recompensas
               </Link>
               <Link 
                 to="#profile" 
@@ -203,10 +200,10 @@ export default function Home() {
                 </div>
                 <div className="flex flex-wrap gap-4">
                   <Button size="lg" className="gap-2" onClick={() => navigate('/login')}>
-                    Comienza a Codificar <ArrowRight className="h-4 w-4" />
+                    Comenzar Ahora <ArrowRight className="h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="outline">
-                    Ver Desafíos
+                    Ver Retos
                   </Button>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-8">
@@ -324,9 +321,9 @@ Ejemplo Output:
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Brain className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Desafíos Técnicos</h3>
+                  <h3 className="text-xl font-bold">Retos Técnicos</h3>
                   <p className="text-sm text-muted-foreground">
-                    Retos diseñados por nuestros expertos, alineados con los proyectos y tecnologías de Tech Mahindra.
+                    Desafíos diseñados por nuestros expertos, alineados con los proyectos y tecnologías de Tech Mahindra.
                   </p>
                 </CardContent>
               </Card>
