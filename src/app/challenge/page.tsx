@@ -2,12 +2,22 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import CodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
+import { python } from '@codemirror/lang-python'
+import { java } from '@codemirror/lang-java'
+import { cpp } from '@codemirror/lang-cpp'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Trophy, Clock, Brain, PlayCircle, CheckCircle2, XCircle, Coins } from "lucide-react"
 import { SignedIn, UserButton } from "@clerk/clerk-react"
 import { Container, Section, Bar } from '@column-resizer/react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const sampleChallenge = {
   title: "Inversión de Cadenas",
@@ -37,8 +47,37 @@ Ejemplo de Salida:
   ]
 }
 
+// Add language options
+const languageOptions = [
+  { value: 'javascript', label: 'JavaScript', extension: javascript },
+  { value: 'python', label: 'Python', extension: python },
+  { value: 'java', label: 'Java', extension: java },
+  { value: 'cpp', label: 'C++', extension: cpp },
+]
+
+const startingCodeTemplates = {
+  javascript: `function reverseString(str) {
+  // Tu código aquí
+  
+}`,
+  python: `def reverse_string(s):
+    # Tu código aquí
+    pass`,
+  java: `public class Solution {
+    public String reverseString(String str) {
+        // Tu código aquí
+        return "";
+    }
+}`,
+  cpp: `string reverseString(string str) {
+    // Tu código aquí
+    return "";
+}`
+}
+
 export default function ChallengePage() {
-  const [code, setCode] = useState(sampleChallenge.startingCode)
+  const [code, setCode] = useState(startingCodeTemplates.javascript)
+  const [selectedLanguage, setSelectedLanguage] = useState(languageOptions[0])
   const [results, setResults] = useState<{success: boolean, message: string} | null>(null)
 
   const handleRunCode = () => {
@@ -216,12 +255,35 @@ export default function ChallengePage() {
         >
           <div className="h-full p-6 flex flex-col">
             <div className="flex-1 flex flex-col">
+              <div className="mb-2">
+                <Select
+                  value={selectedLanguage.value}
+                  onValueChange={(value) => {
+                    const language = languageOptions.find(l => l.value === value)
+                    if (language) {
+                      setSelectedLanguage(language)
+                      setCode(startingCodeTemplates[value as keyof typeof startingCodeTemplates])
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select Language" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border">
+                    {languageOptions.map((lang) => (
+                      <SelectItem key={lang.value} value={lang.value}>
+                        {lang.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <Card className="border-2 flex-1">
                 <CodeMirror
                   value={code}
                   height="100%"
                   theme={vscodeDark}
-                  extensions={[javascript({ jsx: true })]}
+                  extensions={[selectedLanguage.extension({ jsx: true })]}
                   onChange={(value) => setCode(value)}
                   className="text-sm h-full"
                 />
