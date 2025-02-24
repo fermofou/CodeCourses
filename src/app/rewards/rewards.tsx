@@ -62,19 +62,19 @@ export default function RewardsPage() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <Link
-              to="#challenges"
+              to="/challenges"
               className="text-black transition-colors hover:text-primary"
             >
               Retos de Programación
             </Link>
             <Link
-              to="#leaderboard"
+              to="/leaderboard"
               className="text-black transition-colors hover:text-primary"
             >
               Tabla de Posiciones
             </Link>
             <Link
-              to="#"
+              to="/rewards"
               className="text-black transition-colors hover:text-primary"
             >
               Recompensas
