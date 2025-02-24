@@ -8,7 +8,7 @@ import { cpp } from '@codemirror/lang-cpp'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Trophy, Clock, Brain, PlayCircle, CheckCircle2, XCircle, Coins, Code } from "lucide-react"
+import { Trophy, Brain, PlayCircle, CheckCircle2, XCircle, Coins, Code } from "lucide-react"
 import { SignedIn, UserButton } from "@clerk/clerk-react"
 import { Container, Section, Bar } from '@column-resizer/react'
 import {
@@ -205,16 +205,18 @@ export default function ChallengePage() {
                   <div>
                     <h1 className="text-3xl font-bold">{sampleChallenge.title}</h1>
                     <div className="flex items-center gap-4 mt-2">
-                      <span className="inline-flex items-center gap-1 text-sm">
+                      <span className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full ${
+                        sampleChallenge.difficulty === "Fácil" 
+                          ? "bg-green-500/10 text-green-500"
+                          : sampleChallenge.difficulty === "Medio"
+                          ? "bg-yellow-500/10 text-yellow-500" 
+                          : "bg-red-500/10 text-red-500"
+                      }`}>
                         <Brain className="h-4 w-4" />
                         {sampleChallenge.difficulty}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-sm">
-                        <Clock className="h-4 w-4" />
-                        {sampleChallenge.timeLimit}
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-sm">
-                        <Trophy className="h-4 w-4 text-primary" />
+                      <span className="inline-flex items-center gap-1.5 text-sm bg-red-500/10 text-red-500 px-3 py-1 rounded-full">
+                        <Trophy className="h-4 w-4" />
                         500 MC
                       </span>
                     </div>
