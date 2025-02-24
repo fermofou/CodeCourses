@@ -28,6 +28,7 @@ function App() {
           element={isSignedIn ? <Navigate to="/" replace /> : <LoginPage />}
         />
         <Route path="/challenge" element={<ChallengePage />} />
+        <Route path="/challenges" element={<ChallengesPage />} />
         <Route path="/rewards" element={<RewardsPage />} />
       </Routes>
     </Router>

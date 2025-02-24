@@ -69,7 +69,7 @@ export default function Home() {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
-            <Link to="#challenges" className="text-black transition-colors hover:text-primary">
+            <Link to="/challenges" className="text-black transition-colors hover:text-primary">
               Retos de Programación
             </Link>
             <Link to="#leaderboard" className="text-black transition-colors hover:text-primary">
@@ -154,7 +154,7 @@ export default function Home() {
               </SignedIn>
               
               <Link 
-                to="#challenges" 
+                to="/challenges" 
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
