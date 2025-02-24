@@ -5,12 +5,14 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react"
 
 import { Button } from "@/components/ui/custom-button"
 import { Card, CardContent } from "@/components/ui/card"
+import { AnimatedCounter } from "@/components/ui/animated-counter"
 
 export default function Home() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [mcoins, setMcoins] = useState(112750);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -26,6 +28,29 @@ export default function Home() {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const incrementCoins = () => {
+      setMcoins(prev => Math.min(prev + Math.floor(Math.random() * 20) + 1, 999999));
+    };
+
+    const scheduleNextIncrement = () => {
+      const delay = Math.random() * 1500 + 500;
+      return setTimeout(() => {
+        incrementCoins();
+        timeoutRef.current = scheduleNextIncrement();
+      }, delay);
+    };
+
+    const timeoutRef = { current: null as any };
+    timeoutRef.current = scheduleNextIncrement();
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -45,16 +70,13 @@ export default function Home() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <Link to="/challenges" className="text-black transition-colors hover:text-primary">
-              Coding Challenges
+              Retos de Programación
             </Link>
             <Link to="#leaderboard" className="text-black transition-colors hover:text-primary">
-              Leaderboard
+              Tabla de Posiciones
             </Link>
             <Link to="#rewards" className="text-black transition-colors hover:text-primary">
-              Rewards
-            </Link>
-            <Link to="#profile" className="text-black transition-colors hover:text-primary">
-              Mi Perfil
+              Recompensas
             </Link>
           </nav>
 
@@ -136,21 +158,21 @@ export default function Home() {
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Coding Challenges
+                Retos de Programación
               </Link>
               <Link 
                 to="#leaderboard" 
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Leaderboard
+                Tabla de Posiciones
               </Link>
               <Link 
                 to="#rewards" 
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Rewards
+                Recompensas
               </Link>
               <Link 
                 to="#profile" 
@@ -203,24 +225,41 @@ export default function Home() {
                 </div>
                 <div className="flex flex-wrap gap-4">
                   <Button size="lg" className="gap-2" onClick={() => navigate('/login')}>
-                    Comienza a Codificar <ArrowRight className="h-4 w-4" />
+                    Comenzar Ahora <ArrowRight className="h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="outline">
-                    Ver Desafíos
+                    Ver Retos
                   </Button>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-8">
-                  <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">50+</h4>
-                    <p className="text-sm text-muted-foreground">Desafíos Internos</p>
+                <div className="flex flex-col space-y-12 pt-8">
+                  {/* Top stats in a grid */}
+                  <div className="grid grid-cols-2 gap-8 max-w-md mx-auto w-full">
+                    <div className="flex flex-col items-center text-center space-y-3">
+                      <h4 className="text-5xl font-bold text-primary">
+                        50+
+                      </h4>
+                      <p className="text-base text-muted-foreground font-medium">Desafíos Internos</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center space-y-3">
+                      <h4 className="text-5xl font-bold text-primary">
+                        300+
+                      </h4>
+                      <p className="text-base text-muted-foreground font-medium">Mahindras Activos</p>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">300+</h4>
-                    <p className="text-sm text-muted-foreground">Mahindras Activos</p>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="text-4xl font-bold text-primary">5k</h4>
-                    <p className="text-sm text-muted-foreground">MCoins Ganados</p>
+                  
+                  {/* MCoins counter centered below */}
+                  <div className="flex flex-col items-center space-y-4">
+                    <div className="bg-muted/30 px-8 py-6 rounded-2xl">
+                      <AnimatedCounter 
+                        value={mcoins} 
+                        className="text-5xl"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Coins className="h-5 w-5" />
+                      <p className="text-base font-medium">MCoins Ganados</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -324,9 +363,9 @@ Ejemplo Output:
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Brain className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Desafíos Técnicos</h3>
+                  <h3 className="text-xl font-bold">Retos Técnicos</h3>
                   <p className="text-sm text-muted-foreground">
-                    Retos diseñados por nuestros expertos, alineados con los proyectos y tecnologías de Tech Mahindra.
+                    Desafíos diseñados por nuestros expertos, alineados con los proyectos y tecnologías de Tech Mahindra.
                   </p>
                 </CardContent>
               </Card>
@@ -363,36 +402,36 @@ Ejemplo Output:
             <div className="max-w-3xl mx-auto">
               <Card>
                 <CardContent className="p-6">
-                  {[1, 2, 3, 4, 5].map((position) => (
+                  {[
+                    { level: 28, challenges: 45 },
+                    { level: 25, challenges: 38 },
+                    { level: 24, challenges: 31 },
+                    { level: 22, challenges: 27 },
+                    { level: 21, challenges: 25 },
+                  ].map((stats, index) => (
                     <div 
-                      key={position} 
+                      key={index} 
                       className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${
-                        position === 1 ? 'bg-primary/5 rounded-lg' : ''
+                        index === 0 ? 'bg-primary/5 rounded-lg' : ''
                       }`}
                     >
                       <div className="flex items-center gap-6">
-                        <div className={`text-2xl font-bold ${
-                          "text-muted-foreground"
-                        }`}>
-                          {position === 1 && <Crown className="h-7 w-7 inline mr-2 text-primary" />}
-                          {position}°
+                        <div className="text-2xl font-bold text-muted-foreground">
+                          {index === 0 && <Crown className="h-7 w-7 inline mr-2 text-primary" />}
+                          {index + 1}°
                         </div>
                         <div className="flex items-center gap-3">
                           <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                            position === 1 ? "bg-zinc-200" :
-                            "bg-muted"
+                            index === 0 ? "bg-zinc-200" : "bg-muted"
                           }`}>
-                            <User className={`h-6 w-6 ${
-
-                              "text-muted-foreground"
-                            }`} />
+                            <User className="h-6 w-6 text-muted-foreground" />
                           </div>
                           <div className="space-y-1">
-                            <span className="font-semibold">Developer_{position}</span>
+                            <span className="font-semibold">Developer_{index + 1}</span>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>Nivel {Math.floor(Math.random() * 10) + 20}</span>
+                              <span>Nivel {stats.level}</span>
                               <span>•</span>
-                              <span>{Math.floor(Math.random() * 50)} desafíos</span>
+                              <span>{stats.challenges} desafíos</span>
                             </div>
                           </div>
                         </div>
@@ -400,11 +439,11 @@ Ejemplo Output:
                       <div className="flex flex-col items-end gap-1">
                         <div className="flex items-center gap-2">
                           <Sparkles className="h-4 w-4 text-primary" />
-                          <span className="font-semibold">{6000 - position * 1000} XP</span>
+                          <span className="font-semibold">{6000 - (index + 1) * 1000} XP</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-primary">
                           <Coins className="h-4 w-4" />
-                          <span className="font-medium">{1000 - position * 100} MC</span>
+                          <span className="font-medium">{1000 - (index + 1) * 100} MC</span>
                         </div>
                       </div>
                     </div>
