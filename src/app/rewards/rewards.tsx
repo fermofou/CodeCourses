@@ -98,19 +98,19 @@ export default function RewardsPage() {
               <nav className="space-y-1">
                 <a
                   href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
                   Discover
                 </a>
                 <a
                   href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
                   My rewards
                 </a>
                 <a
                   href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
                   My mahindricks
                 </a>
@@ -121,19 +121,19 @@ export default function RewardsPage() {
               <nav className="space-y-1">
                 <a
                   href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
                   Ranking
                 </a>
                 <a
                   href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
                   About
                 </a>
                 <a
                   href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-100"
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
                   Profile
                 </a>
