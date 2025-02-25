@@ -35,32 +35,28 @@ export default function RewardsPage() {
     {
       id: 1,
       name: "Mochila",
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-02-24%20083113-hq8J0n8OSWJzCYYDqk898Ec0MZcZLO.png",
+      image: "/assets/mochila.jpg",
       price: 4500,
       available: 10,
     },
     {
       id: 2,
       name: "Taza café",
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-02-24%20083113-hq8J0n8OSWJzCYYDqk898Ec0MZcZLO.png",
+      image: "/assets/mug.jpg",
       price: 1000,
       available: 50,
     },
     {
       id: 3,
       name: "Libro Designing Data Intensive A...",
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-02-24%20083113-hq8J0n8OSWJzCYYDqk898Ec0MZcZLO.png",
+      image: "/assets/DDIA.jpg",
       price: 10000,
       available: 5,
     },
     {
       id: 4,
       name: "Stickers Github",
-      image:
-        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Captura%20de%20pantalla%202025-02-24%20083113-hq8J0n8OSWJzCYYDqk898Ec0MZcZLO.png",
+      image: "/assets/stickers.jpg",
       price: 100,
       available: 100,
     },
