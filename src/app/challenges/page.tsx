@@ -1,8 +1,7 @@
 import { FaStar, FaCheck, FaTrophy } from "react-icons/fa"
 import { FaFileCode, FaShareFromSquare } from "react-icons/fa6";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Table } from "antd"
-import { SignedIn, UserButton } from "@clerk/clerk-react"
 import { Trophy,  Coins } from "lucide-react"
 import type { ColumnsType } from 'antd/es/table'
 import { Tag as AntdTag } from 'antd'
@@ -29,7 +28,7 @@ const dataSource = Array.from<ProblemsTableType>({ length: 80 }).map<ProblemsTab
   key: i,
   status: (i % 6) < 3,
   name: `Problema ${i + 1}`,
-  points: 20 + (i % 10),
+  points: 20 + (i % 10)*5,
   difficulty: (i % 5) + 1,
   tags: ['nice', 'developer', 'tag'],
 }));
@@ -39,6 +38,7 @@ const columns: ColumnsType<ProblemsTableType> = [
     title: 'Estatus',
     dataIndex: 'status',
     key: 'status',
+    className: "flex justify-center items-center",
     render: (_, { status }) => (
       <>
       { status && (
@@ -65,6 +65,13 @@ const columns: ColumnsType<ProblemsTableType> = [
     title: 'Puntos',
     dataIndex: 'points',
     key: 'points',
+    render: (_, { points, status }) => (
+      <div
+        style={{color: status ? "#2CBA5A" : "black"}}
+      >
+      {points} MC
+      </div> 
+    )
   },
   {
     title: 'Tags',
@@ -124,7 +131,7 @@ const DifficultyTag = ({ completed } : {completed : boolean }) => {
   // Difficulty is a number between 1 and 5
   return (
       <div
-      style={{backgroundColor: !completed ? "gray" : "#2DBB5C  "}}
+      style={{backgroundColor: !completed ? "gray" : "#2DBB5C" }}
       className={`min-w-[1.4rem] min-h-[1.4rem] max-w-[1.4rem] max-h-[1.4rem] rounded-full flex justify-center items-center font-bold`} 
       >
         {completed && (
@@ -141,14 +148,14 @@ const Gym = () => {
   return (
     <div className="flex flex-col min-w-[40rem] flex-grow gap-4" >
       <span className="text-xl font-bold">Todos los problemas</span>
-      <Table<ProblemsTableType> pagination={{pageSize: 8, showSizeChanger: false}} dataSource={dataSource} columns={columns} />
+      <Table<ProblemsTableType> pagination={{pageSize: 10, showSizeChanger: false}} dataSource={dataSource} columns={columns} />
     </div>
   )
 }
 
-const DailyChallenge = () => {
+const DailyChallenge = ({onClick} : {onClick?: () => void }) => {
   return (
-      <div className="relative flex flex-row gap-4 border-2 rounded-lg p-4 min-w-[30rem] flex-grow justify-center items-center pb-7">
+      <div className="relative flex flex-row gap-4 border-2 rounded-lg p-4 min-w-[30rem] flex-grow justify-center items-center pb-7 cursor-pointer" onClick={onClick}>
         <div className="absolute bottom-0 left-0 bg-white text-xs px-2 py-1 ">
           Desafío Diario
         </div>
@@ -226,12 +233,15 @@ const WeeklyMissions = () => {
 };
 
 export default function ChallengesPage() {
+  const navigate = useNavigate();
   return (
     <div className="flex w-full h-screen flex-col justify-start"> 
       <Navbar/>
       <div className="flex flex-col h-full w-full justify-start gap-8 overflow-auto p-6">
         <div className="flex gap-4 flex-wrap justify-center">
-          <DailyChallenge />
+          <DailyChallenge onClick={() => {
+            navigate("/challenge")
+          }}/>
           <DailyMissions />  
           <WeeklyMissions />  
         </div>

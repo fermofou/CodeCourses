@@ -220,7 +220,7 @@ export default function Home() {
                   <Button size="lg" className="gap-2" onClick={() => navigate('/login')}>
                     Comenzar Ahora <ArrowRight className="h-4 w-4" />
                   </Button>
-                  <Button size="lg" variant="outline">
+                  <Button size="lg" variant="outline"  onClick={() => navigate('/challenges')}>
                     Ver Retos
                   </Button>
                 </div>
