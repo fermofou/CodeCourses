@@ -10,7 +10,7 @@ import LoginPage from "./app/login/page";
 import ChallengePage from "./app/challenge/page";
 import ChallengesPage from "./app/challenges/page";
 import RewardsPage from "./app/rewards/rewards";
-import { SignedIn, UserButton } from "@clerk/clerk-react";
+import LeaderboardPage from "./app/leaderboard/page";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -28,9 +28,22 @@ function App() {
           path="/login"
           element={isSignedIn ? <Navigate to="/" replace /> : <LoginPage />}
         />
-        <Route path="/challenge" element={<ChallengePage />} />
-        <Route path="/challenges" element={<ChallengesPage />} />
-        <Route path="/rewards" element={<RewardsPage />} />
+        <Route
+          path="/challenge"
+          element={!isSignedIn ? <Navigate to="/login" replace /> : <ChallengePage />}
+        />
+        <Route
+          path="/challenges"
+          element={!isSignedIn ? <Navigate to="/login" replace /> : <ChallengesPage />}
+        />
+        <Route
+          path="/rewards"
+          element={!isSignedIn ? <Navigate to="/login" replace /> : <RewardsPage />}
+        />
+        <Route
+          path="/leaderboard"
+          element={!isSignedIn ? <Navigate to="/login" replace /> : <LeaderboardPage />}
+        />
       </Routes>
     </Router>
   );

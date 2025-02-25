@@ -72,10 +72,10 @@ export default function Home() {
             <Link to="/challenges" className="text-black transition-colors hover:text-primary">
               Retos de Programación
             </Link>
-            <Link to="#leaderboard" className="text-black transition-colors hover:text-primary">
+            <Link to="/leaderboard" className="text-black transition-colors hover:text-primary">
               Tabla de Posiciones
             </Link>
-            <Link to="#rewards" className="text-black transition-colors hover:text-primary">
+            <Link to="/rewards" className="text-black transition-colors hover:text-primary">
               Recompensas
             </Link>
           </nav>
@@ -161,25 +161,18 @@ export default function Home() {
                 Retos de Programación
               </Link>
               <Link 
-                to="#leaderboard" 
+                to="/leaderboard" 
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Tabla de Posiciones
               </Link>
               <Link 
-                to="#rewards" 
+                to="/rewards" 
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Recompensas
-              </Link>
-              <Link 
-                to="#profile" 
-                className="text-black px-2 py-1.5"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Mi Perfil
               </Link>
 
               <SignedOut>
