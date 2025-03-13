@@ -64,7 +64,7 @@ export default function Home() {
                 <span className="text-[#ED2831] text-lg font-bold leading-none">M</span>
               </div>
             </div>
-            <span className="text-xl font-bold">TechCraft</span>
+            <span className="text-xl font-bold">CodeCourses</span>
           </Link>
           
           {/* Desktop Navigation */}
