@@ -11,6 +11,7 @@ import ChallengePage from "./app/challenge/page";
 import ChallengesPage from "./app/challenges/page";
 import RewardsPage from "./app/rewards/rewards";
 import LeaderboardPage from "./app/leaderboard/page";
+import ReposPage from "./app/repos/repos";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -30,19 +31,33 @@ function App() {
         />
         <Route
           path="/challenge"
-          element={!isSignedIn ? <Navigate to="/login" replace /> : <ChallengePage />}
+          element={
+            !isSignedIn ? <Navigate to="/login" replace /> : <ChallengePage />
+          }
         />
         <Route
           path="/challenges"
-          element={!isSignedIn ? <Navigate to="/login" replace /> : <ChallengesPage />}
+          element={
+            !isSignedIn ? <Navigate to="/login" replace /> : <ChallengesPage />
+          }
         />
         <Route
           path="/rewards"
-          element={!isSignedIn ? <Navigate to="/login" replace /> : <RewardsPage />}
+          element={
+            !isSignedIn ? <Navigate to="/login" replace /> : <RewardsPage />
+          }
         />
         <Route
           path="/leaderboard"
-          element={!isSignedIn ? <Navigate to="/login" replace /> : <LeaderboardPage />}
+          element={
+            !isSignedIn ? <Navigate to="/login" replace /> : <LeaderboardPage />
+          }
+        />
+        <Route
+          path="/repos"
+          element={
+            !isSignedIn ? <Navigate to="/login" replace /> : <ReposPage />
+          }
         />
       </Routes>
     </Router>
