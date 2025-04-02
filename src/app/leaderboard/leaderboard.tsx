@@ -1,23 +1,15 @@
 import type React from "react"
+import { useEffect, useState } from "react"
 import { useUser } from "@clerk/clerk-react"
 import { Medal } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 type LeaderboardEntry = {
-  id: string
   name: string
-  score: number
-  problemsSolved: number
+  points: number
+  level: number
 }
-
-const mockLeaderboardData: LeaderboardEntry[] = [
-  { id: "1", name: "Alice", score: 1500, problemsSolved: 120 },
-  { id: "2", name: "Bob", score: 1450, problemsSolved: 115 },
-  { id: "3", name: "Charlie", score: 1400, problemsSolved: 110 },
-  { id: "4", name: "David", score: 1350, problemsSolved: 105 },
-  { id: "5", name: "Eve", score: 1300, problemsSolved: 100 },
-]
 
 const getMedalInfo = (rank: number) => {
   switch (rank) {
@@ -47,6 +39,23 @@ const getRowStyle = (rank: number) => {
 
 const Leaderboard: React.FC = () => {
   const { user } = useUser()
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/leaderboard")
+        const data = await res.json()
+        setLeaderboard(data)
+      } catch (err) {
+        console.error("Error al obtener leaderboard:", err)
+      }
+    }
+
+    fetchLeaderboard()
+    const interval = setInterval(fetchLeaderboard, 5000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -56,17 +65,19 @@ const Leaderboard: React.FC = () => {
           <TableRow className="border-b-2 border-[#ED2831]/20">
             <TableHead className="w-20 text-[#ED2831]">Rank</TableHead>
             <TableHead className="text-[#ED2831]">User</TableHead>
-            <TableHead className="text-right text-[#ED2831]">Score</TableHead>
-            <TableHead className="text-right text-[#ED2831]">Problems Solved</TableHead>
+            <TableHead className="text-right text-[#ED2831]">Points</TableHead>
+            <TableHead className="text-right text-[#ED2831]">Level</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockLeaderboardData.map((entry, index) => {
+          {leaderboard.map((entry, index) => {
             const { color } = getMedalInfo(index)
+            const isCurrentUser = user?.fullName === entry.name
+
             return (
               <TableRow
-                key={entry.id}
-                className={`${user?.id === entry.id ? "bg-primary/10" : ""} 
+                key={`${entry.name}-${entry.points}`}
+                className={`${isCurrentUser ? "bg-primary/10" : ""} 
                   ${getRowStyle(index)} border-b transition-colors`}
               >
                 <TableCell className="w-20 font-medium">
@@ -80,39 +91,14 @@ const Leaderboard: React.FC = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-3">
-                    <Avatar
-                      className={`${index < 3 ? "border-2" : "border"} ${
-                        index === 0
-                          ? "border-yellow-400 bg-yellow-50"
-                          : index === 1
-                            ? "border-gray-400 bg-gray-50"
-                            : index === 2
-                              ? "border-amber-700 bg-amber-50"
-                              : "border-gray-200 bg-gray-100"
-                      }`}
-                    >
-                      <AvatarFallback
-                        className={`
-                        font-medium
-                        ${
-                          index === 0
-                            ? "text-yellow-700"
-                            : index === 1
-                              ? "text-gray-700"
-                              : index === 2
-                                ? "text-amber-800"
-                                : "text-gray-600"
-                        }
-                      `}
-                      >
-                        {entry.name.charAt(0)}
-                      </AvatarFallback>
+                    <Avatar className={`${index < 3 ? "border-2" : "border"} border-gray-200`}>
+                      <AvatarFallback>{entry.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <span className="font-medium">{entry.name}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-right font-medium">{entry.score}</TableCell>
-                <TableCell className="text-right font-medium">{entry.problemsSolved}</TableCell>
+                <TableCell className="text-right font-medium">{entry.points}</TableCell>
+                <TableCell className="text-right font-medium">{entry.level}</TableCell>
               </TableRow>
             )
           })}
@@ -123,4 +109,3 @@ const Leaderboard: React.FC = () => {
 }
 
 export default Leaderboard
-
