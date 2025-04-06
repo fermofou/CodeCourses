@@ -1,55 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import Leftbar from "./leftbar";
+import Problems from "./problems";
+import Users from "./users";
+import Settings from "./settings";
+import CalendarTab from "./calendar";
 
-import { Select } from 'antd';
+const General = () => {
+  return (
+    <>
 
-interface Problem {
-  id: number;
-  title: string;
-  url: string;
+    </>
+  )
 }
 
-const onChange = (value: string) => {
-  console.log(`selected ${value}`);
-};
-
-const onSearch = (value: string) => {
-  console.log('search:', value);
-};
 
 export default function AdminPage() {
-  const [problems, setProblems] = useState<Problem[]>([]);
-  const [problemUrl, setProblemUrl] = useState("");
-
-  const addProblem = () => {
-    if (!problemUrl.trim()) return;
-
-    const id = Date.now();
-    const title = problemUrl.split("/").pop() || "Unknown Problem";
-
-    setProblems([...problems, { id, title, url: problemUrl }]);
-    setProblemUrl("");
-  };
-
-  const removeProblem = (id: number) => {
-    setProblems(problems.filter((problem) => problem.id !== id));
-  };
-
-  const platformOptions = [
-    { value: "cses", label: "CSES" },
-    { value: "codeforces", label: "Codeforces" },
-    { value: "hackerank", label: "Hackerank" },
-    { value: "leetcode", label: "Leetcode" },
-  ];
-
+  const [menuOption, setMenuOption] = useState("General");
   return (
     <div className="flex h-screen min-h-screen flex-col">
       <Navbar />
       <div className="w-full h-full mx-auto flex justify-start text-center">
-        <Leftbar />
-        <div className="flex w-full h-full justify-center align-middle">
-          <h1 className="text-xl font-bold mb-4">Administrador de Problemas</h1>
+        <Leftbar menuOption={menuOption} setMenuOption={setMenuOption}/>
+        <div className="flex w-full h-full justify-center p-4">
+          { menuOption == "General" && <General /> }
+          { menuOption == "Calendario" && <CalendarTab /> }
+          { menuOption == "Problemas" && <Problems /> }
+          { menuOption == "Usuarios" && <Users /> }
+          { menuOption == "Configuración" && <Settings /> }
         </div>
       </div>
     </div>
