@@ -90,6 +90,12 @@ const Navbar = () => {
             >
               Repos
             </Link>
+            <Link
+              to="/admin"
+              className="text-black transition-colors hover:text-primary"
+            >
+             Admin 
+            </Link>
           </nav>
         )}
 

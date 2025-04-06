@@ -47,7 +47,7 @@ const fetchSonarQubeMetrics = async (projectKey: string) => {
 
     // Transform the measures array into an object for easier access
     const metrics = {};
-    data.component.measures.forEach((measure) => {
+    data.component.measures.forEach((measure : any) => {
       metrics[measure.metric] = measure.value;
     });
 
@@ -341,7 +341,7 @@ const SonarMetricsModal: React.FC<SonarMetricsModalProps> = ({
   };
 
   // Helper function to determine metric status color
-  const getMetricColor = (metric, value) => {
+  const getMetricColor = (metric : any, value : any) => {
     const numValue = parseFloat(value);
     switch (metric) {
       case "bugs":
