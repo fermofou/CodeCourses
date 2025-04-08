@@ -14,11 +14,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 interface Product {
-  id: number;
+  reward_id: number;
   name: string;
-  image: string;
-  price: number;
-  available: number;
+  description: string;
+  inventory_count: number;
+  cost: number;
 }
 
 ("use client");
@@ -31,36 +31,7 @@ export default function RewardsPage() {
   const [activeTab, setActiveTab] = React.useState("swag");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cartItems, setCartItems] = useState<Product[]>([]);
-  const products: Product[] = [
-    {
-      id: 1,
-      name: "Mochila",
-      image: "/assets/mochila.jpg",
-      price: 4500,
-      available: 10,
-    },
-    {
-      id: 2,
-      name: "Taza café",
-      image: "/assets/mug.jpg",
-      price: 1000,
-      available: 50,
-    },
-    {
-      id: 3,
-      name: "Libro Designing Data Intensive A...",
-      image: "/assets/DDIA.jpg",
-      price: 10000,
-      available: 5,
-    },
-    {
-      id: 4,
-      name: "Stickers Github",
-      image: "/assets/stickers.jpg",
-      price: 100,
-      available: 100,
-    },
-  ];
+  const [rewards, setRewards] = useState<Product[]>([]);
 
   const addToCart = (product: Product) => {
     setCartItems([...cartItems, product]);
@@ -82,6 +53,14 @@ export default function RewardsPage() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/rewards")
+      .then((response) => response.json())
+      .then((data) => setRewards(data))
+      .catch((error) => console.error("Error fetching rewards:", error));
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
@@ -96,42 +75,19 @@ export default function RewardsPage() {
                   href="#"
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
-                  Discover
+                  Articulos
                 </a>
                 <a
                   href="#"
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
-                  My rewards
+                  Mis compras
                 </a>
                 <a
                   href="#"
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
-                  My mahindricks
-                </a>
-              </nav>
-            </div>
-            <div>
-              <h2 className="mb-2 text-lg font-semibold">Social</h2>
-              <nav className="space-y-1">
-                <a
-                  href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
-                >
-                  Ranking
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
-                >
-                  About
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
-                >
-                  Profile
+                  Mis favoritos
                 </a>
               </nav>
             </div>
@@ -142,7 +98,7 @@ export default function RewardsPage() {
         <main className="flex-1 p-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex space-x-1 rounded-lg bg-gray-100 p-1">
-              {["Swag", "Gift Cards", "More"].map((tab) => (
+              {["Disponibles", "Todos", "Desarrollo", "Ocio"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab.toLowerCase())}
@@ -177,31 +133,23 @@ export default function RewardsPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {products.map((product) => (
+            {rewards.map((reward) => (
               <div
-                key={product.id}
+                key={reward.reward_id}
                 className="rounded-lg border p-4 cursor-pointer"
-                onClick={() => setSelectedProduct(product)}
+                onClick={() => setSelectedProduct(reward)}
               >
                 <img
-                  src={product.image || "/placeholder.svg"}
-                  alt={product.name}
+                  src={`assets/${reward.reward_id}.jpg`} //dejen reward_id
+                  alt={reward.name}
                   className="w-full h-48 object-cover rounded-md mb-3"
                 />
-                <h3 className="font-medium">{product.name}</h3>
+                <h3 className="font-medium">{reward.name}</h3>
                 <p className="text-sm text-gray-600">
-                  {product.price} mahindricks
+                  {reward.cost} mahindricks
                 </p>
               </div>
             ))}
-          </div>
-
-          <div>
-            <h2 className="text-xl font-bold mb-1">Made for You</h2>
-            <p className="text-gray-600 text-sm mb-6">Restocked Items</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-              {/* Additional product cards would go here */}
-            </div>
           </div>
         </main>
       </div>
@@ -219,16 +167,16 @@ export default function RewardsPage() {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 items-center gap-4">
               <img
-                src={selectedProduct?.image || "/placeholder.svg"}
+                src={`assets/${selectedProduct?.reward_id}.jpg`}
                 alt={selectedProduct?.name}
                 className="w-full h-64 object-cover rounded-md"
               />
               <div>
                 <p className="text-lg font-semibold mb-2">
-                  {selectedProduct?.price} mahindricks
+                  {selectedProduct?.cost} mahindricks
                 </p>
                 <p className="text-sm text-gray-600 mb-4">
-                  Available: {selectedProduct?.available}
+                  Available: {selectedProduct?.inventory_count}
                 </p>
                 <Button
                   onClick={() => selectedProduct && addToCart(selectedProduct)}
