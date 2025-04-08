@@ -1,4 +1,4 @@
-import { FaStar, FaCheck, FaTrophy } from "react-icons/fa";
+import { FaStar, FaCheck, FaTrophy, FaTimes } from "react-icons/fa";
 import { FaFileCode, FaShareFromSquare } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { Table } from "antd";
@@ -7,6 +7,7 @@ import type { ColumnsType } from "antd/es/table";
 import { Tag as AntdTag } from "antd";
 import DuoImage from "./DuoMissing.png";
 import Navbar from "@/components/navbar";
+import React, { useState, useEffect, useRef } from "react";
 
 interface ProblemsTableType {
   key: number;
@@ -17,41 +18,52 @@ interface ProblemsTableType {
   tags: string[];
 }
 
+interface ApiProblemType {
+  problem_id: number;
+  title: string;
+  difficulty: number;
+  solved: boolean | null;
+  tags?: string[];
+  // Points might be added later
+}
+
 interface ProblemOverviewType {
+  id: number;
   name: string;
   points: number;
   difficulty: number;
   description: string;
 }
 
-const dataSource = Array.from<ProblemsTableType>({
-  length: 80,
-}).map<ProblemsTableType>((_, i) => ({
-  key: i,
-  status: i % 6 < 3,
-  name: `Problema ${i + 1}`,
-  points: 20 + (i % 10) * 5,
-  difficulty: (i % 5) + 1,
-  tags: ["nice", "developer", "tag"],
-}));
+// Helper function to convert difficulty string to number
+const difficultyToNumber = (difficulty: string): number => {
+  const difficultyMap: { [key: string]: number } = {
+    Fácil: 1,
+    Easy: 1,
+    Medium: 3,
+    Medio: 3,
+    Difícil: 5,
+    Hard: 5,
+  };
+
+  return difficultyMap[difficulty] || 2; // Default to 2 if unknown
+};
 
 const columns: ColumnsType<ProblemsTableType> = [
   {
-    title: "Estatus",
+    title: "Status",
     dataIndex: "status",
     key: "status",
     className: "flex justify-center items-center",
-    render: (_, { status }) => (
-      <>{status && <DifficultyTag completed={status} />}</>
-    ),
+    render: (_, { status }) => <>{<CompletedMar completed={status} />}</>,
   },
   {
-    title: "Problema",
+    title: "Problem",
     dataIndex: "name",
     key: "name",
     render: (_, { name, status, key }) => (
       <Link
-        to="/challenge/${key + 1}"
+        to={`/challenge/${key}`}
         className="hover:underline"
         style={{ color: status ? "#2CBA5A" : "black" }}
       >
@@ -60,7 +72,7 @@ const columns: ColumnsType<ProblemsTableType> = [
     ),
   },
   {
-    title: "Puntos",
+    title: "Points",
     dataIndex: "points",
     key: "points",
     render: (_, { points, status }) => (
@@ -73,23 +85,23 @@ const columns: ColumnsType<ProblemsTableType> = [
     dataIndex: "tags",
     render: (_: unknown, { tags }: ProblemsTableType) => (
       <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "tag") {
-            color = "volcano";
-          }
-          return (
-            <AntdTag color={color} key={tag}>
-              {" "}
-              {tag}{" "}
-            </AntdTag>
-          );
-        })}
+        {tags &&
+          tags.map((tag) => {
+            let color = tag.length > 5 ? "geekblue" : "green";
+            if (tag === "tag") {
+              color = "volcano";
+            }
+            return (
+              <AntdTag color={color} key={tag}>
+                {tag}
+              </AntdTag>
+            );
+          })}
       </>
     ),
   },
   {
-    title: "Dificultad",
+    title: "Difficulty",
     dataIndex: "difficulty",
     key: "difficulty",
     render: (_, { difficulty }) => (
@@ -103,7 +115,8 @@ const columns: ColumnsType<ProblemsTableType> = [
 ];
 
 const dailyChallenge: ProblemOverviewType = {
-  name: "¡Duo ha desaparecido!",
+  id: 0,
+  name: "Duo has disappeared!",
   points: 30,
   difficulty: 3,
   description:
@@ -132,26 +145,37 @@ const ChallengeButton = ({
     </div>
   );
 };
-const DifficultyTag = ({ completed }: { completed: boolean }) => {
-  // Difficulty is a number between 1 and 5
+
+const CompletedMar = ({ completed }: { completed: boolean | null }) => {
+  let bgColor = "gray";
+  //console.log(completed);
+
+  if (completed == true) {
+    bgColor = "#2DBB5C";
+  } else if (completed === null) {
+    bgColor = "gray";
+  } else if (completed === false) {
+    bgColor = "red";
+  }
   return (
     <div
-      style={{ backgroundColor: !completed ? "gray" : "#2DBB5C" }}
+      style={{ backgroundColor: bgColor }}
       className={`min-w-[1.4rem] min-h-[1.4rem] max-w-[1.4rem] max-h-[1.4rem] rounded-full flex justify-center items-center font-bold`}
     >
       {completed && <FaCheck size={13} color="white" />}
-      {!completed && <FaStar size={13} color="white" />}
+      {completed == null && <FaStar size={13} color="white" />}
+      {completed == false && <FaTimes size={13} color="white" />}
     </div>
   );
 };
 
-const Gym = () => {
+const Gym = ({ problems }: { problems: ProblemsTableType[] }) => {
   return (
     <div className="flex flex-col min-w-[40rem] flex-grow gap-4">
       <span className="text-xl font-bold">Todos los problemas</span>
       <Table<ProblemsTableType>
         pagination={{ pageSize: 10, showSizeChanger: false }}
-        dataSource={dataSource}
+        dataSource={problems}
         columns={columns}
       />
     </div>
@@ -186,6 +210,7 @@ const DailyChallenge = ({ onClick }: { onClick?: () => void }) => {
     </div>
   );
 };
+
 const Mission = ({
   icon,
   name,
@@ -295,6 +320,38 @@ const WeeklyMissions = () => {
 
 export default function ChallengesPage() {
   const navigate = useNavigate();
+  const [problems, setProblems] = useState<ProblemsTableType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("http://localhost:8080/problems?userId=6")
+      .then((response) => response.json())
+      .then((data: ApiProblemType[]) => {
+        // Map the API data to match our table structure
+        const formattedProblems = data.map((problem) => {
+          // no se, 20 puntos * dificultad del 1 al 5?
+          const points = problem.difficulty * 20;
+
+          return {
+            key: problem.problem_id,
+            status: problem.solved, // Convert null to false
+            name: problem.title,
+            points: points,
+            difficulty: problem.difficulty,
+            tags: problem.tags || ["coding"], // Default tag if not provided
+          };
+        });
+
+        setProblems(formattedProblems);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching problems:", error);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <div className="flex w-full h-screen flex-col justify-start">
       <Navbar />
@@ -308,7 +365,7 @@ export default function ChallengesPage() {
           <DailyMissions />
           <WeeklyMissions />
         </div>
-        <Gym />
+        <Gym problems={problems} />
       </div>
     </div>
   );
