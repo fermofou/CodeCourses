@@ -222,7 +222,7 @@ export default function ChallengePage() {
                 <div className="bg-muted/50 p-4 border-b">
                   <h2 className="font-semibold flex items-center gap-1.5 text-sm">
                     <Brain className="h-3.5 w-3.5" />
-                    Descripción del Reto
+                    Challenge description
                   </h2>
                 </div>
 
@@ -237,25 +237,23 @@ export default function ChallengePage() {
                         <div className="flex items-center gap-4 mt-2">
                           <span
                             className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full ${
-                              challenge.difficulty <= 2
+                              challenge.difficulty < 2
                                 ? "bg-green-500/10 text-green-500"
-                                : challenge.difficulty === 3
+                                : challenge.difficulty === 2
                                 ? "bg-yellow-500/10 text-yellow-500"
                                 : "bg-red-500/10 text-red-500"
                             }`}
                           >
                             <Brain className="h-4 w-4" />
-                            {challenge.difficulty === 1 ||
-                            challenge.difficulty === 2
+                            {challenge.difficulty === 1
                               ? "Fácil"
-                              : challenge.difficulty === 3 ||
-                                challenge.difficulty === 4
+                              : challenge.difficulty === 2
                               ? "Medio"
                               : "Difícil"}
                           </span>
                           <span className="inline-flex items-center gap-1.5 text-sm bg-red-500/10 text-red-500 px-3 py-1 rounded-full">
                             <Trophy className="h-4 w-4" />
-                            500 MC
+                            {challenge.difficulty * 100} MC
                           </span>
                         </div>
                       </div>
@@ -269,16 +267,14 @@ export default function ChallengePage() {
                       </Card>
 
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold">
-                          Casos de Prueba
-                        </h3>
+                        <h3 className="text-lg font-semibold">Test Cases</h3>
                         <div className="grid gap-4">
                           {challenge.testCases.map((testCase, index) => (
                             <Card key={index} className="p-4">
                               <div className="grid grid-cols-2 gap-4">
                                 <div>
                                   <p className="text-sm font-medium text-muted-foreground">
-                                    Entrada:
+                                    Input:
                                   </p>
                                   <pre className="mt-1 text-sm">
                                     {testCase.input}
@@ -286,7 +282,7 @@ export default function ChallengePage() {
                                 </div>
                                 <div>
                                   <p className="text-sm font-medium text-muted-foreground">
-                                    Salida Esperada:
+                                    Expected Output:
                                   </p>
                                   <pre className="mt-1 text-sm">
                                     {testCase.expectedOutput}
