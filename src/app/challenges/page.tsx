@@ -7,7 +7,7 @@ import type { ColumnsType } from "antd/es/table";
 import { Tag as AntdTag } from "antd";
 import DuoImage from "./DuoMissing.png";
 import Navbar from "@/components/navbar";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 interface ProblemsTableType {
   key: number;
@@ -63,11 +63,11 @@ const columns: ColumnsType<ProblemsTableType> = [
     key: "name",
     render: (_, { name, status, key }) => (
       <Link
-        to={`/challenge/${key}`}
+        to={`/challenge?${key}`}
         className="hover:underline"
         style={{ color: status ? "#2CBA5A" : "black" }}
       >
-        {name}
+        {key}. {name}
       </Link>
     ),
   },
