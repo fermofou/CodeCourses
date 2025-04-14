@@ -32,6 +32,8 @@ export default function RewardsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cartItems, setCartItems] = useState<Product[]>([]);
   const [rewards, setRewards] = useState<Product[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [userPoints, setUserPoints] = useState(1000); // Replace with actual user points
 
   const addToCart = (product: Product) => {
     setCartItems([...cartItems, product]);
@@ -75,19 +77,19 @@ export default function RewardsPage() {
                   href="#"
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
-                  Articulos
+                  Items
+                </a>
+                <a
+                  href=""
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
+                >
+                  My purchases
                 </a>
                 <a
                   href="#"
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
-                  Mis compras
-                </a>
-                <a
-                  href="#"
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
-                >
-                  Mis favoritos
+                  My favorites
                 </a>
               </nav>
             </div>
@@ -97,23 +99,28 @@ export default function RewardsPage() {
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="mb-6 flex items-center justify-between">
-            <div className="flex space-x-1 rounded-lg bg-gray-100 p-1">
-              {["Disponibles", "Todos", "Desarrollo", "Ocio"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab.toLowerCase())}
-                  className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                    activeTab === tab.toLowerCase()
-                      ? "bg-primary text-white"
-                      : "bg-white text-black hover:bg-gray-50"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold mb-1">Earn cool stuff!</h1>
+              <p className="text-gray-600 text-sm">
+                Top picks for you. Updated daily.
+              </p>
             </div>
             <div className="relative">
-              <ShoppingCart className="h-6 w-6 text-gray-600" />
+              <button
+                onClick={() => setCartOpen(true)}
+                className="relative p-2 rounded-full bg-white hover:bg-gray-50 transition-colors"
+              >
+                <ShoppingCart className="h-6 w-6 text-primary" />
+                {cartItems.length > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                  >
+                    {cartItems.length}
+                  </Badge>
+                )}
+              </button>
+
               {cartItems.length > 0 && (
                 <Badge
                   variant="destructive"
@@ -123,13 +130,6 @@ export default function RewardsPage() {
                 </Badge>
               )}
             </div>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-1">Earn cool stuff!</h1>
-            <p className="text-gray-600 text-sm">
-              Top picks for you. Updated daily.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -185,6 +185,58 @@ export default function RewardsPage() {
                 </Button>
               </div>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={cartOpen} onOpenChange={setCartOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Your Cart</DialogTitle>
+            <DialogDescription>
+              Review your items and purchase one at a time.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {cartItems.length === 0 ? (
+              <p className="text-sm text-gray-500">Your cart is empty.</p>
+            ) : (
+              cartItems.map((item, index) => (
+                <div
+                  key={`${item.reward_id}-${index}`}
+                  className="flex items-center justify-between border rounded-lg p-3"
+                >
+                  <div>
+                    <p className="font-semibold">{item.name}</p>
+                    <p className="text-sm text-gray-600">
+                      {item.cost} mahindricks
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      // Simulate an API call
+                      if (userPoints >= item.cost) {
+                        console.log(`Calling: buy/userid/${item.reward_id}`);
+                        // Remove the item from cart after purchase
+                        setCartItems((prev) =>
+                          prev.filter((_, i) => i !== index)
+                        );
+                      } else {
+                        console.log("not enough");
+                      }
+                    }}
+                    variant="default"
+                    disabled={userPoints < item.cost}
+                    className={
+                      userPoints < item.cost
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }
+                  >
+                    {userPoints < item.cost ? "Not enough points" : "Buy"}
+                  </Button>
+                </div>
+              ))
+            )}
           </div>
         </DialogContent>
       </Dialog>
