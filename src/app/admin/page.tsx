@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "@/components/navbar";
 import Leftbar from "./leftbar";
 import Problems from "./problems";

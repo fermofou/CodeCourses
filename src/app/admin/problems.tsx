@@ -10,18 +10,21 @@ const initialData = [
     title: "Sumar dos números",
     difficulty: "l2",
     tags: ["Math", "Básico"],
+    description: "Suma dos números enteros y devuelve el resultado.",
   },
   {
     key: "2",
     title: "Camino más corto en un grafo",
     difficulty: "l4",
     tags: ["Graphs", "Dijkstra"],
+    description: "Encuentra el camino más corto entre dos nodos en un grafo.",
   },
   {
     key: "3",
     title: "Camino más largo en un grafo",
     difficulty: "l3",
     tags: ["Graphs", "Dijkstra"],
+    description: "Encuentra el camino más largo entre dos nodos en un grafo.",
   },
 ];
 
@@ -139,42 +142,55 @@ const Problems = () => {
         okText="Guardar"
         cancelText="Cancelar"
       >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            label="Título"
-            name="title"
-            rules={[{ required: true, message: "Por favor ingresa el título" }]}
-          >
-            <Input id="problem-title" />
-          </Form.Item>
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={values => {
+            console.log("Form values:", values);
+            if (!values.zipFile) {
+              return;
+            }
+            handleOk();
+          }}
+        >
+        <Form.Item
+          label="Título"
+          style={{ marginBottom: "1rem" }}
+          name="title"
+          rules={[{ required: true, message: "Por favor ingresa el título" }]}
+        >
+          <Input id="problem-title" />
+        </Form.Item>
 
-          <Form.Item
-            label="Dificultad"
-            name="difficulty"
-            rules={[{ required: true, message: "Selecciona una dificultad" }]}
-          >
-            <Select
-              placeholder="Selecciona dificultad"
-              options={[
-                { value: "l1", label: "★☆☆☆☆ Muy Fácil" },
-                { value: "l2", label: "★★☆☆☆ Fácil" },
-                { value: "l3", label: "★★★☆☆ Media" },
-                { value: "l4", label: "★★★★☆ Difícil" },
-                { value: "l5", label: "★★★★★ Muy Difícil" },
-              ]}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Tags"
-            name="tags"
-            rules={[{ required: true, message: "Agrega al menos un tag" }]}
-          >
+        <Form.Item
+          style={{ marginBottom: "1rem" }}
+          label="Dificultad"
+          name="difficulty"
+          rules={[{ required: true, message: "Selecciona una dificultad" }]}
+        >
           <Select
-            mode="tags"
-            style={{ width: "100%" }}
-            placeholder="Tags"
+            placeholder="Selecciona dificultad"
             options={[
+              { value: "l1", label: "★☆☆☆☆ Muy Fácil" },
+              { value: "l2", label: "★★☆☆☆ Fácil" },
+              { value: "l3", label: "★★★☆☆ Media" },
+              { value: "l4", label: "★★★★☆ Difícil" },
+              { value: "l5", label: "★★★★★ Muy Difícil" },
+            ]}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Tags"
+          name="tags"
+          style={{ marginBottom: "1rem" }}
+          rules={[{ required: true, message: "Agrega al menos un tag" }]}
+        >
+        <Select
+          mode="tags"
+          style={{ width: "100%" }}
+          placeholder="Tags"
+          options={[
             { value: "Math", label: "Math" },
             { value: "DP", label: "DP" },
             { value: "Greedy", label: "Greedy" },
@@ -192,44 +208,69 @@ const Problems = () => {
             { value: "Strings", label: "Strings" },
             { value: "Trees", label: "Trees" },
             { value: "Two Pointers", label: "Two Pointers" },
-            ]}
-          />
+          ]}
+        />
+        </Form.Item>
+          <Form.Item
+            label="Descripción"
+            name="description"
+            rules={[{ required: true, message: "Por favor ingresa la descripción" }]}
+          >
+            <Input.TextArea rows={7} placeholder="Descripción del problema" />
           </Form.Item>
-
-          {!isEditing && (
+          <Form.List name="testCases">
+            {(fields, { add, remove }) => (
             <>
-              <Form.Item label="Fuente del problema" name="source" rules={[{ required: true, message: "Selecciona la fuente" }]}>
-                <Select
-                  placeholder="Selecciona la fuente"
-                  options={[
-                    { value: "Codeforces", label: "Codeforces" },
-                    { value: "AtCoder", label: "AtCoder" },
-                    { value: "CSES", label: "CSES" },
-                  ]}
-                />
+              {fields.map(({ key, name, fieldKey, ...restField }) => (
+                <div key={key} className="mb-4 border p-3 rounded-md">
+              <Form.Item
+                {...restField}
+                label="Input de Prueba"
+                name={[name, "testInput"]}
+                fieldKey={[fieldKey, "testInput"]}
+                rules={[{ required: true, message: "Por favor ingresa un input de prueba" }]}
+              >
+                <Input.TextArea rows={2} placeholder="Input de prueba" />
               </Form.Item>
 
-              <Form.Item label="URL del problema" name="url" rules={[{ required: true, message: "Por favor ingresa la URL" }]}>
-                <Input placeholder="https://..." />
+              <Form.Item
+                {...restField}
+                label="Output de Prueba"
+                name={[name, "testOutput"]}
+                fieldKey={[fieldKey, "testOutput"]}
+                rules={[{ required: true, message: "Por favor ingresa el output esperado" }]}
+              >
+                <Input.TextArea rows={2} placeholder="Output esperado" />
               </Form.Item>
 
-              <Form.Item>
-                <Button
-                  onClick={() => {
-                    const url = form.getFieldValue("url");
-                    if (url) {
-                      setParsedURL(`Procesado: ${url}`);
-                    } else {
-                      setParsedURL("Por favor ingresa una URL válida.");
-                    }
-                  }}
-                >
-                  Procesar
-                </Button>
-              </Form.Item>
-
-              <div className="text-sm text-gray-600 italic">{parsedURL}</div>
+              <Button danger onClick={() => remove(name)}>
+                Eliminar Testcase de Ejemplo 
+              </Button>
+                </div>
+              ))}
+              <Button style={{marginBottom: "1rem"}} type="dashed" onClick={() => add()} block>
+                Agregar Testcase de Ejemplo 
+              </Button>
             </>
+            )}
+          </Form.List>
+          {!isEditing && (
+          <>
+            <Form.Item
+              label="Subir Testcases (ZIP)"
+              name="zipFile"
+              rules={[{ required: true, message: "Por favor sube un archivo ZIP con los testcases" }]}
+              valuePropName="zipFile"
+              getValueFromEvent={(e) => e} // importante para capturar el evento original
+            >
+              <input type="file" accept=".zip" />
+            </Form.Item>
+            <div className="text-sm text-gray-600 italic mt-2">
+              Asegúrate de que el archivo ZIP contenga los testcases en el formato: 
+              <br />
+              <strong>1.in, 1.out, 2.in, 2.out, ...</strong>
+            </div>
+          </>
           )}
         </Form>
       </Modal>
