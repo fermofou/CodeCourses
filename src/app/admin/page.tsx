@@ -16,16 +16,19 @@ const General = () => {
 
 
 export default function AdminPage() {
-  const [menuOption, setMenuOption] = useState("General");
+  const [menuOption, setMenuOption] = useState("Problemas");
   return (
     <div className="flex h-screen min-h-screen flex-col">
       <Navbar />
       <div className="w-full h-full mx-auto flex justify-start text-center">
         <Leftbar menuOption={menuOption} setMenuOption={setMenuOption}/>
         <div className="flex w-full h-full justify-center p-4">
+         {/*
+         
           { menuOption == "General" && <General /> }
-          { menuOption == "Calendario" && <CalendarTab /> }
+         */} 
           { menuOption == "Problemas" && <Problems /> }
+          { menuOption == "Calendario" && <CalendarTab /> }
           { menuOption == "Usuarios" && <Users /> }
           { menuOption == "Configuración" && <Settings /> }
         </div>
