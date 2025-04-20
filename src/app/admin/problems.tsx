@@ -1,5 +1,5 @@
 // problemas.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Table, Button, Modal, Form, Input, Select, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
@@ -8,34 +8,68 @@ const initialData = [
   {
     key: "1",
     title: "Sumar dos números",
-    difficulty: "l2",
+    difficulty: 2,
     tags: ["Math", "Básico"],
     description: "Suma dos números enteros y devuelve el resultado.",
   },
   {
     key: "2",
     title: "Camino más corto en un grafo",
-    difficulty: "l4",
+    difficulty: 4,
     tags: ["Graphs", "Dijkstra"],
     description: "Encuentra el camino más corto entre dos nodos en un grafo.",
   },
   {
     key: "3",
     title: "Camino más largo en un grafo",
-    difficulty: "l3",
+    difficulty: 3,
     tags: ["Graphs", "Dijkstra"],
     description: "Encuentra el camino más largo entre dos nodos en un grafo.",
   },
 ];
 
+interface ApiProblemType {
+  problem_id: number;
+  title: string;
+  difficulty: number;
+  solved: boolean | null;
+  tags?: string[];
+  description?: string;
+  // Points might be added later
+}
+
+
 const Problems = () => {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(undefined);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingProblem, setEditingProblem] = useState<any>(null);
-  const [parsedURL, setParsedURL] = useState("");
-
+  const [loading, setLoading] = useState<boolean>(true); 
   const [form] = Form.useForm();
+  useEffect(() => {
+    setLoading(true);
+    fetch("http://localhost:8080/problems?userId=6")
+      .then((response) => response.json())
+      .then((data: ApiProblemType[]) => {
+        // Map the API data to match our table structure
+        const formattedProblems = data.map((problem) => {
+          return {
+            key: problem.problem_id,
+            status: problem.solved, // Convert null to false
+            title: problem.title,
+            difficulty: problem.difficulty,
+            tags: problem.tags || ["coding"], // Default tag if not provided
+          };
+        });
+        console.log("formattedProblems", formattedProblems);
+        setData(formattedProblems);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching problems:", error);
+        setLoading(false);
+      });
+  }, []);
 
   const showAddModal = () => {
     setIsEditing(false);
@@ -50,17 +84,48 @@ const Problems = () => {
     setIsModalVisible(true);
   };
 
-  const handleOk = () => {
-    form.validateFields().then(values => {
+  const handleOk = async () => {
+    await form.validateFields().then(async values => {
       if (isEditing) {
-        setData(prev =>
-          prev.map(item =>
-            item.key === editingProblem.key ? { ...editingProblem, ...values } : item
-          )
-        );
+      setData(prev =>
+        prev.map(item =>
+        item.key === editingProblem.key ? { ...editingProblem, ...values } : item
+        )
+      );
       } else {
-        const newProblem = { ...values, key: Date.now().toString() };
-        setData(prev => [...prev, newProblem]);
+      const newProblem = { ...values, key: Date.now().toString() };
+      setData(prev => [...prev, newProblem]);
+      
+      
+      const SampleTests = newProblem.testCases != undefined ? JSON.stringify(
+        newProblem.testCases.map((testCase: any) => ({ input: testCase.testInput, expectedOutput: testCase.testOutput,
+        }))
+      ) : "[]";
+
+      const data = {
+        Title: newProblem.title,
+        Difficulty: newProblem.difficulty,
+        TimeLimit: 5,
+        MemoryLimit: 256,
+        SampleTests: SampleTests,
+        Question: newProblem.description,
+      };
+      console.log("data", data);
+      console.log("values", newProblem);
+
+      try {
+        const response = await fetch("http://localhost:8080/admin/uploadProblemStatement", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        });
+        const res = await response.json(); 
+        console.log("Response from server:", res);
+      } catch (error) {
+        console.error("Error uploading problem statement:", error);
+      }
       }
       setIsModalVisible(false);
       form.resetFields();
@@ -82,13 +147,13 @@ const Problems = () => {
       title: "Dificultad",
       dataIndex: "difficulty",
       key: "difficulty",
-      render: (difficulty: string) => {
+      render: (difficulty: number) => {
         const stars = {
-          "l1": "★☆☆☆☆",
-          "l2": "★★☆☆☆",
-          "l3": "★★★☆☆",
-          "l4": "★★★★☆",
-          "l5": "★★★★★",
+          1: "★☆☆☆☆",
+          2: "★★☆☆☆",
+          3: "★★★☆☆",
+          4: "★★★★☆",
+          5: "★★★★★",
         };
         return <Tag> {stars[difficulty]}</Tag>;
       },
@@ -171,11 +236,11 @@ const Problems = () => {
           <Select
             placeholder="Selecciona dificultad"
             options={[
-              { value: "l1", label: "★☆☆☆☆ Muy Fácil" },
-              { value: "l2", label: "★★☆☆☆ Fácil" },
-              { value: "l3", label: "★★★☆☆ Media" },
-              { value: "l4", label: "★★★★☆ Difícil" },
-              { value: "l5", label: "★★★★★ Muy Difícil" },
+              { value: 1, label: "★☆☆☆☆ Muy Fácil" },
+              { value: 2, label: "★★☆☆☆ Fácil" },
+              { value: 3, label: "★★★☆☆ Media" },
+              { value: 4, label: "★★★★☆ Difícil" },
+              { value: 5, label: "★★★★★ Muy Difícil" },
             ]}
           />
         </Form.Item>
