@@ -155,7 +155,7 @@ export default function ChallengePage() {
       //console.log(`http://localhost:8080/challenge?probID=${probID}&userID=${userID}`);
       try {
         const response = await fetch(
-          `http://localhost:8080/challenge?probID=${probID}&userID=${userID}`
+          `/challenge?probID=${probID}&userID=${userID}`
         );
         const dataChallenge = await response.json();
         dataChallenge.testCases = JSON.parse(dataChallenge.tests);

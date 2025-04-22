@@ -22,6 +22,10 @@ export default defineConfig({
       '/health': {
         target: 'http://localhost:8080',
         changeOrigin: true,
+      },
+      '/challenge': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
       }
     }
   }
