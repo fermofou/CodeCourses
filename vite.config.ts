@@ -11,8 +11,17 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '*': {
-        target: '/',
+      '/execute': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/result': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/health': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
       }
     }
   }

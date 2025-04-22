@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
-import { java } from "@codemirror/lang-java";
 import { cpp } from "@codemirror/lang-cpp";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { Button } from "@/components/ui/button";
@@ -49,7 +48,7 @@ function getProbId() {
   if (/^\d+$/.test(query)) return query;
   if (/^\d+=?$/.test(query)) return query.split("=")[0];
 
-  return null; // Not a valid format
+  return null;
 }
 
 const sampleChallenge = {
@@ -84,27 +83,26 @@ Ejemplo de Salida:
 const languageOptions = [
   { value: "javascript", label: "JavaScript", extension: javascript },
   { value: "python", label: "Python", extension: python },
-  { value: "java", label: "Java", extension: java },
   { value: "cpp", label: "C++", extension: cpp },
 ];
 
 const startingCodeTemplates = {
-  javascript: `function reverseString(str) {
-  // Tu código aquí
+  javascript: `// Write your solution here
+function solution(input) {
+  // Your code here
   
+  return result;
 }`,
-  python: `def reverse_string(s):
-    # Tu código aquí
-    pass`,
-  java: `public class Solution {
-    public String reverseString(String str) {
-        // Tu código aquí
-        return "";
-    }
-}`,
-  cpp: `string reverseString(string str) {
-    // Tu código aquí
-    return "";
+  python: `# Write your solution here
+def solution(input):
+    # Your code here
+    
+    return result`,
+  cpp: `// Write your solution here
+string solution(string input) {
+    // Your code here
+    
+    return result;
 }`,
 };
 
@@ -113,8 +111,8 @@ export const ChallengeContext = createContext<{
   handleRunCode: () => void;
   handleSubmitCode: () => void;
 }>({
-  handleRunCode: () => {},
-  handleSubmitCode: () => {},
+  handleRunCode: () => { },
+  handleSubmitCode: () => { },
 });
 
 export default function ChallengePage() {
@@ -124,8 +122,33 @@ export default function ChallengePage() {
     success: boolean;
     message: string;
   } | null>(null);
+  const [isBackendAvailable, setIsBackendAvailable] = useState<boolean | null>(null);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const [challenge, setChallenge] = useState<Challenge | null>(null);
+
+  // Check if backend is available
+  useEffect(() => {
+    const checkBackend = async () => {
+      try {
+        const response = await fetch('/health');
+        if (response.ok) {
+          setIsBackendAvailable(true);
+          console.log('Backend is available');
+        } else {
+          setIsBackendAvailable(false);
+          console.error('Backend health check failed:', response.status);
+        }
+      } catch (error) {
+        setIsBackendAvailable(false);
+        console.error('Backend is not available:', error);
+      }
+    };
+
+    checkBackend();
+  }, []);
+
   useEffect(() => {
     let probID = getProbId();
     const fetchChallenge = async () => {
@@ -138,15 +161,15 @@ export default function ChallengePage() {
         dataChallenge.testCases = JSON.parse(dataChallenge.tests);
         setChallenge(dataChallenge);
         //console.log(data);
-        // Set starting code to match challenge’s language, fallback to JS
+        // Set starting code to match challenge's language, fallback to JS
         const defaultLang = dataChallenge.language || "javascript";
         setSelectedLanguage(
           languageOptions.find((lang) => lang.value === defaultLang) ||
-            languageOptions[0]
+          languageOptions[0]
         );
         setCode(
           startingCodeTemplates[
-            defaultLang as keyof typeof startingCodeTemplates
+          defaultLang as keyof typeof startingCodeTemplates
           ]
         );
       } catch (err) {
@@ -159,47 +182,399 @@ export default function ChallengePage() {
 
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
   const userID = 6;
-  const handleRunCode = useCallback(() => {
+  const handleRunCode = useCallback(async () => {
     // Clear previous results and console output
     setResults(null);
     setConsoleOutput([]);
+    setIsExecuting(true);
+
+    // Clear any existing timeout
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
 
     // Add a placeholder message to show the execution was triggered
-    setConsoleOutput((prev) => [...prev, "Code execution triggered..."]);
+    setConsoleOutput((prev) => [...prev, "Executing code..."]);
 
-    // Simulate a successful result after a short delay
-    setTimeout(() => {
-      // This is just a placeholder - replace with your actual execution logic
-      setConsoleOutput((prev) => [
-        ...prev,
-        "Input: TechMahindra2024",
-        "Your output: 4202ardnihaMhceT",
-      ]);
+    try {
+      // Log the request payload
+      const payload = {
+        language: selectedLanguage.value,
+        code: code,
+        // Add test cases if available
+        testCases: challenge?.testCases || [],
+      };
+      console.log('Sending request with payload:', payload);
+      setConsoleOutput((prev) => [...prev, "Processing..."]);
 
-      setResults({
-        success: true,
-        message: "¡Prueba superada! La función funciona correctamente.",
+      // Submit code to backend
+      const response = await fetch('/execute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       });
-    }, 1000);
-  }, []);
 
-  const handleSubmitCode = useCallback(() => {
-    // Implement submission logic here
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server response not ok:', response.status, errorText);
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Received initial response:', data);
+
+      if (!data.job_id) {
+        throw new Error('No job ID received from server');
+      }
+
+      const jobId = data.job_id;
+      setConsoleOutput((prev) => [...prev, "Waiting for results..."]);
+
+      // Set up timeout first
+      const newTimeoutId = setTimeout(() => {
+        clearInterval(pollInterval);
+        setConsoleOutput((prev) => [
+          ...prev,
+          "Execution is taking longer than expected...",
+          "You can try running the code again or wait a bit longer."
+        ]);
+        setResults({
+          success: false,
+          message: 'Execution is taking longer than expected',
+        });
+        setIsExecuting(false);
+      }, 30000);
+
+      setTimeoutId(newTimeoutId);
+
+      // Poll for results
+      const pollInterval = setInterval(async () => {
+        try {
+          console.log(`Polling for results of job ${jobId}...`);
+          const resultResponse = await fetch(`/result/${jobId}`);
+
+          if (!resultResponse.ok) {
+            clearInterval(pollInterval);
+            clearTimeout(newTimeoutId);
+            setTimeoutId(null);
+            const errorText = await resultResponse.text();
+            console.error('Result polling failed:', resultResponse.status, errorText);
+            throw new Error(`Result polling failed: ${resultResponse.status} - ${errorText}`);
+          }
+
+          const resultData = await resultResponse.json();
+          console.log('Received result data:', resultData);
+
+          if (resultData.status === 'completed' || resultData.status === 'success') {
+            // Clear both interval and timeout immediately
+            clearInterval(pollInterval);
+            clearTimeout(newTimeoutId);
+            setTimeoutId(null);
+
+            // Format the output to be cleaner
+            const formattedOutput: string[] = [];
+
+            // Add standard output if available
+            if (resultData.output) {
+              let cleanOutput = resultData.output
+                .replace(/Fetching code from:.*?\n/g, '')
+                .replace(/Executing file:.*?\n/g, '')
+                .replace(/Compiling file:.*?\n/g, '')
+                .replace(/Executing compiled program\s*/g, '')
+                .replace(/STDOUT:\s*/g, '')
+                .replace(/STDERR:\s*/g, '')
+                .replace(/^python\s+/g, '')  // Remove "python" prefix if it exists
+                .replace(/^g\+\+\s+.*?\n/g, '')  // Remove g++ compilation commands
+                .replace(/^cc\s+.*?\n/g, '')  // Remove cc compilation commands
+                .replace(/^gcc\s+.*?\n/g, '')  // Remove gcc compilation commands
+                .replace(/\s+/g, ' ')        // Normalize whitespace
+                .trim();
+
+              if (cleanOutput) {
+                formattedOutput.push(cleanOutput);
+              }
+            }
+
+            // Add standard error if available
+            if (resultData.error && resultData.error !== 'None') {
+              let cleanError = resultData.error
+                .replace(/STDERR:\s*/g, '')
+                .replace(/^g\+\+\s+.*?\n/g, '')  // Remove g++ compilation commands
+                .replace(/^cc\s+.*?\n/g, '')  // Remove cc compilation commands
+                .replace(/^gcc\s+.*?\n/g, '')  // Remove gcc compilation commands
+                .trim();
+
+              if (cleanError) {
+                formattedOutput.push(`Error: ${cleanError}`);
+              }
+            }
+
+            // Add execution time if available
+            if (resultData.exec_time_ms) {
+              formattedOutput.push(`Execution time: ${resultData.exec_time_ms}ms`);
+            }
+
+            // Update console output with formatted results
+            setConsoleOutput((prev) => [
+              ...prev.filter(line => !line.includes('Status: pending')), // Remove pending status messages
+              ...formattedOutput,
+            ].filter(Boolean));
+
+            setResults({
+              success: !resultData.error,
+              message: resultData.error
+                ? `Code execution failed: ${resultData.error}`
+                : 'Code executed successfully',
+            });
+            setIsExecuting(false);
+            return; // Exit early after successful completion
+          } else if (resultData.status === 'error') {
+            clearInterval(pollInterval);
+            // Clear the timeout since we got an error
+            if (timeoutId) {
+              clearTimeout(timeoutId);
+              setTimeoutId(null);
+            }
+            setConsoleOutput((prev) => [...prev, `Error: ${resultData.error || 'Unknown error'}`]);
+            setResults({
+              success: false,
+              message: `Code execution failed: ${resultData.error || 'Unknown error'}`,
+            });
+            setIsExecuting(false);
+          } else {
+            // For any other status, just log it
+            setConsoleOutput((prev) => [...prev, `Status: ${resultData.status}`]);
+          }
+        } catch (pollError) {
+          clearInterval(pollInterval);
+          // Clear the timeout since we got an error
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            setTimeoutId(null);
+          }
+          const errorMessage = pollError instanceof Error ? pollError.message : 'Unknown polling error';
+          console.error('Error during result polling:', errorMessage);
+          setConsoleOutput((prev) => [...prev, `Error during result polling: ${errorMessage}`]);
+          setResults({
+            success: false,
+            message: `Failed to get execution results: ${errorMessage}`,
+          });
+          setIsExecuting(false);
+        }
+      }, 1000); // Poll every second
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Error executing code:', errorMessage);
+      setConsoleOutput((prev) => [...prev, `Error: ${errorMessage}`]);
+      setResults({
+        success: false,
+        message: `Failed to execute code: ${errorMessage}`,
+      });
+      setIsExecuting(false);
+    }
+  }, [code, selectedLanguage, challenge, timeoutId]);
+
+  const handleSubmitCode = useCallback(async () => {
     setConsoleOutput((prev) => [...prev, "Submitting code..."]);
+    setIsExecuting(true);
 
-    // Simulate submission
-    setTimeout(() => {
-      setResults({
-        success: true,
-        message: "¡Solución enviada correctamente!",
+    // Clear any existing timeout
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+
+    try {
+      // Log the request payload
+      const payload = {
+        language: selectedLanguage.value,
+        code: code,
+        // Add test cases if available
+        testCases: challenge?.testCases || [],
+      };
+      console.log('Sending submission with payload:', payload);
+      setConsoleOutput((prev) => [...prev, "Processing..."]);
+
+      // Submit code to backend
+      const response = await fetch('/execute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
       });
-    }, 1500);
-  }, []);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server response not ok:', response.status, errorText);
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      }
+
+      const data = await response.json();
+      console.log('Received initial response:', data);
+
+      if (!data.job_id) {
+        throw new Error('No job ID received from server');
+      }
+
+      const jobId = data.job_id;
+      setConsoleOutput((prev) => [...prev, "Waiting for results..."]);
+
+      // Set up timeout first
+      const submitTimeoutId = setTimeout(() => {
+        clearInterval(pollInterval);
+        setConsoleOutput((prev) => [
+          ...prev,
+          "Submission is taking longer than expected...",
+          "You can try submitting again or wait a bit longer."
+        ]);
+        setResults({
+          success: false,
+          message: 'Submission is taking longer than expected',
+        });
+        setIsExecuting(false);
+      }, 30000);
+
+      setTimeoutId(submitTimeoutId);
+
+      // Poll for results
+      const pollInterval = setInterval(async () => {
+        try {
+          console.log(`Polling for results of job ${jobId}...`);
+          const resultResponse = await fetch(`/result/${jobId}`);
+
+          if (!resultResponse.ok) {
+            clearInterval(pollInterval);
+            clearTimeout(submitTimeoutId);
+            setTimeoutId(null);
+            const errorText = await resultResponse.text();
+            console.error('Result polling failed:', resultResponse.status, errorText);
+            throw new Error(`Result polling failed: ${resultResponse.status} - ${errorText}`);
+          }
+
+          const resultData = await resultResponse.json();
+          console.log('Received result data:', resultData);
+
+          if (resultData.status === 'completed' || resultData.status === 'success') {
+            // Clear both interval and timeout immediately
+            clearInterval(pollInterval);
+            clearTimeout(submitTimeoutId);
+            setTimeoutId(null);
+
+            // Format the output to be cleaner
+            const formattedOutput: string[] = [];
+
+            // Add standard output if available
+            if (resultData.output) {
+              let cleanOutput = resultData.output
+                .replace(/Fetching code from:.*?\n/g, '')
+                .replace(/Executing file:.*?\n/g, '')
+                .replace(/Compiling file:.*?\n/g, '')
+                .replace(/Executing compiled program\s*/g, '')
+                .replace(/STDOUT:\s*/g, '')
+                .replace(/STDERR:\s*/g, '')
+                .replace(/^python\s+/g, '')  // Remove "python" prefix if it exists
+                .replace(/^g\+\+\s+.*?\n/g, '')  // Remove g++ compilation commands
+                .replace(/^cc\s+.*?\n/g, '')  // Remove cc compilation commands
+                .replace(/^gcc\s+.*?\n/g, '')  // Remove gcc compilation commands
+                .replace(/\s+/g, ' ')        // Normalize whitespace
+                .trim();
+
+              if (cleanOutput) {
+                formattedOutput.push(cleanOutput);
+              }
+            }
+
+            // Add standard error if available
+            if (resultData.error && resultData.error !== 'None') {
+              let cleanError = resultData.error
+                .replace(/STDERR:\s*/g, '')
+                .replace(/^g\+\+\s+.*?\n/g, '')  // Remove g++ compilation commands
+                .replace(/^cc\s+.*?\n/g, '')  // Remove cc compilation commands
+                .replace(/^gcc\s+.*?\n/g, '')  // Remove gcc compilation commands
+                .trim();
+
+              if (cleanError) {
+                formattedOutput.push(`Error: ${cleanError}`);
+              }
+            }
+
+            // Add execution time if available
+            if (resultData.exec_time_ms) {
+              formattedOutput.push(`Execution time: ${resultData.exec_time_ms}ms`);
+            }
+
+            // Update console output with formatted results
+            setConsoleOutput((prev) => [
+              ...prev.filter(line => !line.includes('Status: pending')), // Remove pending status messages
+              ...formattedOutput,
+            ].filter(Boolean));
+
+            setResults({
+              success: !resultData.error,
+              message: resultData.error
+                ? `Submission failed: ${resultData.error}`
+                : 'Code submitted successfully',
+            });
+            setIsExecuting(false);
+            return; // Exit early after successful completion
+          } else if (resultData.status === 'error') {
+            clearInterval(pollInterval);
+            setConsoleOutput((prev) => [...prev, `Error: ${resultData.error || 'Unknown error'}`]);
+            setResults({
+              success: false,
+              message: `Submission failed: ${resultData.error || 'Unknown error'}`,
+            });
+          } else {
+            // For any other status, just log it
+            setConsoleOutput((prev) => [...prev, `Status: ${resultData.status}`]);
+          }
+        } catch (pollError) {
+          clearInterval(pollInterval);
+          // Clear the timeout since we got an error
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            setTimeoutId(null);
+          }
+          const errorMessage = pollError instanceof Error ? pollError.message : 'Unknown polling error';
+          console.error('Error during result polling:', errorMessage);
+          setConsoleOutput((prev) => [...prev, `Error during result polling: ${errorMessage}`]);
+          setResults({
+            success: false,
+            message: `Failed to get execution results: ${errorMessage}`,
+          });
+          setIsExecuting(false);
+        }
+      }, 1000); // Poll every second
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Error submitting code:', errorMessage);
+      setConsoleOutput((prev) => [...prev, `Error: ${errorMessage}`]);
+      setResults({
+        success: false,
+        message: `Failed to submit code: ${errorMessage}`,
+      });
+      setIsExecuting(false);
+    }
+  }, [code, selectedLanguage, challenge, timeoutId]);
 
   return (
     <ChallengeContext.Provider value={{ handleRunCode, handleSubmitCode }}>
       <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
+
+        {/* Backend availability warning */}
+        {isBackendAvailable === false && (
+          <div className="bg-red-500 text-white p-2 text-center">
+            <p className="font-bold">Warning: Code execution service is not available</p>
+            <p className="text-sm">Please make sure the backend server is running on port 8080</p>
+          </div>
+        )}
 
         {/* Main Content */}
         <Container
@@ -236,20 +611,19 @@ export default function ChallengePage() {
                         </h1>
                         <div className="flex items-center gap-4 mt-2">
                           <span
-                            className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full ${
-                              challenge.difficulty < 2
-                                ? "bg-green-500/10 text-green-500"
-                                : challenge.difficulty === 2
+                            className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full ${challenge.difficulty < 2
+                              ? "bg-green-500/10 text-green-500"
+                              : challenge.difficulty === 2
                                 ? "bg-yellow-500/10 text-yellow-500"
                                 : "bg-red-500/10 text-red-500"
-                            }`}
+                              }`}
                           >
                             <Brain className="h-4 w-4" />
                             {challenge.difficulty === 1
                               ? "Fácil"
                               : challenge.difficulty === 2
-                              ? "Medio"
-                              : "Difícil"}
+                                ? "Medio"
+                                : "Difícil"}
                           </span>
                           <span className="inline-flex items-center gap-1.5 text-sm bg-red-500/10 text-red-500 px-3 py-1 rounded-full">
                             <Trophy className="h-4 w-4" />
@@ -337,7 +711,7 @@ export default function ChallengePage() {
                             setSelectedLanguage(language);
                             setCode(
                               startingCodeTemplates[
-                                value as keyof typeof startingCodeTemplates
+                              value as keyof typeof startingCodeTemplates
                               ]
                             );
                           }
@@ -360,7 +734,7 @@ export default function ChallengePage() {
                         onClick={() =>
                           setCode(
                             startingCodeTemplates[
-                              selectedLanguage.value as keyof typeof startingCodeTemplates
+                            selectedLanguage.value as keyof typeof startingCodeTemplates
                             ]
                           )
                         }
@@ -399,21 +773,59 @@ export default function ChallengePage() {
                         Run your code to see output here
                       </div>
                     ) : (
-                      consoleOutput.map((line, index) => (
-                        <div key={index} className="text-sm mb-1">
-                          {line}
-                        </div>
-                      ))
+                      <>
+                        {consoleOutput.map((line, index) => {
+                          // Determine the line type for styling
+                          let lineClass = "text-sm mb-1";
+
+                          if (line.startsWith("Output:")) {
+                            lineClass += " text-green-400";
+                          } else if (line.startsWith("Error:")) {
+                            lineClass += " text-red-400";
+                          } else if (line.startsWith("Execution time:")) {
+                            lineClass += " text-blue-400";
+                          } else if (line.startsWith("Executing code...") ||
+                            line.startsWith("Processing...") ||
+                            line.startsWith("Waiting for results...")) {
+                            lineClass += " text-gray-400";
+                          } else if (line.startsWith("Status:")) {
+                            lineClass += " text-yellow-400";
+                          } else if (line.startsWith("Execution is taking longer") ||
+                            line.startsWith("Submission is taking longer")) {
+                            lineClass += " text-orange-400";
+                          }
+
+                          return (
+                            <div key={index} className={lineClass}>
+                              {line}
+                            </div>
+                          );
+                        })}
+
+                        {isExecuting && (
+                          <div className="mt-2 text-blue-400 text-sm flex items-center">
+                            <div className="animate-spin mr-2">⚙️</div>
+                            <span>Processing your code...</span>
+                          </div>
+                        )}
+                      </>
                     )}
                     {results && (
                       <div
-                        className={`mt-4 p-2 rounded ${
-                          results.success
-                            ? "bg-green-900/30 text-green-400"
-                            : "bg-red-900/30 text-red-400"
-                        }`}
+                        className={`mt-4 p-2 rounded ${results.success
+                          ? "bg-green-900/30 text-green-400"
+                          : "bg-red-900/30 text-red-400"
+                          }`}
                       >
                         {results.message}
+                        {!results.success && !isExecuting && (
+                          <button
+                            onClick={handleRunCode}
+                            className="ml-2 text-sm underline hover:text-white"
+                          >
+                            Try again
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
