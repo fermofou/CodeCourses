@@ -1,6 +1,6 @@
-import path from "path"
-import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
+import path from "path";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   plugins: [react()],
@@ -10,25 +10,30 @@ export default defineConfig({
     },
   },
   server: {
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     port: 5173,
     proxy: {
-      '/execute': {
-        target: 'http://localhost:8080',
+      "/execute": {
+        target: "http://localhost:8080",
         changeOrigin: true,
       },
-      '/result': {
-        target: 'http://localhost:8080',
+      "/result": {
+        target: "http://localhost:8080",
         changeOrigin: true,
       },
-      '/health': {
-        target: 'http://localhost:8080',
+      "/health": {
+        target: "http://localhost:8080",
         changeOrigin: true,
       },
-      '/challenge': {
-        target: 'http://localhost:8080',
+      "/api/challenge": {
+        // Changed this to /api/challenge
+        target: "http://localhost:8080",
         changeOrigin: true,
-      }
-    }
-  }
-})
+        rewrite: (path) => path.replace(/^\/api\/challenge/, "/challenge"),
+      },
+    },
+    // Add history API fallback to serve index.html for any non-asset paths
+    // This ensures client-side routing works
+    historyApiFallback: true,
+  },
+});

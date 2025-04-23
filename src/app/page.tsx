@@ -93,7 +93,7 @@ export default function Home() {
               to="/challenges"
               className="text-black transition-colors hover:text-primary"
             >
-              Programming challenges
+              Programming Challenges
             </Link>
             <Link
               to="/leaderboard"
@@ -107,6 +107,18 @@ export default function Home() {
             >
               Rewards
             </Link>
+            <Link
+              to="/repos"
+              className="text-black transition-colors hover:text-primary"
+            >
+              Repos
+            </Link>
+            <Link
+              to="/admin"
+              className="text-black transition-colors hover:text-primary"
+            >
+              Admin
+            </Link>
           </nav>
 
           {/* Updated Auth Section */}
@@ -117,13 +129,13 @@ export default function Home() {
                 onClick={() => navigate("/login")}
                 className="hidden sm:inline-flex"
               >
-                Iniciar Sesión
+                Sign In
               </Button>
               <Button
                 onClick={() => navigate("/register")}
                 className="hidden sm:inline-flex"
               >
-                Registrarse
+                Register
               </Button>
             </SignedOut>
 
@@ -182,29 +194,43 @@ export default function Home() {
                   </div>
                 </div>
               </SignedIn>
-
+              {/*
               <Link
                 to="/challenges"
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Retos de Programación
-              </Link>
+                Programming Challenges
+              </Link>{" "}
+              */}
               <Link
                 to="/leaderboard"
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Tabla de Posiciones
+                Leaderboard
               </Link>
               <Link
                 to="/rewards"
                 className="text-black px-2 py-1.5"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Recompensas
+                Rewards
               </Link>
-
+              <Link
+                to="/repos"
+                className="text-black px-2 py-1.5"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Repositories
+              </Link>
+              <Link
+                to="/admin"
+                className="text-black px-2 py-1.5"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
+              </Link>
               <SignedOut>
                 <div className="flex flex-col space-y-2 pt-2 border-t">
                   <Button
@@ -214,7 +240,7 @@ export default function Home() {
                       setIsMobileMenuOpen(false);
                     }}
                   >
-                    Iniciar Sesión
+                    Sign In
                   </Button>
                   <Button
                     onClick={() => {
@@ -222,7 +248,7 @@ export default function Home() {
                       setIsMobileMenuOpen(false);
                     }}
                   >
-                    Registrarse
+                    Register
                   </Button>
                 </div>
               </SignedOut>
@@ -274,13 +300,13 @@ export default function Home() {
                     <div className="flex flex-col items-center text-center space-y-3">
                       <h4 className="text-5xl font-bold text-primary">50+</h4>
                       <p className="text-base text-muted-foreground font-medium">
-                        Desafíos Internos
+                        Internal Challenges
                       </p>
                     </div>
                     <div className="flex flex-col items-center text-center space-y-3">
                       <h4 className="text-5xl font-bold text-primary">300+</h4>
                       <p className="text-base text-muted-foreground font-medium">
-                        Mahindras Activos
+                        Active Mahindras
                       </p>
                     </div>
                   </div>
@@ -292,7 +318,7 @@ export default function Home() {
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Coins className="h-5 w-5" />
-                      <p className="text-base font-medium">MCoins Ganados</p>
+                      <p className="text-base font-medium">MCoins Earned</p>
                     </div>
                   </div>
                 </div>
@@ -303,9 +329,9 @@ export default function Home() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
-                        <h3 className="font-semibold">Desafío Destacado</h3>
+                        <h3 className="font-semibold">Spotlight Challenge</h3>
                         <p className="text-sm text-muted-foreground">
-                          Algoritmos y Estructuras
+                          Data Structures and Alghoritms
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -314,17 +340,17 @@ export default function Home() {
                           500 MC
                         </span>
                         <Button variant="outline" size="sm">
-                          Resolver
+                          Solve
                         </Button>
                       </div>
                     </div>
 
                     <div className="rounded-lg bg-black/95 p-4 font-mono text-sm text-green-400 space-y-4">
                       <div className="flex items-center justify-between text-xs text-muted-foreground border-b border-muted pb-2">
-                        <span>Inversión de Cadenas</span>
+                        <span>Reverse String</span>
                         <div className="flex gap-2">
-                          <span className="text-primary">Tiempo: 1s</span>
-                          <span>Memoria: 128MB</span>
+                          <span className="text-primary">Time: 1s</span>
+                          <span>Memory: 128MB</span>
                         </div>
                       </div>
                       <pre className="space-y-2 overflow-x-auto">
@@ -345,8 +371,8 @@ Ejemplo Output:
 "4202ardnihaMhceT"`}</code>
                       </pre>
                       <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-muted pt-2">
-                        <span>Dificultad: Fácil</span>
-                        <span>Tasa de éxito: 85%</span>
+                        <span>Dificulty: Fácil</span>
+                        <span>Success rate: 85%</span>
                       </div>
                     </div>
 
@@ -358,14 +384,14 @@ Ejemplo Output:
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span>•</span>
-                          <span>Intentos: 156</span>
+                          <span>Tries: 156</span>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div className="space-y-1">
                           <span className="text-muted-foreground">
-                            Complejidad esperada
+                            Expected complexity
                           </span>
                           <div className="h-2 rounded-full bg-muted overflow-hidden">
                             <div className="h-full w-[30%] bg-green-500 rounded-full" />
@@ -373,7 +399,7 @@ Ejemplo Output:
                         </div>
                         <div className="space-y-1">
                           <span className="text-muted-foreground">
-                            Nivel de optimización
+                            Optimization level
                           </span>
                           <div className="h-2 rounded-full bg-muted overflow-hidden">
                             <div className="h-full w-[40%] bg-yellow-500 rounded-full" />
@@ -389,7 +415,7 @@ Ejemplo Output:
                           Arrays
                         </span>
                         <span className="bg-muted px-2 py-1 rounded-full text-xs">
-                          Básico
+                          Basics
                         </span>
                       </div>
                     </div>
@@ -403,36 +429,39 @@ Ejemplo Output:
         <section id="features" className="bg-muted/50 py-24">
           <div className="container space-y-12">
             <h2 className="text-3xl font-bold tracking-tighter text-center sm:text-4xl md:text-5xl">
-              Beneficios para Mahindras
+              Benefits for Mahindras
             </h2>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Brain className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Retos Técnicos</h3>
+                  <h3 className="text-xl font-bold">Technical Challenges</h3>
                   <p className="text-sm text-muted-foreground">
-                    Desafíos diseñados por nuestros expertos, alineados con los
-                    proyectos y tecnologías de Tech Mahindra.
+                    Challenges designed by our experts, aligned with the Tech
+                    Mahindra's projects and technologies.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Target className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Desarrollo Profesional</h3>
+                  <h3 className="text-xl font-bold">
+                    {" "}
+                    Professional Development
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    Gana MCoins y experiencia que se reflejarán en tu evaluación
-                    de desempeño y oportunidades de crecimiento.
+                    Earn MCoins and gain experience that will be reflected in
+                    your performance evaluation and growth opportunities.
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent className="p-6 space-y-2">
                   <Gift className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Reconocimientos</h3>
+                  <h3 className="text-xl font-bold">Recognition</h3>
                   <p className="text-sm text-muted-foreground">
-                    Canjea tus MCoins por beneficios exclusivos como días
-                    libres, cursos premium y merchandising de la empresa.
+                    Redeem your MCoins for exclusive benefits like days off,
+                    premium courses, and company merchandise.
                   </p>
                 </CardContent>
               </Card>
@@ -447,8 +476,7 @@ Ejemplo Output:
                 Top Mahindras
               </h2>
               <p className="text-xl text-muted-foreground max-w-[42rem] mx-auto">
-                Los desarrolladores más destacados de esta semana en nuestra
-                empresa.
+                This week's top developers at our company.
               </p>
             </div>
             <div className="max-w-3xl mx-auto">
@@ -487,9 +515,9 @@ Ejemplo Output:
                               Developer_{index + 1}
                             </span>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>Nivel {stats.level}</span>
+                              <span>Level {stats.level}</span>
                               <span>•</span>
-                              <span>{stats.challenges} desafíos</span>
+                              <span>{stats.challenges} challenges</span>
                             </div>
                           </div>
                         </div>
@@ -520,10 +548,10 @@ Ejemplo Output:
           <div className="container space-y-12">
             <div className="text-center space-y-4">
               <span className="text-primary text-sm font-medium">
-                Próximamente
+                Coming soon
               </span>
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                Nuevas Funcionalidades
+                New Functionalities
               </h2>
             </div>
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -533,8 +561,8 @@ Ejemplo Output:
                   <div>
                     <h3 className="font-bold">Tech Mahindra Trivia</h3>
                     <p className="text-sm text-muted-foreground">
-                      Demuestra tu conocimiento sobre nuestras tecnologías y
-                      procesos internos.
+                      Show your knowledge in our technologies and internal
+                      processes.
                     </p>
                   </div>
                 </CardContent>
@@ -543,10 +571,10 @@ Ejemplo Output:
                 <CardContent className="p-6 flex gap-4">
                   <Sparkles className="h-8 w-8 text-primary flex-shrink-0" />
                   <div>
-                    <h3 className="font-bold">Torneos por Área</h3>
+                    <h3 className="font-bold">Tournaments by Area</h3>
                     <p className="text-sm text-muted-foreground">
-                      Compite con otros Mahindras de tu departamento en desafíos
-                      especializados.
+                      Compete with other Mahindras in your department in
+                      specialized challenges.
                     </p>
                   </div>
                 </CardContent>
@@ -558,26 +586,26 @@ Ejemplo Output:
       <footer className="border-t py-8">
         <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm text-muted-foreground">
-            © 2024 Tech Mahindra. Todos los derechos reservados.
+            © 2025 Tech Mahindra. All rights reserved.
           </p>
           <div className="flex items-center space-x-4">
             <Link
               to="#"
               className="text-sm text-muted-foreground hover:text-primary"
             >
-              Términos
+              Terms
             </Link>
             <Link
               to="#"
               className="text-sm text-muted-foreground hover:text-primary"
             >
-              Privacidad
+              Privacy
             </Link>
             <Link
               to="#"
               className="text-sm text-muted-foreground hover:text-primary"
             >
-              Contacto
+              Contact
             </Link>
           </div>
         </div>

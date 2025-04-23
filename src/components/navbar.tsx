@@ -70,19 +70,19 @@ const Navbar = () => {
               to="/challenges"
               className="text-black transition-colors hover:text-primary"
             >
-              Retos de Programación
+              Programming Challenges
             </Link>
             <Link
               to="/leaderboard"
               className="text-black transition-colors hover:text-primary"
             >
-              Tabla de Posiciones
+              Leaderboard
             </Link>
             <Link
               to="/rewards"
               className="text-black transition-colors hover:text-primary"
             >
-              Recompensas
+              Rewards
             </Link>
             <Link
               to="/repos"
@@ -94,7 +94,7 @@ const Navbar = () => {
               to="/admin"
               className="text-black transition-colors hover:text-primary"
             >
-             Admin 
+              Admin
             </Link>
           </nav>
         )}
