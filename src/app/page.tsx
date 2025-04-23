@@ -17,6 +17,7 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/custom-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { useUserData } from "../userData";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ export default function Home() {
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [mcoins, setMcoins] = useState(112750);
+  const {
+    state: { userData, loading, error },
+  } = useUserData();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -144,12 +148,16 @@ export default function Home() {
                 <div className="hidden md:flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <Coins className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium">2,500 MC</span>
+                    <span className="text-sm font-medium">
+                      {userData?.points} MC
+                    </span>
                   </div>
                   <div className="h-4 w-px bg-border" />
                   <div className="flex items-center gap-2">
                     <Trophy className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium">Nivel 12</span>
+                    <span className="text-sm font-medium">
+                      Nivel {userData?.level}
+                    </span>
                   </div>
                 </div>
                 <UserButton
@@ -186,11 +194,11 @@ export default function Home() {
                 <div className="flex items-center justify-between p-2 mb-2 bg-muted/50 rounded-lg">
                   <div className="flex items-center gap-3">
                     <Coins className="h-5 w-5 text-primary" />
-                    <span className="font-medium">2,500 MC</span>
+                    <span className="font-medium">{userData?.points} MC</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <Trophy className="h-5 w-5 text-primary" />
-                    <span className="font-medium">Nivel 12</span>
+                    <span className="font-medium">Level {userData?.level}</span>
                   </div>
                 </div>
               </SignedIn>

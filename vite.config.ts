@@ -32,8 +32,5 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/challenge/, "/challenge"),
       },
     },
-    // Add history API fallback to serve index.html for any non-asset paths
-    // This ensures client-side routing works
-    historyApiFallback: true,
   },
 });

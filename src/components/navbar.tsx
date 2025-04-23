@@ -4,10 +4,14 @@ import { Coins, Trophy, PlayCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useContext } from "react";
 import { ChallengeContext } from "@/app/challenge/page";
+import { useUserData } from "../userData";
 
 const Navbar = () => {
   const location = useLocation();
   const isChallengePage = location.pathname === "/challenge";
+  const {
+    state: { userData, loading, error },
+  } = useUserData();
 
   // Get the challenge functions if we're on the challenge page
   const challengeFunctions = isChallengePage
@@ -105,12 +109,16 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <Coins className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">2,500 MC</span>
+                <span className="text-sm font-medium">
+                  {userData?.points} MC
+                </span>
               </div>
               <div className="h-4 w-px bg-border" />
               <div className="flex items-center gap-2">
                 <Trophy className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">Nivel 12</span>
+                <span className="text-sm font-medium">
+                  Nivel {userData?.level}
+                </span>
               </div>
             </div>
             <UserButton

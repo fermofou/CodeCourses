@@ -16,7 +16,7 @@ import {
   Code,
   Terminal,
 } from "lucide-react";
-import { SignedIn, UserButton } from "@clerk/clerk-react";
+import { SignedIn, UserButton, useUser } from "@clerk/clerk-react";
 import { Container, Section, Bar } from "@column-resizer/react";
 import Navbar from "@/components/navbar";
 import {

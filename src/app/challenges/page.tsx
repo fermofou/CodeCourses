@@ -8,6 +8,7 @@ import { Tag as AntdTag } from "antd";
 import DuoImage from "./DuoMissing.png";
 import Navbar from "@/components/navbar";
 import { useState, useEffect } from "react";
+import { SignedIn, useUser } from "@clerk/clerk-react";
 
 interface ProblemsTableType {
   key: number;
@@ -34,20 +35,6 @@ interface ProblemOverviewType {
   difficulty: number;
   description: string;
 }
-
-// Helper function to convert difficulty string to number
-const difficultyToNumber = (difficulty: string): number => {
-  const difficultyMap: { [key: string]: number } = {
-    Fácil: 1,
-    Easy: 1,
-    Medium: 3,
-    Medio: 3,
-    Difícil: 5,
-    Hard: 5,
-  };
-
-  return difficultyMap[difficulty] || 2; // Default to 2 if unknown
-};
 
 const columns: ColumnsType<ProblemsTableType> = [
   {
@@ -172,7 +159,7 @@ const CompletedMar = ({ completed }: { completed: boolean | null }) => {
 const Gym = ({ problems }: { problems: ProblemsTableType[] }) => {
   return (
     <div className="flex flex-col min-w-[40rem] flex-grow gap-4">
-      <span className="text-xl font-bold">Todos los problemas</span>
+      <span className="text-xl font-bold">All problems</span>
       <Table<ProblemsTableType>
         pagination={{ pageSize: 10, showSizeChanger: false }}
         dataSource={problems}
@@ -322,6 +309,15 @@ export default function ChallengesPage() {
   const navigate = useNavigate();
   const [problems, setProblems] = useState<ProblemsTableType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { isLoaded, user } = useUser();
+
+  if (!isLoaded) {
+    // Handle loading state
+    return null;
+  }
+
+  if (!user) return null;
 
   useEffect(() => {
     setLoading(true);
