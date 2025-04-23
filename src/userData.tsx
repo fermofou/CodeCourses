@@ -82,7 +82,9 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "LOADING" });
     try {
       // Replace with your actual API endpoint
-      const response = await fetch(`http://localhost:8080/user/${user.id}`);
+      const response = await fetch(
+        `http://localhost:8080/user/${user.id}/${user.fullName}/${user.emailAddresses}`
+      );
       if (!response.ok) throw new Error("Failed to fetch user data");
       const data = await response.json();
       dispatch({ type: "SET_USER_DATA", payload: data });
