@@ -176,7 +176,7 @@ const DailyChallenge = ({ onClick }: { onClick?: () => void }) => {
       onClick={onClick}
     >
       <div className="absolute bottom-0 left-0 bg-white text-xs px-2 py-1 ">
-        Desafío Diario
+        Daily Challenge
       </div>
       <div className="flex flex-col gap-3 items-center">
         <span className="text-xl font-bold">{dailyChallenge.name}</span>
@@ -321,7 +321,7 @@ export default function ChallengesPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:8080/problems?userId=6")
+    fetch(`http://localhost:8080/problems?userId=${user?.id}`)
       .then((response) => response.json())
       .then((data: ApiProblemType[]) => {
         // Map the API data to match our table structure
