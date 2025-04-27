@@ -32,6 +32,7 @@ const Problems = () => {
   const [problemsData, setProblemsData] = useState(undefined);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingProblem, setLoadingProblem] = useState<boolean>(true);
   const [challengeData, setChallengeData] = useState<ProblemData>({
@@ -44,6 +45,8 @@ const Problems = () => {
       expectedOutput: "",
     }],
   });
+  const [refetch, setRefetch] = useState(false);
+  const [deletingID, setDeletingID] = useState<number | null>(null);
   const [zipFile, setZipFile] = useState<File | null>(null);
   const userID = 6;
 
@@ -70,7 +73,7 @@ const Problems = () => {
         console.error("Error fetching problems:", error);
         setLoading(false);
       });
-  }, []);
+  }, [refetch]);
 
   const fetchProblem = async (problemId: number) => {
     try {
@@ -86,17 +89,27 @@ const Problems = () => {
 
   const showAddModal = () => {
     setIsEditing(false);
+    setIsDeleting(false);
+    setLoadingProblem(false);
     setIsModalVisible(true);
   };
 
   const showEditModal = async (record: any) => {
     setIsEditing(true);
+    setIsDeleting(false);
     setLoadingProblem(true); 
     setIsModalVisible(true);
     await fetchProblem(record.key);
     setLoadingProblem(false);
   };
 
+  const showDeleteModal = async (record: any) => {
+    setIsEditing(false); 
+    setIsDeleting(true);
+    setLoadingProblem(false);
+    setDeletingID(record.key);
+    setIsModalVisible(true);
+  }
 
   const handleEditProblem = async () => {
     console.log(challengeData);
@@ -131,7 +144,6 @@ const Problems = () => {
 
   const handleUploadProblem = async () => {
       const newProblem = { ...challengeData, key: Date.now().toString() };
-      setProblemsData(prev => [...prev, challengeData]);
       
       const SampleTests = newProblem.testCases != undefined ? JSON.stringify(
         newProblem.testCases.map((testCase: any) => ({ input: testCase.input, expectedOutput: testCase.expectedOutput,
@@ -159,9 +171,29 @@ const Problems = () => {
         });
         const res = await response.json(); 
         console.log("Response from server:", res);
+        setRefetch(!refetch);
       } catch (error) {
         console.error("Error uploading problem statement:", error);
       }
+  }
+
+  const handleDeleteProblem = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/admin/deleteProblem?problemId=${deletingID}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Error deleting problem");
+      }
+      const res = await response.json();
+      console.log("Response from server:", res);
+    } catch (error) {
+      console.error("Error deleting problem:", error);
+    }
+    setRefetch(!refetch);
   }
 
   const handleClose = () => {
@@ -181,6 +213,8 @@ const Problems = () => {
   const handleOk = async () => {
       if (isEditing) {
         await handleEditProblem();
+      } else if (isDeleting){
+        await handleDeleteProblem();
       } else {
         await handleUploadProblem();
       }
@@ -232,7 +266,7 @@ const Problems = () => {
           <Button icon={<EditOutlined />} onClick={() => {showEditModal(record);}}>
             Editar
           </Button>
-          <Button danger>
+          <Button danger onClick={() => {showDeleteModal(record);}}>
             Eliminar   
           </Button> 
         </div>
@@ -253,15 +287,16 @@ const Problems = () => {
       </div>
       <Table columns={columns} dataSource={problemsData} />
       <Modal
-        title={isEditing ? "Editar Problema" : "Agregar Problema"}
+        style={{ marginTop:"-3rem"}}
+        title={isEditing ? "Editar Problema" : (isDeleting ? "Eliminar Problema" : "Agregar Problema")}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText="Guardar"
+        okText= {isEditing ? "Guardar" : (isDeleting ? "Eliminar" : "Agregar")}
         cancelText="Cancelar"
       >
         {loadingProblem && <p>Cargando problema...</p>}
-        {!loadingProblem && ( 
+        {!loadingProblem && !isDeleting && ( 
         <> 
         <div style={{marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem"}}>
           Título
@@ -394,6 +429,11 @@ const Problems = () => {
         </>
         )}
         </>
+        )}
+        {isDeleting && (
+          <div>
+            <p>¿Estás seguro de que deseas eliminar este problema?</p>
+          </div>
         )}
 
 
