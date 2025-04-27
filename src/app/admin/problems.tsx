@@ -1,6 +1,6 @@
 // problemas.ts
 import { useState, useEffect } from "react";
-import { Table, Button, Modal, Form, Input, Select, Tag } from "antd";
+import { Table, Button, Modal, Input, Select, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -29,10 +29,9 @@ interface ProblemData {
 }
 
 const Problems = () => {
-  const [data, setData] = useState(undefined);
+  const [problemsData, setProblemsData] = useState(undefined);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editingProblem, setEditingProblem] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingProblem, setLoadingProblem] = useState<boolean>(true);
   const [challengeData, setChallengeData] = useState<ProblemData>({
@@ -46,7 +45,6 @@ const Problems = () => {
     }],
   });
   const [zipFile, setZipFile] = useState<File | null>(null);
-  const [form] = Form.useForm(); 
   const userID = 6;
 
   useEffect(() => {
@@ -65,7 +63,7 @@ const Problems = () => {
 
           };
         });
-        setData(formattedProblems);
+        setProblemsData(formattedProblems);
         setLoading(false);
       })
       .catch((error) => {
@@ -79,16 +77,7 @@ const Problems = () => {
       const response = await fetch(`http://localhost:8080/challenge?probID=${problemId}&userID=${userID}`);
       const data = await response.json(); 
       data.testCases = JSON.parse(data.tests);
-      setChallengeData({
-        title: data.title,
-        difficulty: data.difficulty,
-        tags: data.tags,
-        question: data.question,
-        testCases: data.testCases.map((testCase: any) => ({
-          input: testCase.input,
-          expectedOutput: testCase.expectedOutput,
-        })),
-      }) 
+      setChallengeData(data) 
       return data;
     } catch (error) {
       console.error("Error fetching problem:", error);
@@ -97,14 +86,11 @@ const Problems = () => {
 
   const showAddModal = () => {
     setIsEditing(false);
-    form.resetFields();
     setIsModalVisible(true);
   };
 
   const showEditModal = async (record: any) => {
     setIsEditing(true);
-    setEditingProblem(record);
-    form.setFieldsValue(record);
     setLoadingProblem(true); 
     setIsModalVisible(true);
     await fetchProblem(record.key);
@@ -113,13 +99,39 @@ const Problems = () => {
 
 
   const handleEditProblem = async () => {
-    
+    console.log(challengeData);
+    const SampleTests = challengeData.testCases != undefined ? JSON.stringify( 
+      challengeData.testCases.map((testCase: any) => ({ input: testCase.input, expectedOutput: testCase.expectedOutput,
+      }))
+    ) : "[]";
+    const data = {
+      problem_id: challengeData.problem_id, 
+      title: challengeData.title,
+      difficulty: challengeData.difficulty,
+      timeLimit: 5,
+      memoryLimit: 256,
+      sampleTests: SampleTests, 
+      question: challengeData.question,
+    } 
+    try {
+        const response = await fetch("http://localhost:8080/admin/editProblemStatement", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        });
+        const res = await response.json();
+        console.log("Response from server:", res);
+    } catch (error) {
+      console.error("Error uploading problem statement:", error);
+    }
+
   }
 
   const handleUploadProblem = async () => {
-      const values = challengeData; 
-      const newProblem = { ...values, key: Date.now().toString() };
-      setData(prev => [...prev, newProblem]);
+      const newProblem = { ...challengeData, key: Date.now().toString() };
+      setProblemsData(prev => [...prev, challengeData]);
       
       const SampleTests = newProblem.testCases != undefined ? JSON.stringify(
         newProblem.testCases.map((testCase: any) => ({ input: testCase.input, expectedOutput: testCase.expectedOutput,
@@ -239,7 +251,7 @@ const Problems = () => {
           label="Agregar problema"
         />
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={problemsData} />
       <Modal
         title={isEditing ? "Editar Problema" : "Agregar Problema"}
         visible={isModalVisible}
