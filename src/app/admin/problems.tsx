@@ -45,6 +45,7 @@ const Problems = () => {
       expectedOutput: "",
     }],
   });
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [refetch, setRefetch] = useState(false);
   const [deletingID, setDeletingID] = useState<number | null>(null);
   const [zipFile, setZipFile] = useState<File | null>(null);
@@ -74,6 +75,10 @@ const Problems = () => {
         setLoading(false);
       });
   }, [refetch]);
+  
+  useEffect(() => {
+    console.log("Zip file changed:", zipFile);
+  }, [zipFile]);
 
   const fetchProblem = async (problemId: number) => {
     try {
@@ -111,6 +116,24 @@ const Problems = () => {
     setIsModalVisible(true);
   }
 
+  const validateForm = () => {
+    if (challengeData.title === "" || challengeData.question === ""){
+      alert("Por favor completa todos los campos requeridos.");
+      return false;
+    }
+
+    if (challengeData.testCases?.some((testCase) => testCase.input === "" || testCase.expectedOutput === "")) {
+      alert("Por favor no dejes campos vacíos en los testcases de ejemplo.");
+      return false;
+    }
+    if(!isEditing && !zipFile){
+        alert("por favor selecciona un archivo zip.");
+        return false;
+    }
+
+    return true;
+  }
+
   const handleEditProblem = async () => {
     console.log(challengeData);
     const SampleTests = challengeData.testCases != undefined ? JSON.stringify( 
@@ -142,9 +165,27 @@ const Problems = () => {
 
   }
 
+  const handleUploadTestcases = async (problemId: number) => {
+    if (!zipFile) {
+      console.error("No file selected");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", zipFile);
+    try {
+      const response = await fetch(`http://localhost:8080/admin/uploadTestcases?problemId=${problemId}`, {
+        method: "POST",
+        body: formData,
+      });
+      const res = await response.json();
+      console.log("Response from server:", res);
+    } catch (error) {
+      console.error("Error uploading test cases:", error);
+    }
+  }
+
   const handleUploadProblem = async () => {
-      const newProblem = { ...challengeData, key: Date.now().toString() };
-      
+    const newProblem = { ...challengeData, key: Date.now().toString() };
       const SampleTests = newProblem.testCases != undefined ? JSON.stringify(
         newProblem.testCases.map((testCase: any) => ({ input: testCase.input, expectedOutput: testCase.expectedOutput,
         }))
@@ -170,7 +211,7 @@ const Problems = () => {
           body: JSON.stringify(data)
         });
         const res = await response.json(); 
-        console.log("Response from server:", res);
+        await handleUploadTestcases(res.problem_id); 
         setRefetch(!refetch);
       } catch (error) {
         console.error("Error uploading problem statement:", error);
@@ -211,14 +252,24 @@ const Problems = () => {
   }
 
   const handleOk = async () => {
-      if (isEditing) {
-        await handleEditProblem();
-      } else if (isDeleting){
-        await handleDeleteProblem();
-      } else {
-        await handleUploadProblem();
-      }
-      handleClose();
+    if (isEditing) {
+      if (!validateForm()) {
+        return;
+      } 
+      setIsLoadingSave(true);
+      await handleEditProblem();
+    } else if (isDeleting){
+      setIsLoadingSave(true);
+      await handleDeleteProblem();
+    } else {
+      if (!validateForm()) {
+        return;
+      } 
+      setIsLoadingSave(true);
+      await handleUploadProblem();
+    }
+    setIsLoadingSave(false);
+    handleClose();
   };
 
   const handleCancel = () => {
@@ -291,8 +342,10 @@ const Problems = () => {
         title={isEditing ? "Editar Problema" : (isDeleting ? "Eliminar Problema" : "Agregar Problema")}
         visible={isModalVisible}
         onOk={handleOk}
+        disabled={isLoadingSave}
         onCancel={handleCancel}
         okText= {isEditing ? "Guardar" : (isDeleting ? "Eliminar" : "Agregar")}
+        okButtonProps={{ loading: isLoadingSave }} 
         cancelText="Cancelar"
       >
         {loadingProblem && <p>Cargando problema...</p>}
@@ -435,8 +488,6 @@ const Problems = () => {
             <p>¿Estás seguro de que deseas eliminar este problema?</p>
           </div>
         )}
-
-
       </Modal>
 
     </div>

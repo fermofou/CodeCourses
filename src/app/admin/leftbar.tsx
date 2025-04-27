@@ -1,5 +1,5 @@
 import { JSX, useState } from "react";
-import { Settings, Users, Folder, Home, Calendar, CodeXml } from "lucide-react";
+import { Settings, Users, Folder, Home, CodeXml } from "lucide-react";
 
 interface MenuItem {
   name: string;
@@ -10,7 +10,6 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   // { name: "General", icon: <Home size={20} /> },
   { name: "Problemas", icon: <CodeXml size={20} /> },
-  { name: "Calendario", icon: <Calendar size={20} /> },
   { name: "Usuarios", icon: <Users size={20} /> },
   { name: "Configuración", icon: <Settings size={20} /> }
 ];

@@ -4,7 +4,6 @@ import Leftbar from "./leftbar";
 import Problems from "./problems";
 import Users from "./users";
 import Settings from "./settings";
-import CalendarTab from "./calendar";
 
 const General = () => {
   return (
@@ -28,7 +27,6 @@ export default function AdminPage() {
           { menuOption == "General" && <General /> }
          */} 
           { menuOption == "Problemas" && <Problems /> }
-          { menuOption == "Calendario" && <CalendarTab /> }
           { menuOption == "Usuarios" && <Users /> }
           { menuOption == "Configuración" && <Settings /> }
         </div>
