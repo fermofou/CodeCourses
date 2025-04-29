@@ -1,5 +1,6 @@
 import { MotionValue, motion, useSpring, useTransform } from "framer-motion";
 import { useEffect } from "react";
+import React from "react";
 
 const fontSize = 32; // Slightly smaller for retro look
 const padding = 15;
@@ -16,7 +17,7 @@ export function AnimatedCounter({ value, className = "" }: CounterProps) {
   const places = Array.from({ length: numDigits }, (_, i) => Math.pow(10, numDigits - i - 1));
 
   return (
-    <div 
+    <div
       className={`inline-flex bg-[#FDFBF7] rounded-lg p-2 shadow-inner overflow-hidden ${className}`}
       style={{
         boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)',
@@ -24,12 +25,12 @@ export function AnimatedCounter({ value, className = "" }: CounterProps) {
       }}
     >
       {places.map((place, i) => (
-        <>
-          <Digit key={i} place={place} value={value} />
+        <React.Fragment key={i}>
+          <Digit place={place} value={value} />
           {i < places.length - 1 && i % 3 === 2 && (
             <span className="mx-1 self-center font-mono text-black">,</span>
           )}
-        </>
+        </React.Fragment>
       ))}
     </div>
   );
@@ -49,8 +50,8 @@ function Digit({ place, value }: { place: number; value: number }) {
   }, [animatedValue, valueRoundedToPlace]);
 
   return (
-    <div 
-      style={{ height }} 
+    <div
+      style={{ height }}
       className="relative w-[1ch] font-mono tabular-nums bg-[#FDFBF7] text-black overflow-hidden"
     >
       {[...Array(10).keys()].map((i) => (

@@ -26,10 +26,29 @@ export default defineConfig({
         changeOrigin: true,
       },
       "/api/challenge": {
-        // Changed this to /api/challenge
         target: "http://localhost:8080",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/challenge/, "/challenge"),
+      },
+      "/user": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/leaderboard": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/problems": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/rewards": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/challenge": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
       },
     },
   },

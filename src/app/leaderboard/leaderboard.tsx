@@ -44,7 +44,7 @@ const Leaderboard: React.FC = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("http://localhost:8080/leaderboard")
+        const res = await fetch("/leaderboard")
         const data = await res.json()
         setLeaderboard(data)
       } catch (err) {

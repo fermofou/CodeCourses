@@ -160,7 +160,17 @@ export default function ChallengePage() {
           `api/challenge?probID=${probID}&userID=${userID}`
         );
         const dataChallenge = await response.json();
-        dataChallenge.testCases = JSON.parse(dataChallenge.tests);
+        // Handle test cases properly
+        if (typeof dataChallenge.tests === 'string') {
+          try {
+            dataChallenge.testCases = JSON.parse(dataChallenge.tests);
+          } catch (e) {
+            console.error('Failed to parse test cases:', e);
+            dataChallenge.testCases = [];
+          }
+        } else {
+          dataChallenge.testCases = dataChallenge.tests || [];
+        }
         setChallenge(dataChallenge);
         //console.log(data);
         // Set starting code to match challenge's language, fallback to JS

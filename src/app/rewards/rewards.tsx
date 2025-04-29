@@ -57,7 +57,7 @@ export default function RewardsPage() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:8080/rewards")
+    fetch("/rewards")
       .then((response) => response.json())
       .then((data) => setRewards(data))
       .catch((error) => console.error("Error fetching rewards:", error));

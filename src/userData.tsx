@@ -31,10 +31,10 @@ type UserDataAction =
 // Create context with type safety
 const UserDataContext = createContext<
   | {
-      state: UserDataState;
-      dispatch: React.Dispatch<UserDataAction>;
-      refreshUserData: () => void;
-    }
+    state: UserDataState;
+    dispatch: React.Dispatch<UserDataAction>;
+    refreshUserData: () => void;
+  }
   | undefined
 >(undefined);
 
@@ -83,7 +83,7 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
     try {
       // Replace with your actual API endpoint
       const response = await fetch(
-        `http://localhost:8080/user/${user.id}/${user.fullName}/${user.emailAddresses}`
+        `/user/${user.id}/${user.fullName}/${user.emailAddresses[0].emailAddress}`
       );
       if (!response.ok) throw new Error("Failed to fetch user data");
       const data = await response.json();
