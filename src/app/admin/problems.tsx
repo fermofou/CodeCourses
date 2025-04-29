@@ -327,15 +327,10 @@ const Problems = () => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Problemas</h2>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={showAddModal}
-          label="Agregar problema"
-        />
-      </div>
+      <div className="mb-6">
+  <h1 className="text-3xl font-bold mb-2">Problemas</h1>
+  <p className="text-gray-600">Administra y gestiona los problemas de la plataforma</p>
+</div>
       <Table columns={columns} dataSource={problemsData} />
       <Modal
         style={{ marginTop:"-3rem"}}

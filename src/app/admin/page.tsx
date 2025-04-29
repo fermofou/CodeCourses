@@ -3,6 +3,7 @@ import Navbar from "@/components/navbar";
 import Leftbar from "./leftbar";
 import Problems from "./problems";
 import Users from "./users";
+import Medals from "./medals";
 import Settings from "./settings";
 
 const General = () => {
@@ -28,6 +29,7 @@ export default function AdminPage() {
          */} 
           { menuOption == "Problemas" && <Problems /> }
           { menuOption == "Usuarios" && <Users /> }
+          { menuOption == "Medallas" && <Medals /> }
           { menuOption == "Configuración" && <Settings /> }
         </div>
       </div>
