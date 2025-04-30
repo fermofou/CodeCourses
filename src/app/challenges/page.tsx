@@ -321,7 +321,7 @@ export default function ChallengesPage() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/problems?userId=6`)  // Using a default user ID for now
+    fetch(`api/problems?userId=${user.id}`)
       .then((response) => response.json())
       .then((data: ApiProblemType[]) => {
         // Map the API data to match our table structure

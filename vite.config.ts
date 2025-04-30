@@ -38,15 +38,16 @@ export default defineConfig({
         target: "http://localhost:8080",
         changeOrigin: true,
       },
-      "/problems": {
+      "/api/problems": {
         target: "http://localhost:8080",
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/problems/, "/problems"),
       },
       "/rewards": {
         target: "http://localhost:8080",
         changeOrigin: true,
       },
-      "/challenge": {
+      "api/challenge": {
         target: "http://localhost:8080",
         changeOrigin: true,
       },
