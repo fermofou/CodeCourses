@@ -56,7 +56,7 @@ const Medals = () => {
             className="w-10 h-10 rounded-full"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = "https://via.placeholder.com/40";
+              target.src = "https://imanolgzz.com/_next/image?url=%2Fimages%2FmainPhoto.jpg&w=1920&q=75/40";
             }}
           />
           <span className="font-medium">{text}</span>
@@ -137,7 +137,7 @@ const Medals = () => {
       name,
       description,
       requirement,
-      image_url: imageUrl || "https://via.placeholder.com/40",
+      image_url: imageUrl || "https://imanolgzz.com/_next/image?url=%2Fimages%2FmainPhoto.jpg&w=1920&q=75/40",
     };
 
     const method = isEditing ? "PUT" : "POST";
@@ -164,7 +164,7 @@ const Medals = () => {
           name,
           description,
           requirement,
-          imageUrl: imageUrl || "https://via.placeholder.com/40",
+          imageUrl: imageUrl || "https://imanolgzz.com/_next/image?url=%2Fimages%2FmainPhoto.jpg&w=1920&q=75/40",
           createdAt: new Date().toISOString(),
         };
 
