@@ -313,7 +313,6 @@ export default function ChallengesPage() {
   const { isLoaded, user } = useUser();
 
   if (!isLoaded) {
-    // Handle loading state
     return null;
   }
 
