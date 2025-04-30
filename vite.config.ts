@@ -13,6 +13,10 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
     proxy: {
+      "/claim": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
       "/execute": {
         target: "http://localhost:8080",
         changeOrigin: true,
@@ -43,9 +47,10 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/problems/, "/problems"),
       },
-      "/rewards": {
+      "/api/rewards": {
         target: "http://localhost:8080",
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/rewards/, "/rewards"),
       },
       "api/challenge": {
         target: "http://localhost:8080",

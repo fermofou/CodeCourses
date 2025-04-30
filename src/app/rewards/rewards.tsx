@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/custom-button";
 import React, { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/navbar";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search, ShoppingCart, User } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { useUser } from "@clerk/clerk-react";
 
 interface Product {
   reward_id: number;
@@ -34,7 +35,7 @@ export default function RewardsPage() {
   const [rewards, setRewards] = useState<Product[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [userPoints, setUserPoints] = useState(1000); // Replace with actual user points
-
+  const { user } = useUser();
   const addToCart = (product: Product) => {
     setCartItems([...cartItems, product]);
     setSelectedProduct(null);
@@ -57,7 +58,7 @@ export default function RewardsPage() {
   }, []);
 
   useEffect(() => {
-    fetch("/rewards")
+    fetch("/api/rewards")
       .then((response) => response.json())
       .then((data) => setRewards(data))
       .catch((error) => console.error("Error fetching rewards:", error));
@@ -80,7 +81,7 @@ export default function RewardsPage() {
                   Items
                 </a>
                 <a
-                  href=""
+                  href="#"
                   className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-black hover:bg-gray-100"
                 >
                   My purchases
@@ -212,16 +213,43 @@ export default function RewardsPage() {
                     </p>
                   </div>
                   <Button
-                    onClick={() => {
-                      // Simulate an API call
+                    onClick={async () => {
                       if (userPoints >= item.cost) {
-                        console.log(`Calling: buy/userid/${item.reward_id}`);
+                        console.log(`Claiming reward: ${item.reward_id}`);
+                        const payload = {
+                          userID: user?.id,
+                          rewardID: item.reward_id,
+                        };
+                        try {
+                          const response = await fetch("/claim", {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(payload),
+                          });
+
+                          const data = await response.json();
+
+                          if (response.ok) {
+                            alert(data.message);
+                            // Update user points after successful purchase
+                            setUserPoints((prev) => prev - item.cost);
+                          } else {
+                            alert(
+                              `Error: ${data.message || "Failed to claim"}`
+                            );
+                          }
+                        } catch (error) {
+                          alert(`Request failed: ${error.message}`);
+                        }
+
                         // Remove the item from cart after purchase
                         setCartItems((prev) =>
                           prev.filter((_, i) => i !== index)
                         );
                       } else {
-                        console.log("not enough");
+                        console.log("Not enough points");
                       }
                     }}
                     variant="default"
