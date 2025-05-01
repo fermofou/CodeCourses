@@ -57,7 +57,7 @@ const Problems = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/problems?userId=${user.id}`)
+    fetch(`http://localhost:8080/problems?userId=${user.id}`)
       .then((response) => response.json())
       .then((data: ApiProblemType[]) => {
         // Map the API data to match our table structure
