@@ -18,15 +18,15 @@ export default defineConfig({
         changeOrigin: true,
       },
       "/execute": {
-        target: "http://localhost:8080",
+        target: "http://142.93.10.227:8080",
         changeOrigin: true,
       },
       "/result": {
-        target: "http://localhost:8080",
+        target: "http://142.93.10.227:8080",
         changeOrigin: true,
       },
       "/health": {
-        target: "http://localhost:8080",
+        target: "http://142.93.10.227:8080",
         changeOrigin: true,
       },
       "/api/challenge": {
