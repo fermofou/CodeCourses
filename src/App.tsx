@@ -13,6 +13,7 @@ import RewardsPage from "./app/rewards/rewards";
 import LeaderboardPage from "./app/leaderboard/page";
 import ReposPage from "./app/repos/repos";
 import AdminPage from "./app/admin/page";
+import Layout from "./app/layout";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -24,49 +25,51 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/login"
-          element={isSignedIn ? <Navigate to="/" replace /> : <LoginPage />}
-        />
-        <Route
-          path="/challenge"
-          element={
-            !isSignedIn ? <Navigate to="/login" replace /> : <ChallengePage />
-          }
-        />
-        <Route
-          path="/challenges"
-          element={
-            !isSignedIn ? <Navigate to="/login" replace /> : <ChallengesPage />
-          }
-        />
-        <Route
-          path="/rewards"
-          element={
-            !isSignedIn ? <Navigate to="/login" replace /> : <RewardsPage />
-          }
-        />
-        <Route
-          path="/leaderboard"
-          element={
-            !isSignedIn ? <Navigate to="/login" replace /> : <LeaderboardPage />
-          }
-        />
-        <Route
-          path="/repos"
-          element={
-            !isSignedIn ? <Navigate to="/login" replace /> : <ReposPage />
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            !isSignedIn ? <Navigate to="/login" replace /> : <AdminPage />
-          }
-        />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/login"
+            element={isSignedIn ? <Navigate to="/" replace /> : <LoginPage />}
+          />
+          <Route
+            path="/challenge"
+            element={
+              !isSignedIn ? <Navigate to="/login" replace /> : <ChallengePage />
+            }
+          />
+          <Route
+            path="/challenges"
+            element={
+              !isSignedIn ? <Navigate to="/login" replace /> : <ChallengesPage />
+            }
+          />
+          <Route
+            path="/rewards"
+            element={
+              !isSignedIn ? <Navigate to="/login" replace /> : <RewardsPage />
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              !isSignedIn ? <Navigate to="/login" replace /> : <LeaderboardPage />
+            }
+          />
+          <Route
+            path="/repos"
+            element={
+              !isSignedIn ? <Navigate to="/login" replace /> : <ReposPage />
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              !isSignedIn ? <Navigate to="/login" replace /> : <AdminPage />
+            }
+          />
+        </Routes>
+      </Layout>
     </Router>
   );
 }
