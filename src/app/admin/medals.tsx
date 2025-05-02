@@ -39,13 +39,13 @@ const Medals = () => {
       })
       .catch((err) => {
         console.error("Error fetching badges:", err);
-        message.error("Error al cargar las medallas.");
+        message.error("Error loading medals.");
       });
   }, []);
 
   const columns: ColumnsType<MedalType> = [
     {
-      title: "Medalla",
+      title: "Medal",
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
@@ -64,25 +64,25 @@ const Medals = () => {
       ),
     },
     {
-      title: "Descripción",
+      title: "Description",
       dataIndex: "description",
       key: "description",
     },
     {
-      title: "Requisito",
+      title: "Requirement",
       dataIndex: "requirement",
       key: "requirement",
     },
     {
-      title: "Acciones",
+      title: "Actions",
       key: "actions",
       render: (_, record) => (
         <div className="flex gap-3">
           <Button icon={<EditOutlined />} onClick={() => showEditModal(record)}>
-            Editar
+            Edit
           </Button>
           <Button danger onClick={() => handleDelete(record.id)}>
-            Eliminar
+            Delete
           </Button>
         </div>
       ),
@@ -114,22 +114,22 @@ const Medals = () => {
       method: "DELETE",
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error al eliminar medalla");
+        if (!res.ok) throw new Error("Error deleting medal");
         return res.json();
       })
       .then(() => {
-        message.success("Medalla eliminada correctamente");
+        message.success("Medal deleted successfully");
         setMedalsData((prev) => prev.filter((medal) => medal.id !== id));
       })
       .catch((err) => {
         console.error(err);
-        message.error("Error al eliminar la medalla");
+        message.error("Error deleting medal");
       });
   };
 
   const handleOk = () => {
     if (!name || !description || !requirement) {
-      message.warning("Todos los campos son obligatorios");
+      message.warning("All fields are required");
       return;
     }
 
@@ -153,11 +153,11 @@ const Medals = () => {
       body: JSON.stringify(body),
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error al guardar la medalla");
+        if (!res.ok) throw new Error("Error saving medal");
         return res.json();
       })
       .then((response) => {
-        message.success(isEditing ? "Medalla actualizada" : "Medalla creada");
+        message.success(isEditing ? "Medal updated" : "Medal created");
 
         const newMedal: MedalType = {
           id: isEditing ? currentMedal!.id : response.badge_id,
@@ -184,7 +184,7 @@ const Medals = () => {
       })
       .catch((err) => {
         console.error(err);
-        message.error("Ocurrió un error");
+        message.error("An error occurred");
       });
   };
 
@@ -195,66 +195,66 @@ const Medals = () => {
   return (
     <div className="w-full max-w-6xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Medallas</h1>
-        <p className="text-gray-600">Administra las medallas y logros de la plataforma</p>
+        <h1 className="text-3xl font-bold mb-2">Medals</h1>
+        <p className="text-gray-600">Manage platform medals and achievements</p>
       </div>
 
       <div className="flex justify-between items-center mb-6">
         <div className="relative w-64">
           <input
             type="text"
-            placeholder="Buscar medalla..."
+            placeholder="Search medal..."
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <Button type="primary" className="bg-blue-600" onClick={showAddModal}>
-          Añadir Medalla
+          Add Medal
         </Button>
       </div>
 
       <Table columns={columns} dataSource={medalsData} rowKey="id" />
 
       <Modal
-        title={isEditing ? "Editar Medalla" : "Añadir Medalla"}
+        title={isEditing ? "Edit Medal" : "Add Medal"}
         open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        okText={isEditing ? "Guardar" : "Crear"}
-        cancelText="Cancelar"
+        okText={isEditing ? "Save" : "Create"}
+        cancelText="Cancel"
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
             <Input
-              placeholder="Nombre de la medalla"
+              placeholder="Medal name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <Input.TextArea
               rows={3}
-              placeholder="Descripción de la medalla"
+              placeholder="Medal description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Requisito</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Requirement</label>
             <Input
-              placeholder="Requisito para obtener la medalla"
+              placeholder="Requirement to earn the medal"
               value={requirement}
               onChange={(e) => setRequirement(e.target.value)}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">URL de imagen</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">URL of image</label>
             <Input
-              placeholder="URL de la imagen"
+              placeholder="URL of the image"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
             />

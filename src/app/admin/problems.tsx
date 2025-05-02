@@ -122,16 +122,16 @@ const Problems = () => {
 
   const validateForm = () => {
     if (challengeData.title === "" || challengeData.question === "") {
-      alert("Por favor completa todos los campos requeridos.");
+      alert("Please complete all required fields.");
       return false;
     }
 
     if (challengeData.testCases?.some((testCase) => testCase.input === "" || testCase.expectedOutput === "")) {
-      alert("Por favor no dejes campos vacíos en los testcases de ejemplo.");
+      alert("Please do not leave empty fields in the example test cases.");
       return false;
     }
     if (!isEditing && !zipFile) {
-      alert("por favor selecciona un archivo zip.");
+      alert("Please select a zip file.");
       return false;
     }
 
@@ -284,12 +284,12 @@ const Problems = () => {
 
   const columns: ColumnsType<any> = [
     {
-      title: "Título",
+      title: "Title",
       dataIndex: "title",
       key: "title",
     },
     {
-      title: "Dificultad",
+      title: "Difficulty",
       dataIndex: "difficulty",
       key: "difficulty",
       render: (difficulty: number) => {
@@ -316,15 +316,15 @@ const Problems = () => {
       ),
     },
     {
-      title: "Acción",
+      title: "Action",
       key: "action",
       render: (_: any, record: any) => (
         <div className="flex gap-3">
           <Button icon={<EditOutlined />} onClick={() => { showEditModal(record); }}>
-            Editar
+            Edit
           </Button>
           <Button danger onClick={() => { showDeleteModal(record); }}>
-            Eliminar
+            Delete
           </Button>
         </div>
       ),
@@ -334,40 +334,40 @@ const Problems = () => {
   return (
     <div className="w-full">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Problemas</h1>
-        <p className="text-gray-600">Administra y gestiona los problemas de la plataforma</p>
+        <h1 className="text-3xl font-bold mb-2">Problems</h1>
+        <p className="text-gray-600">Manage and administer platform problems</p>
       </div>
       <Table columns={columns} dataSource={problemsData} />
       <Modal
         style={{ marginTop: "-3rem" }}
-        title={isEditing ? "Editar Problema" : (isDeleting ? "Eliminar Problema" : "Agregar Problema")}
+        title={isEditing ? "Edit Problem" : (isDeleting ? "Delete Problem" : "Add Problem")}
         visible={isModalVisible}
         onOk={handleOk}
         disabled={isLoadingSave}
         onCancel={handleCancel}
-        okText={isEditing ? "Guardar" : (isDeleting ? "Eliminar" : "Agregar")}
+        okText={isEditing ? "Save" : (isDeleting ? "Delete" : "Add")}
         okButtonProps={{ loading: isLoadingSave }}
-        cancelText="Cancelar"
+        cancelText="Cancel"
       >
-        {loadingProblem && <p>Cargando problema...</p>}
+        {loadingProblem && <p>Loading problem...</p>}
         {!loadingProblem && !isDeleting && (
           <>
             <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              Título
-              <Input value={challengeData.title} onChange={(e: any) => { setChallengeData({ ...challengeData, title: e.target.value }) }} placeholder="Título del problema" />
+              Title
+              <Input value={challengeData.title} onChange={(e: any) => { setChallengeData({ ...challengeData, title: e.target.value }) }} placeholder="Problem title" />
             </div>
             <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              Dificultad
+              Difficulty
               <Select
-                placeholder="Selecciona dificultad"
+                placeholder="Select difficulty"
                 value={challengeData.difficulty}
                 onChange={(value) => { setChallengeData({ ...challengeData, difficulty: value }) }}
                 options={[
-                  { value: 1, label: "★☆☆☆☆ Muy Fácil" },
-                  { value: 2, label: "★★☆☆☆ Fácil" },
-                  { value: 3, label: "★★★☆☆ Media" },
-                  { value: 4, label: "★★★★☆ Difícil" },
-                  { value: 5, label: "★★★★★ Muy Difícil" },
+                  { value: 1, label: "★☆☆☆☆ Very Easy" },
+                  { value: 2, label: "★★☆☆☆ Easy" },
+                  { value: 3, label: "★★★☆☆ Medium" },
+                  { value: 4, label: "★★★★☆ Hard" },
+                  { value: 5, label: "★★★★★ Very Hard" },
                 ]}
               />
             </div>
@@ -401,22 +401,22 @@ const Problems = () => {
               />
             </div>
             <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              Descripción
+              Description
               <Input.TextArea
                 value={challengeData.question}
                 onChange={(e: any) => { setChallengeData({ ...challengeData, question: e.target.value }) }}
                 rows={6}
-                placeholder="Descripción del problema"
+                placeholder="Problem description"
               />
             </div>
             <div>
               {(challengeData?.testCases || []).map((testCase, index) => (
                 <div key={index} className="mb-4 border p-3 rounded-md">
                   <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                    <label>Input de Prueba</label>
+                    <label>Test Input</label>
                     <Input.TextArea
                       rows={2}
-                      placeholder="Input de prueba"
+                      placeholder="Test input"
                       value={testCase.input}
                       onChange={(e: any) => {
                         const updatedTestCases = [...(challengeData?.testCases || [])];
@@ -430,10 +430,10 @@ const Problems = () => {
                   </div>
 
                   <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                    <label>Output de Prueba</label>
+                    <label>Test Output</label>
                     <Input.TextArea
                       rows={2}
-                      placeholder="Output esperado"
+                      placeholder="Expected output"
                       value={testCase.expectedOutput}
                       onChange={(e: any) => {
                         const updatedTestCases = [...(challengeData?.testCases || [])];
@@ -451,7 +451,7 @@ const Problems = () => {
                     updatedTestCases.splice(index, 1);
                     setChallengeData({ ...challengeData, testCases: updatedTestCases });
                   }}>
-                    Eliminar Testcase de Ejemplo
+                    Delete Test Case
                   </Button>
                 </div>
               ))}
@@ -459,7 +459,7 @@ const Problems = () => {
                 const updatedTestCases = [...(challengeData?.testCases || []), { input: "", expectedOutput: "" }];
                 setChallengeData({ ...challengeData, testCases: updatedTestCases });
               }} block>
-                Agregar Testcase de Ejemplo
+                Add Test Case
               </Button>
             </div>
             {!isEditing && (
@@ -472,11 +472,11 @@ const Problems = () => {
                 />
                 {zipFile && (
                   <div className="text-sm text-gray-600 italic mt-2">
-                    Archivo seleccionado: {zipFile.name}
+                    Selected file: {zipFile.name}
                   </div>
                 )}
                 <div className="text-sm text-gray-600 italic mt-2">
-                  Asegúrate de que el archivo ZIP contenga los testcases en el formato:
+                  Make sure the ZIP file contains the test cases in the format:
                   <br />
                   <strong>1.in, 1.out, 2.in, 2.out, ...</strong>
                 </div>
@@ -486,7 +486,7 @@ const Problems = () => {
         )}
         {isDeleting && (
           <div>
-            <p>¿Estás seguro de que deseas eliminar este problema?</p>
+            <p>Are you sure you want to delete this problem?</p>
           </div>
         )}
       </Modal>

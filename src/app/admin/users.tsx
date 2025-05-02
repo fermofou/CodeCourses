@@ -62,8 +62,8 @@ const Users = () => {
     }
   });
 
-  const filteredUsers = sortedUsers.filter(user => 
-    user.username.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredUsers = sortedUsers.filter(user =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -91,15 +91,15 @@ const Users = () => {
   return (
     <div className="w-full max-w-6xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Usuarios</h1>
-        <p className="text-gray-600">Administra y visualiza los usuarios registrados en la plataforma</p>
+        <h1 className="text-3xl font-bold mb-2">Users</h1>
+        <p className="text-gray-600">Manage and view registered users on the platform</p>
       </div>
 
       <div className="flex justify-between items-center mb-6">
         <div className="relative w-64">
           <input
             type="text"
-            placeholder="Buscar usuario..."
+            placeholder="Search user..."
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -121,10 +121,10 @@ const Users = () => {
         </div>
         <div className="flex space-x-2">
           <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-            Añadir Usuario
+            Add User
           </button>
           <button className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">
-            Exportar Lista
+            Export List
           </button>
         </div>
       </div>
@@ -139,7 +139,7 @@ const Users = () => {
                   onClick={() => handleSort("username")}
                 >
                   <div className="flex items-center">
-                    Usuario
+                    User
                     {sortBy === "username" && (
                       <span className="ml-1">
                         {sortDir === "asc" ? "↑" : "↓"}
@@ -152,7 +152,7 @@ const Users = () => {
                   onClick={() => handleSort("rank")}
                 >
                   <div className="flex items-center">
-                    Rango
+                    Rank
                     {sortBy === "rank" && (
                       <span className="ml-1">
                         {sortDir === "asc" ? "↑" : "↓"}
@@ -165,7 +165,7 @@ const Users = () => {
                   onClick={() => handleSort("solved")}
                 >
                   <div className="flex items-center">
-                    Resueltos
+                    Solved
                     {sortBy === "solved" && (
                       <span className="ml-1">
                         {sortDir === "asc" ? "↑" : "↓"}
@@ -191,7 +191,7 @@ const Users = () => {
                   onClick={() => handleSort("lastActive")}
                 >
                   <div className="flex items-center">
-                    Último Activo
+                    Last Active
                     {sortBy === "lastActive" && (
                       <span className="ml-1">
                         {sortDir === "asc" ? "↑" : "↓"}
@@ -200,7 +200,7 @@ const Users = () => {
                   </div>
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Acciones
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -231,8 +231,8 @@ const Users = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-900">Editar</button>
-                      <button className="text-red-600 hover:text-red-900">Eliminar</button>
+                      <button className="text-blue-600 hover:text-blue-900">Edit</button>
+                      <button className="text-red-600 hover:text-red-900">Delete</button>
                     </div>
                   </td>
                 </tr>
@@ -244,14 +244,14 @@ const Users = () => {
 
       <div className="mt-6 flex justify-between items-center">
         <div className="text-sm text-gray-500">
-          Mostrando {filteredUsers.length} de {users.length} usuarios
+          Showing {filteredUsers.length} of {users.length} users
         </div>
         <div className="flex space-x-1">
-          <button className="px-3 py-1 border rounded bg-gray-100">Anterior</button>
+          <button className="px-3 py-1 border rounded bg-gray-100">Previous</button>
           <button className="px-3 py-1 border rounded bg-blue-600 text-white">1</button>
           <button className="px-3 py-1 border rounded">2</button>
           <button className="px-3 py-1 border rounded">3</button>
-          <button className="px-3 py-1 border rounded bg-gray-100">Siguiente</button>
+          <button className="px-3 py-1 border rounded bg-gray-100">Next</button>
         </div>
       </div>
     </div>

@@ -4,9 +4,9 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState("general");
   const [generalSettings, setGeneralSettings] = useState({
     siteName: "CodeChallenge",
-    siteDescription: "Plataforma de problemas de programación competitiva",
-    language: "es",
-    timeZone: "America/Mexico_City",
+    siteDescription: "Competitive programming problem platform",
+    language: "en",
+    timeZone: "America/New_York",
     defaultTheme: "light"
   });
   
@@ -52,8 +52,8 @@ const Settings = () => {
   return (
     <div className="w-full max-w-4xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Configuración</h1>
-        <p className="text-gray-600">Administra las configuraciones del sistema</p>
+        <h1 className="text-3xl font-bold mb-2">Settings</h1>
+        <p className="text-gray-600">Manage system settings</p>
       </div>
 
       <div className="bg-white rounded-lg shadow">
@@ -71,33 +71,33 @@ const Settings = () => {
             </button>
             <button
               className={`py-4 px-6 font-medium text-sm ${
-                activeTab === "problemas"
+                activeTab === "problems"
                   ? "border-b-2 border-blue-500 text-blue-600"
                   : "text-gray-500 hover:text-gray-700"
               }`}
-              onClick={() => setActiveTab("problemas")}
+              onClick={() => setActiveTab("problems")}
             >
-              Problemas
+              Problems
             </button>
             <button
               className={`py-4 px-6 font-medium text-sm ${
-                activeTab === "notificaciones"
+                activeTab === "notifications"
                   ? "border-b-2 border-blue-500 text-blue-600"
                   : "text-gray-500 hover:text-gray-700"
               }`}
-              onClick={() => setActiveTab("notificaciones")}
+              onClick={() => setActiveTab("notifications")}
             >
-              Notificaciones
+              Notifications
             </button>
             <button
               className={`py-4 px-6 font-medium text-sm ${
-                activeTab === "seguridad"
+                activeTab === "security"
                   ? "border-b-2 border-blue-500 text-blue-600"
                   : "text-gray-500 hover:text-gray-700"
               }`}
-              onClick={() => setActiveTab("seguridad")}
+              onClick={() => setActiveTab("security")}
             >
-              Seguridad
+              Security
             </button>
             <button
               className={`py-4 px-6 font-medium text-sm ${
@@ -115,12 +115,12 @@ const Settings = () => {
         <div className="p-6">
           {activeTab === "general" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold">Configuración General</h2>
+              <h2 className="text-xl font-semibold">General Settings</h2>
               
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nombre del sitio
+                    Site name
                   </label>
                   <input
                     type="text"
@@ -133,7 +133,7 @@ const Settings = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Descripción
+                    Description
                   </label>
                   <input
                     type="text"
@@ -146,7 +146,7 @@ const Settings = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Idioma predeterminado
+                    Default language
                   </label>
                   <select
                     name="language"
@@ -154,8 +154,8 @@ const Settings = () => {
                     onChange={handleGeneralChange}
                     className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="es">Español</option>
                     <option value="en">English</option>
+                    <option value="es">Español</option>
                     <option value="fr">Français</option>
                     <option value="pt">Português</option>
                   </select>
@@ -163,7 +163,7 @@ const Settings = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Zona horaria
+                    Time zone
                   </label>
                   <select
                     name="timeZone"
@@ -171,16 +171,16 @@ const Settings = () => {
                     onChange={handleGeneralChange}
                     className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="America/Mexico_City">Ciudad de México (UTC-6)</option>
                     <option value="America/New_York">New York (UTC-5)</option>
-                    <option value="Europe/Madrid">Madrid (UTC+1)</option>
+                    <option value="America/Mexico_City">Mexico City (UTC-6)</option>
                     <option value="Europe/London">London (UTC+0)</option>
+                    <option value="Europe/Madrid">Madrid (UTC+1)</option>
                   </select>
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tema predeterminado
+                    Default theme
                   </label>
                   <div className="flex space-x-4 mt-2">
                     <div className="flex items-center">
@@ -194,7 +194,7 @@ const Settings = () => {
                         className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
                       />
                       <label htmlFor="light" className="ml-2 block text-sm text-gray-700">
-                        Claro
+                        Light
                       </label>
                     </div>
                     <div className="flex items-center">
@@ -208,7 +208,7 @@ const Settings = () => {
                         className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
                       />
                       <label htmlFor="dark" className="ml-2 block text-sm text-gray-700">
-                        Oscuro
+                        Dark
                       </label>
                     </div>
                     <div className="flex items-center">
@@ -222,7 +222,7 @@ const Settings = () => {
                         className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
                       />
                       <label htmlFor="system" className="ml-2 block text-sm text-gray-700">
-                        Sistema
+                        System
                       </label>
                     </div>
                   </div>
@@ -231,14 +231,14 @@ const Settings = () => {
             </div>
           )}
 
-          {activeTab === "problemas" && (
+          {activeTab === "problems" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold">Configuración de Problemas</h2>
+              <h2 className="text-xl font-semibold">Problem Settings</h2>
               
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Límite de tiempo predeterminado (ms)
+                    Default time limit (ms)
                   </label>
                   <input
                     type="number"
@@ -251,7 +251,7 @@ const Settings = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Límite de memoria predeterminado (MB)
+                    Default memory limit (MB)
                   </label>
                   <input
                     type="number"
@@ -264,7 +264,7 @@ const Settings = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Máximo de envíos por día
+                    Maximum submissions per day
                   </label>
                   <input
                     type="number"
@@ -277,7 +277,7 @@ const Settings = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Timeout del juez (ms)
+                    Judge timeout (ms)
                   </label>
                   <input
                     type="number"
@@ -291,7 +291,7 @@ const Settings = () => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Lenguajes permitidos
+                  Allowed languages
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
                   {["C++", "Java", "Python", "JavaScript", "Go", "Rust", "C#", "Ruby"].map((lang) => (
@@ -325,27 +325,27 @@ const Settings = () => {
             </div>
           )}
 
-          {activeTab === "notificaciones" && (
+          {activeTab === "notifications" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold">Configuración de Notificaciones</h2>
+              <h2 className="text-xl font-semibold">Notification Settings</h2>
               
               <div className="space-y-4">
                 {Object.entries({
-                  emailNotifications: "Notificaciones por email",
-                  contestReminders: "Recordatorios de concursos",
-                  submissionResults: "Resultados de envíos",
-                  rankingUpdates: "Actualizaciones de ranking",
-                  marketingEmails: "Emails de marketing"
+                  emailNotifications: "Email notifications",
+                  contestReminders: "Contest reminders",
+                  submissionResults: "Submission results",
+                  rankingUpdates: "Ranking updates",
+                  marketingEmails: "Marketing emails"
                 }).map(([key, label]) => (
                   <div key={key} className="flex items-center justify-between py-2 border-b">
                     <div>
                       <h3 className="text-sm font-medium text-gray-700">{label}</h3>
                       <p className="text-xs text-gray-500">
-                        {key === "emailNotifications" && "Recibe notificaciones importantes por email"}
-                        {key === "contestReminders" && "Notificaciones para concursos próximos"}
-                        {key === "submissionResults" && "Recibe emails con los resultados de tus envíos"}
-                        {key === "rankingUpdates" && "Notificaciones cuando cambie tu posición en el ranking"}
-                        {key === "marketingEmails" && "Recibe información sobre nuevas características y promociones"}
+                        {key === "emailNotifications" && "Receive important emails"}
+                        {key === "contestReminders" && "Reminders for upcoming contests"}
+                        {key === "submissionResults" && "Receive emails with your submission results"}
+                        {key === "rankingUpdates" && "Notifications when your ranking changes"}
+                        {key === "marketingEmails" && "Receive information about new features and promotions"}
                       </p>
                     </div>
                     <div className="relative inline-block w-12 h-6 transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -368,26 +368,26 @@ const Settings = () => {
             </div>
           )}
 
-          {activeTab === "seguridad" && (
+          {activeTab === "security" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold">Configuración de Seguridad</h2>
+              <h2 className="text-xl font-semibold">Security Settings</h2>
               
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Política de contraseñas
+                    Password policy
                   </label>
                   <select className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option>Estándar (8 caracteres mínimo)</option>
-                    <option>Fuerte (minúsculas, mayúsculas, números y símbolos)</option>
-                    <option>Muy fuerte (12 caracteres, con requisitos complejos)</option>
-                    <option>Personalizada</option>
+                    <option>Standard (8 characters minimum)</option>
+                    <option>Strong (lowercase, uppercase, numbers, and symbols)</option>
+                    <option>Very strong (12 characters, with complex requirements)</option>
+                    <option>Custom</option>
                   </select>
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Duración máxima de sesión (horas)
+                    Maximum session duration (hours)
                   </label>
                   <input
                     type="number"
@@ -404,7 +404,7 @@ const Settings = () => {
                     defaultChecked
                   />
                   <label htmlFor="twoFactorAuth" className="text-sm text-gray-700">
-                    Habilitar autenticación de dos factores para administradores
+                    Enable two-factor authentication for administrators
                   </label>
                 </div>
                 
@@ -416,7 +416,7 @@ const Settings = () => {
                     defaultChecked
                   />
                   <label htmlFor="reCaptcha" className="text-sm text-gray-700">
-                    Habilitar reCAPTCHA en formularios públicos
+                    Enable reCAPTCHA on public forms
                   </label>
                 </div>
               </div>
@@ -425,27 +425,27 @@ const Settings = () => {
 
           {activeTab === "backups" && (
             <div className="space-y-6">
-              <h2 className="text-xl font-semibold">Configuración de Backups</h2>
+              <h2 className="text-xl font-semibold">Backup Settings</h2>
               
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Frecuencia de backup automático
+                    Automatic backup frequency
                   </label>
                   <select className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option>Diario</option>
-                    <option>Semanal</option>
-                    <option>Mensual</option>
-                    <option>No realizar backups automáticos</option>
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                    <option>Do not perform automatic backups</option>
                   </select>
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Ubicación de backups
+                    Backup location
                   </label>
                   <select className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option>Almacenamiento local</option>
+                    <option>Local storage</option>
                     <option>Amazon S3</option>
                     <option>Google Cloud Storage</option>
                     <option>Microsoft Azure</option>
@@ -454,7 +454,7 @@ const Settings = () => {
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Número máximo de backups a mantener
+                    Maximum number of backups to retain
                   </label>
                   <input
                     type="number"
@@ -471,48 +471,48 @@ const Settings = () => {
                     defaultChecked
                   />
                   <label htmlFor="encryptBackups" className="text-sm text-gray-700">
-                    Encriptar backups
+                    Encrypt backups
                   </label>
                 </div>
                 
                 <div className="mt-4">
                   <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-                    Crear backup ahora
+                    Create backup now
                   </button>
                 </div>
                 
                 <div className="mt-4">
-                  <h3 className="text-md font-medium mb-2">Backups recientes</h3>
+                  <h3 className="text-md font-medium mb-2">Recent backups</h3>
                   <div className="bg-gray-50 rounded-md p-4">
                     <div className="space-y-2">
                       <div className="flex justify-between items-center py-2 border-b">
                         <div>
                           <p className="text-sm font-medium">backup_20250405_120000.zip</p>
-                          <p className="text-xs text-gray-500">5 abril 2025, 12:00 • 15.4 MB</p>
+                          <p className="text-xs text-gray-500">5 April 2025, 12:00 • 15.4 MB</p>
                         </div>
                         <div className="flex space-x-2">
-                          <button className="text-blue-600 hover:text-blue-800 text-sm">Descargar</button>
-                          <button className="text-green-600 hover:text-green-800 text-sm">Restaurar</button>
+                          <button className="text-blue-600 hover:text-blue-800 text-sm">Download</button>
+                          <button className="text-green-600 hover:text-green-800 text-sm">Restore</button>
                         </div>
                       </div>
                       <div className="flex justify-between items-center py-2 border-b">
                         <div>
                           <p className="text-sm font-medium">backup_20250404_120000.zip</p>
-                          <p className="text-xs text-gray-500">4 abril 2025, 12:00 • 15.2 MB</p>
+                          <p className="text-xs text-gray-500">4 April 2025, 12:00 • 15.2 MB</p>
                         </div>
                         <div className="flex space-x-2">
-                          <button className="text-blue-600 hover:text-blue-800 text-sm">Descargar</button>
-                          <button className="text-green-600 hover:text-green-800 text-sm">Restaurar</button>
+                          <button className="text-blue-600 hover:text-blue-800 text-sm">Download</button>
+                          <button className="text-green-600 hover:text-green-800 text-sm">Restore</button>
                         </div>
                       </div>
                       <div className="flex justify-between items-center py-2 border-b">
                         <div>
                           <p className="text-sm font-medium">backup_20250403_120000.zip</p>
-                          <p className="text-xs text-gray-500">3 abril 2025, 12:00 • 15.1 MB</p>
+                          <p className="text-xs text-gray-500">3 April 2025, 12:00 • 15.1 MB</p>
                         </div>
                         <div className="flex space-x-2">
-                          <button className="text-blue-600 hover:text-blue-800 text-sm">Descargar</button>
-                          <button className="text-green-600 hover:text-green-800 text-sm">Restaurar</button>
+                          <button className="text-blue-600 hover:text-blue-800 text-sm">Download</button>
+                          <button className="text-green-600 hover:text-green-800 text-sm">Restore</button>
                         </div>
                       </div>
                     </div>
@@ -525,10 +525,10 @@ const Settings = () => {
         
         <div className="px-6 py-4 bg-gray-50 border-t flex justify-end space-x-4">
           <button className="px-4 py-2 border rounded-md hover:bg-gray-100 transition-colors">
-            Cancelar
+            Cancel
           </button>
           <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-            Guardar cambios
+            Save changes
           </button>
         </div>
       </div>

@@ -16,21 +16,21 @@ const General = () => {
 
 
 export default function AdminPage() {
-  const [menuOption, setMenuOption] = useState("Problemas");
+  const [menuOption, setMenuOption] = useState("Problems");
   return (
     <div className="flex h-screen min-h-screen flex-col">
       <Navbar />
       <div className="w-full h-full mx-auto flex justify-start text-center">
-        <Leftbar menuOption={menuOption} setMenuOption={setMenuOption}/>
+        <Leftbar menuOption={menuOption} setMenuOption={setMenuOption} />
         <div className="flex w-full h-full justify-center p-4">
-         {/*
+          {/*
          
           { menuOption == "General" && <General /> }
-         */} 
-          { menuOption == "Problemas" && <Problems /> }
-          { menuOption == "Usuarios" && <Users /> }
-          { menuOption == "Medallas" && <Medals /> }
-          { menuOption == "Configuración" && <Settings /> }
+         */}
+          {menuOption == "Problems" && <Problems />}
+          {menuOption == "Users" && <Users />}
+          {menuOption == "Medals" && <Medals />}
+          {menuOption == "Settings" && <Settings />}
         </div>
       </div>
     </div>
