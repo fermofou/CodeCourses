@@ -5,7 +5,7 @@ import { Table } from "antd";
 import { Trophy, Coins } from "lucide-react";
 import type { ColumnsType } from "antd/es/table";
 import { Tag as AntdTag } from "antd";
-import DuoImage from "./DuoMissing.png";
+import DailyChallengeImage from "./DailyChallenge.png";
 import Navbar from "@/components/navbar";
 import { useState, useEffect } from "react";
 import { SignedIn, useUser } from "@clerk/clerk-react";
@@ -30,10 +30,14 @@ interface ApiProblemType {
 
 interface ProblemOverviewType {
   id: number;
-  name: string;
-  points: number;
+  title: string;
   difficulty: number;
-  description: string;
+  solved: boolean | null;
+  timeLimit: number;
+  memoryLimit: number;
+  question: string;
+  inputs: string[];
+  outputs: string[];
 }
 
 const columns: ColumnsType<ProblemsTableType> = [
@@ -101,15 +105,6 @@ const columns: ColumnsType<ProblemsTableType> = [
   },
 ];
 
-const dailyChallenge: ProblemOverviewType = {
-  id: 0,
-  name: "Duo has disappeared!",
-  points: 30,
-  difficulty: 3,
-  description:
-    "Duo ha desaparecido, pero ha dejado un rastro de su paso. Ayúdanos a encontrarlo reconstryendo el camino que ha seguido.",
-};
-
 const ChallengeButton = ({
   color,
   completed,
@@ -170,30 +165,75 @@ const Gym = ({ problems }: { problems: ProblemsTableType[] }) => {
 };
 
 const DailyChallenge = ({ onClick }: { onClick?: () => void }) => {
-  return (
-    <div
-      className="relative flex flex-row gap-4 border-2 rounded-lg p-4 min-w-[30rem] flex-grow justify-center items-center pb-7 cursor-pointer"
-      onClick={onClick}
-    >
-      <div className="absolute bottom-0 left-0 bg-white text-xs px-2 py-1 ">
-        Daily Challenge
-      </div>
-      <div className="flex flex-col gap-3 items-center">
-        <span className="text-xl font-bold">{dailyChallenge.name}</span>
-        <p className="w-[20rem] text-justify">{dailyChallenge.description}</p>
-        <div className="flex flex-row gap-8">
-          <div className="flex items-center gap-2">
-            {Array.from({ length: dailyChallenge.difficulty }).map((_, i) => (
-              <FaStar key={i} />
-            ))}
-          </div>
-          <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-primary" />
-            <span className="font-medium">{dailyChallenge.points} MC</span>
+  const [challenge, setChallenge] = useState<ProblemOverviewType | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDailyChallenge = async () => {
+      try {
+        const response = await fetch(`api/challenge?probID=1`);
+        const data = await response.json();
+        setChallenge(data);
+      } catch (error) {
+        console.error("Error fetching daily challenge:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDailyChallenge();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="relative flex flex-row gap-6 border-2 rounded-lg p-6 min-w-[30rem] flex-grow justify-between items-center pb-8 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div className="animate-pulse flex flex-col gap-4 items-start w-full">
+          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+          <div className="h-4 bg-gray-200 rounded w-full"></div>
+          <div className="flex gap-4">
+            <div className="h-8 bg-gray-200 rounded w-20"></div>
+            <div className="h-8 bg-gray-200 rounded w-20"></div>
           </div>
         </div>
       </div>
-      <img src={DuoImage} alt="imageDuo" className="w-[120px]" />
+    );
+  }
+
+  if (!challenge) {
+    return null;
+  }
+
+  return (
+    <div
+      className="relative flex flex-row gap-6 border-2 rounded-lg p-6 min-w-[30rem] flex-grow justify-between items-center pb-8 cursor-pointer hover:shadow-lg transition-shadow duration-300 bg-white"
+      onClick={onClick}
+    >
+      <div className="flex flex-col gap-4 items-start">
+        <div className="flex items-center gap-2">
+          <div className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+            Daily Challenge
+          </div>
+          <div className="flex items-center gap-1">
+            {Array.from({ length: challenge.difficulty }).map((_, i) => (
+              <FaStar key={i} className="text-yellow-400" />
+            ))}
+          </div>
+        </div>
+        <span className="text-2xl font-bold text-gray-800">{challenge.title}</span>
+        <p className="w-[24rem] text-gray-600 text-sm leading-relaxed">{challenge.question}</p>
+        <div className="flex flex-row gap-6">
+          <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm">
+            <Trophy className="h-5 w-5 text-yellow-500" />
+            <span className="font-medium text-gray-700">{challenge.difficulty * 20} MC</span>
+          </div>
+          <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm">
+            <FaFileCode className="h-5 w-5 text-blue-500" />
+            <span className="font-medium text-gray-700">Arrays</span>
+          </div>
+        </div>
+      </div>
+      <img src={DailyChallengeImage} alt="Daily Challenge" className="w-[180px] h-[180px] object-contain" />
     </div>
   );
 };
@@ -225,85 +265,6 @@ const Mission = ({
   );
 };
 
-const DailyMissions = () => {
-  const dailyMissions = [
-    {
-      icon: <FaCheck />,
-      name: "Inicia sesión",
-      progress: 100,
-      color: "#4CAF50",
-    },
-    {
-      icon: <FaFileCode />,
-      name: "Resuelve un problema",
-      progress: 100,
-      color: "#2196F3",
-    },
-    {
-      icon: <FaShareFromSquare />,
-      name: "Comparte dos problemas",
-      progress: 50,
-      color: "#FF9800",
-    },
-  ];
-
-  return (
-    <div className="relative flex flex-col gap-4 border-2 rounded-lg p-4 min-w-[22rem] flex-grow justify-center pb-7">
-      <div className="absolute bottom-0 left-0 bg-white text-xs px-2 py-1 ">
-        Misiones Diarias
-      </div>
-      {dailyMissions.map((mission, index) => (
-        <Mission
-          key={index}
-          icon={mission.icon}
-          name={mission.name}
-          progress={mission.progress}
-          color={mission.color}
-        />
-      ))}
-    </div>
-  );
-};
-
-const WeeklyMissions = () => {
-  const weeklyMissions = [
-    {
-      icon: <FaCheck />,
-      name: "Inicia sesión 5 días",
-      progress: 80,
-      color: "#F44336",
-    },
-    {
-      icon: <FaFileCode />,
-      name: "Resuelve 5 problemas",
-      progress: 50,
-      color: "#3F51B5",
-    },
-    {
-      icon: <FaTrophy />,
-      name: "Gana un torneo",
-      progress: 100,
-      color: "#FED91C",
-    },
-  ];
-
-  return (
-    <div className="relative flex flex-col gap-4 border-2 rounded-lg p-4 min-w-[22rem] max-w-[45rem] flex-grow justify-center pb-7">
-      <div className="absolute bottom-0 left-0 bg-white text-xs px-2 py-1 ">
-        Misiones Semanales
-      </div>
-      {weeklyMissions.map((mission, index) => (
-        <Mission
-          key={index}
-          icon={mission.icon}
-          name={mission.name}
-          progress={mission.progress}
-          color={mission.color}
-        />
-      ))}
-    </div>
-  );
-};
 
 export default function ChallengesPage() {
   const navigate = useNavigate();
@@ -357,8 +318,6 @@ export default function ChallengesPage() {
               navigate("/challenge");
             }}
           />
-          <DailyMissions />
-          <WeeklyMissions />
         </div>
         <Gym problems={problems} />
       </div>
