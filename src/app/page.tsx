@@ -402,7 +402,7 @@ Example Output:
 "4202ardnihaMhceT"`}</code>
                       </pre>
                       <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-muted pt-2">
-                        <span>Dificulty: Fácil</span>
+                        <span>Dificulty: Easy</span>
                         <span>Success rate: 85%</span>
                       </div>
                     </div>
