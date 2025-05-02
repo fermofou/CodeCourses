@@ -315,7 +315,7 @@ export default function ChallengesPage() {
         <div className="flex gap-4 flex-wrap justify-center">
           <DailyChallenge
             onClick={() => {
-              navigate("/challenge");
+              navigate("/challenge?1");
             }}
           />
         </div>

@@ -19,15 +19,38 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useUserData } from "../userData";
 
+type LeaderboardEntry = {
+  name: string;
+  points: number;
+  level: number;
+};
+
 export default function Home() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [mcoins, setMcoins] = useState(112750);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const {
     state: { userData, loading, error },
   } = useUserData();
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const res = await fetch("/leaderboard");
+        const data = await res.json();
+        setLeaderboard(data);
+      } catch (err) {
+        console.error("Error fetching leaderboard:", err);
+      }
+    };
+
+    fetchLeaderboard();
+    const interval = setInterval(fetchLeaderboard, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -345,7 +368,7 @@ export default function Home() {
                       <div className="flex items-center gap-2">
                         <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
                           <Coins className="h-3 w-3 inline mr-1" />
-                          500 MC
+                          60 MC
                         </span>
                         <Button variant="outline" size="sm">
                           Solve
@@ -362,20 +385,20 @@ export default function Home() {
                         </div>
                       </div>
                       <pre className="space-y-2 overflow-x-auto">
-                        <code>{`Problema:
-Implementa una función que invierta una cadena de texto
-sin utilizar métodos incorporados de inversión.
+                        <code>{`Problem:
+Implement a function that reverses a string
+without using built-in reversal methods.
 
 Input:
-Una cadena S (1 ≤ |S| ≤ 100) conteniendo letras y números.
+A string S (1 ≤ |S| ≤ 100) containing letters and numbers.
 
 Output:
-La cadena S invertida.
+The string S reversed.
 
-Ejemplo Input:
+Example Input:
 "TechMahindra2024"
 
-Ejemplo Output:
+Example Output:
 "4202ardnihaMhceT"`}</code>
                       </pre>
                       <div className="flex items-center justify-between text-xs text-muted-foreground border-t border-muted pt-2">
@@ -388,7 +411,7 @@ Ejemplo Output:
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Trophy className="h-5 w-5 text-primary" />
-                          <span className="font-medium">500 MCoins</span>
+                          <span className="font-medium">60 MCoins</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <span>•</span>
@@ -490,18 +513,11 @@ Ejemplo Output:
             <div className="max-w-3xl mx-auto">
               <Card>
                 <CardContent className="p-6">
-                  {[
-                    { level: 28, challenges: 45 },
-                    { level: 25, challenges: 38 },
-                    { level: 24, challenges: 31 },
-                    { level: 22, challenges: 27 },
-                    { level: 21, challenges: 25 },
-                  ].map((stats, index) => (
+                  {leaderboard.slice(0, 5).map((entry: LeaderboardEntry, index: number) => (
                     <div
-                      key={index}
-                      className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${
-                        index === 0 ? "bg-primary/5 rounded-lg" : ""
-                      }`}
+                      key={`${entry.name}-${entry.points}`}
+                      className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${index === 0 ? "bg-primary/5 rounded-lg" : ""
+                        }`}
                     >
                       <div className="flex items-center gap-6">
                         <div className="text-2xl font-bold text-muted-foreground">
@@ -512,20 +528,19 @@ Ejemplo Output:
                         </div>
                         <div className="flex items-center gap-3">
                           <div
-                            className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                              index === 0 ? "bg-zinc-200" : "bg-muted"
-                            }`}
+                            className={`w-12 h-12 rounded-full flex items-center justify-center ${index === 0 ? "bg-zinc-200" : "bg-muted"
+                              }`}
                           >
                             <User className="h-6 w-6 text-muted-foreground" />
                           </div>
                           <div className="space-y-1">
                             <span className="font-semibold">
-                              Developer_{index + 1}
+                              {entry.name}
                             </span>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>Level {stats.level}</span>
+                              <span>Level {entry.level}</span>
                               <span>•</span>
-                              <span>{stats.challenges} challenges</span>
+                              <span>{entry.points} points</span>
                             </div>
                           </div>
                         </div>
@@ -534,13 +549,13 @@ Ejemplo Output:
                         <div className="flex items-center gap-2">
                           <Sparkles className="h-4 w-4 text-primary" />
                           <span className="font-semibold">
-                            {6000 - (index + 1) * 1000} XP
+                            {entry.points} XP
                           </span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-primary">
                           <Coins className="h-4 w-4" />
                           <span className="font-medium">
-                            {1000 - (index + 1) * 100} MC
+                            {entry.points} MC
                           </span>
                         </div>
                       </div>
