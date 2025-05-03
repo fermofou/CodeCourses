@@ -3,18 +3,6 @@
 ## 📑 Índice
 
 - [Requerimientos Funcionales](#requerimientos-funcionales)
-  - [Gestión de Problemas](#gestión-de-problemas)
-    - [Scrapping y Transformación](#scrapping-y-transformación)
-    - [Tabla de Problemas](#tabla-de-problemas)
-  - [Interfaz de Usuario – Sección Code Challenges](#interfaz-de-usuario--sección-code-challenges)
-    - [Listado de Problemas](#listado-de-problemas)
-    - [Detalle de Problema](#detalle-de-problema)
-  - [Validación y Evaluación de Envíos](#validación-y-evaluación-de-envíos)
-    - [Editor de Código](#editor-de-código)
-    - [Integración con Judge0](#integración-con-judge0)
-    - [Validación Adicional con SonarQube](#validación-adicional-con-sonarqube)
-    - [Actualización de XP y Currency](#actualización-de-xp-y-currency)
-  - [Gestión de Usuarios (Futuro/Base)](#gestión-de-usuarios-futurobase)
 - [Requerimientos No Funcionales](#requerimientos-no-funcionales)
 - [Historias de Usuario](#historias-de-usuario)
   - [HU-001 - Login de Usuario](#hu-001---login-de-usuario)
