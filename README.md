@@ -93,7 +93,8 @@
 ### HU-001 - Login de Usuario
 **Descripción:** Como usuario y trabajador de la empresa, quiero poder ingresar a la plataforma.  
 **Criterios de Aceptación:**
-- Ingreso con correo y contraseña de la empresa.
+- Ingreso con correo y contraseña.
+- Permitir uso de cuenta Google para mayor velocidad.
 - Mensaje de error si son incorrectos o inválidos.
 
 ---
@@ -104,6 +105,7 @@
 - Ingresar correctamente.
 - Acceder a sección “Problemas de programación”.
 - Seleccionar problema a resolver.
+- Obtener XP y puntos en caso de responder correctamente.
 
 ---
 
