@@ -126,11 +126,12 @@
 ---
 
 ### HU-007 - Sistema de Recompensas
-**Descripción:** Como usuario, quiero recibir XP y currency al resolver problemas.  
+**Descripción:** Como usuario, quiero recibir XP y puntos  al resolver problemas.  
 **Criterios de Aceptación:**
-- Código válido actualiza XP y currency.
+- Código válido actualiza puntos para tienda.
 - Notificación de éxito.
 - Actualización en perfil.
+- Solo puede comprar usuario si alcanza por puntos y quedan productos disponibles.
 
 ---
 
