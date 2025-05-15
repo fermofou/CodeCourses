@@ -95,6 +95,13 @@ const columns: ColumnsType<ProblemsTableType> = [
     title: "Difficulty",
     dataIndex: "difficulty",
     key: "difficulty",
+    // Difficulty filter
+    filters: [
+      { text: "Easy", value: 1 },
+      { text: "Medium", value: 2 },
+      { text: "Hard", value: 3 },
+    ],
+    onFilter: (value, record) => record.difficulty === value,
     render: (_, { difficulty }) => (
       <div className="flex items-center gap-2">
         {Array.from({ length: difficulty }).map((_, i) => (
