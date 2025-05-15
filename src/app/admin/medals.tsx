@@ -56,7 +56,7 @@ const Medals = () => {
             className="w-10 h-10 rounded-full"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = "https://imanolgzz.com/_next/image?url=%2Fimages%2FmainPhoto.jpg&w=1920&q=75/40";
+              target.src = "https://imanolgzz.com/_next/image?url=%2Fimages%2FmainPhoto.jpg&w=1920&q=75";
             }}
           />
           <span className="font-medium">{text}</span>
