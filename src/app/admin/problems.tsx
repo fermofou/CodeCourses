@@ -3,6 +3,12 @@ import { Table, Button, Modal, Input, Select, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { useUser } from "@clerk/clerk-react";
+import { FaWandMagicSparkles } from "react-icons/fa6";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const API_KEY = "llave";
+
+const genAI = new GoogleGenerativeAI(API_KEY);
 
 interface ApiProblemType {
   problem_id: number;
@@ -54,6 +60,59 @@ const Problems = () => {
   if (!isLoaded) return null;
 
   if (!user) return null;
+
+  const rewriteStatement = async (statement: string): Promise<string> => {
+    try {
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+      const prompt = `
+        Eres un generador de problemas de programación contextualizados. Vas a recibir un problema clásico de programación (como búsqueda en matrices, árboles, grafos, dynamic programming, etc.), pero en vez de presentarlo con elementos genéricos, lo transformarás para que esté ambientado en Tech Mahindra.
+
+        ### 💼 *Tu tarea es:*
+
+        1.⁠ ⁠*Identificar los elementos clave del problema original*:
+
+          * Entidades (islas, nodos, personas, etc.)
+          * Relaciones o interacciones (conexiones, caminos, vecinos, etc.)
+          * Recursos (agua, caminos, tiempo, etc.)
+          * Objetivo (contar, optimizar, buscar, etc.)
+
+        2.⁠ ⁠*Reemplazar esos elementos por equivalentes dentro del contexto de Tech Mahindra*:
+
+          * Islas → Edificios de Tech Mahindra
+          * Agua → Áreas de trabajo, empleados, o zonas de descanso
+          * Personas → CEO, directivos, developers de Tech Mahindra
+          * Árboles → Jerarquías de proyectos o equipos
+          * Grafos → Redes internas, infraestructura de IT
+          * Caminos → Flujos de procesos en proyectos de clientes
+          * Recursos → Tiempo, presupuesto, servidores, etc.
+
+        3.⁠ ⁠*Redactar el problema reimaginando el escenario como si fuera un reto real de la empresa Tech Mahindra*, manteniendo la esencia lógica intacta.
+
+        El problema original es el siguiente, responde solo con el enunciado reescrito, sin explicaciones adicionales:
+        """${statement}"""
+      `;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+
+      return text;
+    } catch (error) {
+      console.error("Error llamando a Gemini:", error);
+      return "Hubo un error al reescribir el enunciado.";
+    }
+  };
+
+  const handleRewrite = async () => {
+    if (!challengeData.question) return;
+
+    const rewritten = await rewriteStatement(challengeData.question);
+    setChallengeData((prev) => ({
+      ...prev,
+      question: rewritten,
+    }));
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -337,6 +396,15 @@ const Problems = () => {
         <h1 className="text-3xl font-bold mb-2">Problemas</h1>
         <p className="text-gray-600">Administra y gestiona los problemas de la plataforma</p>
       </div>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Problemas</h2>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={showAddModal}
+          label="Agregar problema"
+        />
+      </div>
       <Table columns={columns} dataSource={problemsData} />
       <Modal
         style={{ marginTop: "-3rem" }}
@@ -408,6 +476,24 @@ const Problems = () => {
                 rows={6}
                 placeholder="Descripción del problema"
               />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "end",
+              }}  
+            >
+              <Button
+                type="primary"
+                onClick={() => {
+                  handleRewrite();
+                }}
+                style={{ marginBottom: "1rem", width: "fit-content" }}
+              >
+              <FaWandMagicSparkles className="mr-2" />
+                Mejorar con IA
+              </Button>
             </div>
             <div>
               {(challengeData?.testCases || []).map((testCase, index) => (
