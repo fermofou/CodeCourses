@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Table, Button, Modal, Input, message } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
+
 
 interface MedalType {
   id: number;
@@ -193,23 +194,29 @@ const Medals = () => {
   };
 
   return (
-    <div className="w-full max-w-6xl">
+    <div className="w-full">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Medals</h1>
-        <p className="text-gray-600">Manage platform medals and achievements</p>
+        <p className="text-gray-600">Manage and administer platform medals</p>
       </div>
-
-      <div className="flex justify-between items-center mb-6">
-        <div className="relative w-64">
-          <input
-            type="text"
-            placeholder="Search medal..."
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center gap-4">
+          <Input.Search
+            placeholder="Search medals..."
+            style={{ width: 250 }}
+            allowClear
+            onSearch={(value) => {
+              console.log('search:', value);
+            }}
           />
         </div>
-        <Button type="primary" className="bg-blue-600" onClick={showAddModal}>
-          Add Medal
-        </Button>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={showAddModal}
+          label="Add Medal"
+        />
       </div>
 
       <Table columns={columns} dataSource={medalsData} rowKey="id" />

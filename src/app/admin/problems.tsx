@@ -55,6 +55,7 @@ const Problems = () => {
   const [refetch, setRefetch] = useState(false);
   const [deletingID, setDeletingID] = useState<number | null>(null);
   const [zipFile, setZipFile] = useState<File | null>(null);
+  const [searchText, setSearchText] = useState(""); // New state for search
   const { isLoaded, user } = useUser();
 
   if (!isLoaded) return null;
@@ -346,11 +347,13 @@ const Problems = () => {
       title: "Title",
       dataIndex: "title",
       key: "title",
+      width: "40%",
     },
     {
       title: "Difficulty",
       dataIndex: "difficulty",
       key: "difficulty",
+      width: "20%",
       render: (difficulty: number) => {
         const stars = {
           1: "★☆☆☆☆",
@@ -366,6 +369,7 @@ const Problems = () => {
       title: "Tags",
       dataIndex: "tags",
       key: "tags",
+      width: "25%",
       render: (tags: string[]) => (
         <>
           {tags.map(tag => (
@@ -377,8 +381,10 @@ const Problems = () => {
     {
       title: "Action",
       key: "action",
+      width: "15%",
+      align: "right",
       render: (_: any, record: any) => (
-        <div className="flex gap-3">
+        <div className="flex justify-end gap-3">
           <Button icon={<EditOutlined />} onClick={() => { showEditModal(record); }}>
             Edit
           </Button>
@@ -397,15 +403,28 @@ const Problems = () => {
         <p className="text-gray-600">Manage and administer platform problems</p>
       </div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Problemas</h2>
+        <div className="flex items-center gap-4">
+          <Input.Search
+            placeholder="Search problems..."
+            style={{ width: 250 }}
+            allowClear
+            onSearch={(value) => setSearchText(value)}
+          />
+        </div>
         <Button
           type="primary"
           icon={<PlusOutlined />}
           onClick={showAddModal}
-          label="Agregar problema"
+          label="Add Problem"
         />
       </div>
-      <Table columns={columns} dataSource={problemsData} />
+      <Table 
+        columns={columns} 
+        dataSource={problemsData?.filter(problem => 
+          problem.title.toLowerCase().includes(searchText.toLowerCase()) ||
+          problem.tags.some(tag => tag.toLowerCase().includes(searchText.toLowerCase()))
+        )} 
+      />
       <Modal
         style={{ marginTop: "-3rem" }}
         title={isEditing ? "Edit Problem" : (isDeleting ? "Delete Problem" : "Add Problem")}

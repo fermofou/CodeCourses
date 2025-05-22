@@ -37,6 +37,37 @@ const getRowStyle = (rank: number) => {
   }
 }
 
+const calculateRank = (points: number): string => {
+  if (points >= 2600) return "Grandmaster"
+  if (points >= 2300) return "Master"
+  if (points >= 1900) return "Candidate"
+  if (points >= 1600) return "Expert"
+  if (points >= 1400) return "Specialist"
+  if (points >= 1200) return "Pupil"
+  return "Newbie"
+}
+
+const getRankColor = (rank: string): string => {
+  switch (rank) {
+    case "Grandmaster":
+      return "text-[#FF0000]"
+    case "Master":
+      return "text-[#FF8C00]"
+    case "Candidate":
+      return "text-[#AA00AA]"
+    case "Expert":
+      return "text-[#0000FF]"
+    case "Specialist":
+      return "text-[#03A89E]"
+    case "Pupil":
+      return "text-[#008000]"
+    case "Newbie":
+      return "text-[#808080]"
+    default:
+      return ""
+  }
+}
+
 const Leaderboard: React.FC = () => {
   const { user } = useUser()
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
@@ -65,6 +96,7 @@ const Leaderboard: React.FC = () => {
           <TableRow className="border-b-2 border-[#ED2831]/20">
             <TableHead className="w-20 text-[#ED2831]">Rank</TableHead>
             <TableHead className="text-[#ED2831]">User</TableHead>
+            <TableHead className="text-[#ED2831]">Division</TableHead>
             <TableHead className="text-right text-[#ED2831]">Points</TableHead>
             <TableHead className="text-right text-[#ED2831]">Level</TableHead>
           </TableRow>
@@ -73,6 +105,8 @@ const Leaderboard: React.FC = () => {
           {leaderboard.map((entry, index) => {
             const { color } = getMedalInfo(index)
             const isCurrentUser = user?.fullName === entry.name
+            const rank = calculateRank(entry.points)
+            const rankColor = getRankColor(rank)
 
             return (
               <TableRow
@@ -96,6 +130,9 @@ const Leaderboard: React.FC = () => {
                     </Avatar>
                     <span className="font-medium">{entry.name}</span>
                   </div>
+                </TableCell>
+                <TableCell>
+                  <span className={`font-medium ${rankColor}`}>{rank}</span>
                 </TableCell>
                 <TableCell className="text-right font-medium">{entry.points}</TableCell>
                 <TableCell className="text-right font-medium">{entry.level}</TableCell>
