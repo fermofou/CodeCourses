@@ -3,11 +3,12 @@ import { Trophy, Star, Target } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface Badge {
-  id: string;
+  badge_id: number;
   name: string;
   description: string;
   requirement: string;
-  awarded_at: string;
+  image_url: string;
+  created_at: string;
 }
 
 interface UserProfileModalProps {
@@ -56,18 +57,22 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
       
       setLoading(true);
       try {
+        console.log('Fetching badges for user:', user.id);
         const response = await fetch(`http://localhost:8080/admin/user/${user.id}/badges`);
         if (!response.ok) throw new Error('Failed to fetch badges');
         const data = await response.json();
-        setUserBadges(data);
+        console.log('Received badges data:', data);
+        setUserBadges(data || []);
       } catch (error) {
         console.error('Error fetching user badges:', error);
+        setUserBadges([]);
       } finally {
         setLoading(false);
       }
     };
 
     if (isOpen && user) {
+      console.log('Modal opened for user:', user);
       fetchUserBadges();
     }
   }, [isOpen, user]);
@@ -76,6 +81,10 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
 
   const rank = calculateRank(user.level);
   const rankColor = getRankColor(rank);
+  const badgesCount = userBadges?.length || 0;
+
+  console.log('Current badges state:', userBadges);
+  console.log('Badges count:', badgesCount);
 
   return (
     <Modal
@@ -116,7 +125,7 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
           <Col span={8}>
             <Statistic
               title="Badges"
-              value={userBadges.length}
+              value={badgesCount}
               prefix={<Trophy className="w-4 h-4" />}
             />
           </Col>
@@ -129,17 +138,20 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
             <h3 className="text-lg font-semibold mb-2">Achievements</h3>
             {loading ? (
               <div className="text-gray-500">Loading badges...</div>
-            ) : userBadges.length > 0 ? (
+            ) : badgesCount > 0 ? (
               <div className="flex flex-wrap gap-2">
-                {userBadges.map((badge) => (
-                  <Tag 
-                    key={badge.id} 
-                    color="blue"
-                    title={`Awarded on ${new Date(badge.awarded_at).toLocaleDateString()}`}
-                  >
-                    {badge.name}
-                  </Tag>
-                ))}
+                {userBadges.map((badge) => {
+                  console.log('Rendering badge:', badge);
+                  return (
+                    <Tag 
+                      key={badge.badge_id} 
+                      color="blue"
+                      title={`${badge.description} - Awarded on ${new Date(badge.created_at).toLocaleDateString()}`}
+                    >
+                      {badge.name}
+                    </Tag>
+                  );
+                })}
               </div>
             ) : (
               <div className="text-gray-500">No badges earned yet</div>
@@ -149,13 +161,13 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
           <div>
             <h3 className="text-lg font-semibold mb-2">Recent Activity</h3>
             <div className="space-y-2">
-              {userBadges.length > 0 ? (
+              {badgesCount > 0 ? (
                 userBadges
-                  .sort((a, b) => new Date(b.awarded_at).getTime() - new Date(a.awarded_at).getTime())
+                  .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
                   .slice(0, 3)
                   .map((badge) => (
-                    <div key={badge.id} className="text-sm text-gray-600">
-                      Earned "{badge.name}" - {new Date(badge.awarded_at).toLocaleDateString()}
+                    <div key={badge.badge_id} className="text-sm text-gray-600">
+                      Earned "{badge.name}" - {new Date(badge.created_at).toLocaleDateString()}
                     </div>
                   ))
               ) : (

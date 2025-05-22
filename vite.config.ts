@@ -13,6 +13,11 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5173,
     proxy: {
+      "/api/leaderboard": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/leaderboard/, "/leaderboard"),
+      },
       "/claim": {
         target: "http://localhost:8080",
         changeOrigin: true,
@@ -35,10 +40,6 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/challenge/, "/challenge"),
       },
       "/user": {
-        target: "http://localhost:8080",
-        changeOrigin: true,
-      },
-      "/leaderboard": {
         target: "http://localhost:8080",
         changeOrigin: true,
       },
@@ -70,6 +71,11 @@ export default defineConfig({
         target: "http://localhost:8080",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/admin\/users\/(.*)/, "/admin/updateUser/$1"),
+      },
+      "/admin/user/:id/badges": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/admin\/user\/(.*)\/badges/, "/admin/user/$1/badges"),
       },
     },
   },

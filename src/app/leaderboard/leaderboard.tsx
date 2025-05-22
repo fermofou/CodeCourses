@@ -81,8 +81,9 @@ const Leaderboard: React.FC = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/leaderboard")
+        const res = await fetch("/api/leaderboard")
         const data = await res.json()
+        console.log('Leaderboard data:', data) // Debug log
         setLeaderboard(data)
       } catch (err) {
         console.error("Error al obtener leaderboard:", err)
@@ -95,6 +96,11 @@ const Leaderboard: React.FC = () => {
   }, [])
 
   const showUserProfile = (entry: LeaderboardEntry) => {
+    console.log('Showing profile for user:', entry) // Debug log
+    if (!entry.id) {
+      console.error('No user ID found for entry:', entry)
+      return
+    }
     setSelectedUser(entry)
     setIsProfileModalOpen(true)
   }
