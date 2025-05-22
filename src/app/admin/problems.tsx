@@ -6,7 +6,7 @@ import { useUser } from "@clerk/clerk-react";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = "llave";
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
