@@ -4,11 +4,15 @@ import { useUser } from "@clerk/clerk-react"
 import { Medal } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import UserProfileModal from "@/components/UserProfileModal"
 
 type LeaderboardEntry = {
   name: string
   points: number
   level: number
+  id: string
+  mail: string
+  is_admin: boolean
 }
 
 const getMedalInfo = (rank: number) => {
@@ -71,6 +75,8 @@ const getRankColor = (rank: string): string => {
 const Leaderboard: React.FC = () => {
   const { user } = useUser()
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [selectedUser, setSelectedUser] = useState<LeaderboardEntry | null>(null)
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -87,6 +93,11 @@ const Leaderboard: React.FC = () => {
     const interval = setInterval(fetchLeaderboard, 5000)
     return () => clearInterval(interval)
   }, [])
+
+  const showUserProfile = (entry: LeaderboardEntry) => {
+    setSelectedUser(entry)
+    setIsProfileModalOpen(true)
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -112,7 +123,8 @@ const Leaderboard: React.FC = () => {
               <TableRow
                 key={`${entry.name}-${entry.points}`}
                 className={`${isCurrentUser ? "bg-primary/10" : ""} 
-                  ${getRowStyle(index)} border-b transition-colors`}
+                  ${getRowStyle(index)} border-b transition-colors cursor-pointer`}
+                onClick={() => showUserProfile(entry)}
               >
                 <TableCell className="w-20 font-medium">
                   {index < 3 ? (
@@ -141,6 +153,12 @@ const Leaderboard: React.FC = () => {
           })}
         </TableBody>
       </Table>
+
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={selectedUser}
+      />
     </div>
   )
 }

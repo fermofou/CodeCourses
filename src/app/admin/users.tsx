@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input, Button, Modal, Form, InputNumber, notification } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, UserOutlined } from "@ant-design/icons";
+import UserProfileModal from "@/components/UserProfileModal";
 
 interface UserType {
   name: string;
@@ -53,6 +54,8 @@ const Users = () => {
   const [previewRank, setPreviewRank] = useState<string>("");
   const [previewRankColor, setPreviewRankColor] = useState<string>("");
   const [api, contextHolder] = notification.useNotification();
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -165,6 +168,11 @@ const Users = () => {
     }
   };
 
+  const showUserProfile = (user: UserType) => {
+    setSelectedUser(user);
+    setIsProfileModalOpen(true);
+  };
+
   if (loading) {
     return <div className="container mx-auto px-4 py-8">Loading...</div>;
   }
@@ -209,10 +217,18 @@ const Users = () => {
                 <TableRow key={user.id} className="border-b transition-colors hover:bg-muted/50">
                   <TableCell className="w-[35%]">
                     <div className="flex items-center space-x-3">
-                      <Avatar className="border border-gray-200">
+                      <Avatar 
+                        className="border border-gray-200 cursor-pointer" 
+                        onClick={() => showUserProfile(user)}
+                      >
                         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                       </Avatar>
-                      <span className="font-medium">{user.name}</span>
+                      <span 
+                        className="font-medium cursor-pointer hover:text-blue-600"
+                        onClick={() => showUserProfile(user)}
+                      >
+                        {user.name}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell className="w-[20%]">
@@ -224,6 +240,13 @@ const Users = () => {
                   <TableCell className="w-[15%] text-center font-medium">{user.points}</TableCell>
                   <TableCell className="w-[15%] text-right">
                     <div className="flex justify-end gap-3">
+                      <Button 
+                        type="primary"
+                        icon={<UserOutlined />} 
+                        onClick={() => showUserProfile(user)}
+                      >
+                        Profile
+                      </Button>
                       <Button 
                         type="primary"
                         icon={<EditOutlined />} 
@@ -290,6 +313,12 @@ const Users = () => {
           {editingUser && <div className="mt-4 text-xs text-gray-500">User ID: {editingUser.id}</div>}
         </Form>
       </Modal>
+
+      <UserProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={selectedUser}
+      />
     </div>
   );
 };
