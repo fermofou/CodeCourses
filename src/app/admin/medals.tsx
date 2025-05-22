@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Table, Button, Modal, Input, message } from "antd";
+import { Table, Button, Modal, Input, notification } from "antd";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 
@@ -18,6 +18,7 @@ const Medals = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentMedal, setCurrentMedal] = useState<MedalType | null>(null);
   const [medalsData, setMedalsData] = useState<MedalType[]>([]);
+  const [api, contextHolder] = notification.useNotification();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -40,7 +41,12 @@ const Medals = () => {
       })
       .catch((err) => {
         console.error("Error fetching badges:", err);
-        message.error("Error loading medals.");
+        api.error({
+          message: "Error Loading Medals",
+          description: "Failed to load medals. Please try again later.",
+          placement: "topRight",
+          duration: 4,
+        });
       });
   }, []);
 
@@ -119,18 +125,33 @@ const Medals = () => {
         return res.json();
       })
       .then(() => {
-        message.success("Medal deleted successfully");
+        api.success({
+          message: "Medal Deleted",
+          description: "The medal was successfully deleted.",
+          placement: "topRight",
+          duration: 4,
+        });
         setMedalsData((prev) => prev.filter((medal) => medal.id !== id));
       })
       .catch((err) => {
         console.error(err);
-        message.error("Error deleting medal");
+        api.error({
+          message: "Delete Failed",
+          description: "Failed to delete the medal. Please try again.",
+          placement: "topRight",
+          duration: 4,
+        });
       });
   };
 
   const handleOk = () => {
     if (!name || !description || !requirement) {
-      message.warning("All fields are required");
+      api.warning({
+        message: "Required Fields",
+        description: "Please fill in all required fields.",
+        placement: "topRight",
+        duration: 4,
+      });
       return;
     }
 
@@ -158,7 +179,14 @@ const Medals = () => {
         return res.json();
       })
       .then((response) => {
-        message.success(isEditing ? "Medal updated" : "Medal created");
+        api.success({
+          message: isEditing ? "Medal Updated" : "Medal Created",
+          description: isEditing 
+            ? "The medal was successfully updated."
+            : "A new medal was successfully created.",
+          placement: "topRight",
+          duration: 4,
+        });
 
         const newMedal: MedalType = {
           id: isEditing ? currentMedal!.id : response.badge_id,
@@ -185,7 +213,12 @@ const Medals = () => {
       })
       .catch((err) => {
         console.error(err);
-        message.error("An error occurred");
+        api.error({
+          message: "Operation Failed",
+          description: "An error occurred while saving the medal. Please try again.",
+          placement: "topRight",
+          duration: 4,
+        });
       });
   };
 
@@ -195,6 +228,7 @@ const Medals = () => {
 
   return (
     <div className="w-full">
+      {contextHolder}
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Medals</h1>
         <p className="text-gray-600">Manage and administer platform medals</p>

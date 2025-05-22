@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Table, Button, Modal, Input, Select, Tag } from "antd"
+import { Table, Button, Modal, Input, Select, Tag, notification } from "antd"
 import type { ColumnsType } from "antd/es/table"
 import { EditOutlined, PlusOutlined } from "@ant-design/icons"
 import { useUser } from "@clerk/clerk-react"
@@ -40,6 +40,7 @@ const Problems = () => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [loadingProblem, setLoadingProblem] = useState<boolean>(true)
+  const [api, contextHolder] = notification.useNotification()
   const [challengeData, setChallengeData] = useState<ProblemData>({
     title: "",
     difficulty: 1,
@@ -224,16 +225,31 @@ const Problems = () => {
 
   const validateForm = () => {
     if (challengeData.title === "" || challengeData.question === "") {
-      alert("Please complete all required fields.")
+      api.warning({
+        message: "Required Fields",
+        description: "Please complete all required fields.",
+        placement: "topRight",
+        duration: 4,
+      });
       return false
     }
 
     if (challengeData.testCases?.some((testCase) => testCase.input === "" || testCase.expectedOutput === "")) {
-      alert("Please do not leave empty fields in the example test cases.")
+      api.warning({
+        message: "Test Cases Required",
+        description: "Please do not leave empty fields in the example test cases.",
+        placement: "topRight",
+        duration: 4,
+      });
       return false
     }
     if (!isEditing && !zipFile) {
-      alert("Please select a zip file.")
+      api.warning({
+        message: "File Required",
+        description: "Please select a zip file.",
+        placement: "topRight",
+        duration: 4,
+      });
       return false
     }
 
@@ -284,8 +300,21 @@ const Problems = () => {
             : problem,
         ),
       )
+
+      api.success({
+        message: "Problem Updated",
+        description: "The problem was successfully updated.",
+        placement: "topRight",
+        duration: 4,
+      });
     } catch (error) {
       console.error("Error uploading problem statement:", error)
+      api.error({
+        message: "Update Failed",
+        description: "Failed to update the problem. Please try again.",
+        placement: "topRight",
+        duration: 4,
+      });
     }
   }
 
@@ -305,6 +334,12 @@ const Problems = () => {
       console.log("Response from server:", res)
     } catch (error) {
       console.error("Error uploading test cases:", error)
+      api.error({
+        message: "Upload Failed",
+        description: "Failed to upload test cases. Please try again.",
+        placement: "topRight",
+        duration: 4,
+      });
     }
   }
 
@@ -342,8 +377,21 @@ const Problems = () => {
       const res = await response.json()
       await handleUploadTestcases(res.problem_id)
       setRefetch(!refetch)
+
+      api.success({
+        message: "Problem Created",
+        description: "The problem was successfully created.",
+        placement: "topRight",
+        duration: 4,
+      });
     } catch (error) {
       console.error("Error uploading problem statement:", error)
+      api.error({
+        message: "Creation Failed",
+        description: "Failed to create the problem. Please try again.",
+        placement: "topRight",
+        duration: 4,
+      });
     }
   }
 
@@ -360,10 +408,23 @@ const Problems = () => {
       }
       const res = await response.json()
       console.log("Response from server:", res)
+      setRefetch(!refetch)
+
+      api.success({
+        message: "Problem Deleted",
+        description: "The problem was successfully deleted.",
+        placement: "topRight",
+        duration: 4,
+      });
     } catch (error) {
       console.error("Error deleting problem:", error)
+      api.error({
+        message: "Delete Failed",
+        description: "Failed to delete the problem. Please try again.",
+        placement: "topRight",
+        duration: 4,
+      });
     }
-    setRefetch(!refetch)
   }
 
   const handleClose = () => {
@@ -473,6 +534,7 @@ const Problems = () => {
 
   return (
     <div className="w-full">
+      {contextHolder}
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Problems</h1>
         <p className="text-gray-600">Manage and administer platform problems</p>

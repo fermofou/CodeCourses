@@ -38,12 +38,12 @@ const getRowStyle = (rank: number) => {
 }
 
 const calculateRank = (points: number): string => {
-  if (points >= 2600) return "Grandmaster"
-  if (points >= 2300) return "Master"
-  if (points >= 1900) return "Candidate"
-  if (points >= 1600) return "Expert"
-  if (points >= 1400) return "Specialist"
-  if (points >= 1200) return "Pupil"
+  if (points >= 20000) return "Grandmaster"
+  if (points >= 10000) return "Master"
+  if (points >= 7500) return "Candidate"
+  if (points >= 5000) return "Expert"
+  if (points >= 3000) return "Specialist"
+  if (points >= 1000) return "Pupil"
   return "Newbie"
 }
 
