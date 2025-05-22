@@ -1,70 +1,85 @@
-import { useState, useEffect } from "react";
-import { Table, Button, Modal, Input, Select, Tag } from "antd";
-import { ColumnsType } from "antd/es/table";
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { useUser } from "@clerk/clerk-react";
-import { FaWandMagicSparkles } from "react-icons/fa6";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { useState, useEffect } from "react"
+import { Table, Button, Modal, Input, Select, Tag } from "antd"
+import type { ColumnsType } from "antd/es/table"
+import { EditOutlined, PlusOutlined } from "@ant-design/icons"
+import { useUser } from "@clerk/clerk-react"
+import { FaWandMagicSparkles } from "react-icons/fa6"
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 interface ApiProblemType {
-  problem_id: number;
-  title: string;
-  difficulty: number;
-  solved: boolean | null;
-  tags?: string[];
-  question: string;
-  // Points might be added later
+  problem_id: number
+  title: string
+  difficulty: number
+  solved: boolean | null
+  tags?: string[]
+  question: string
 }
 
 interface ProblemData {
-  problem_id?: number;
-  title: string;
-  difficulty: number;
-  tags: string[];
-  question: string;
+  problem_id?: number
+  title: string
+  difficulty: number
+  tags: string[]
+  question: string
   testCases?: [
     {
-      expectedOutput: string;
-      input: string;
-    }
-  ];
+      expectedOutput: string
+      input: string
+    },
+  ]
 }
 
 const Problems = () => {
-  const [problemsData, setProblemsData] = useState(undefined);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [loadingProblem, setLoadingProblem] = useState<boolean>(true);
+  const [problemsData, setProblemsData] = useState(undefined)
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [loadingProblem, setLoadingProblem] = useState<boolean>(true)
   const [challengeData, setChallengeData] = useState<ProblemData>({
     title: "",
     difficulty: 1,
     tags: [],
     question: "",
-    testCases: [{
-      input: "",
-      expectedOutput: "",
-    }],
-  });
-  const [isLoadingSave, setIsLoadingSave] = useState(false);
-  const [refetch, setRefetch] = useState(false);
-  const [deletingID, setDeletingID] = useState<number | null>(null);
-  const [zipFile, setZipFile] = useState<File | null>(null);
-  const [searchText, setSearchText] = useState(""); // New state for search
-  const { isLoaded, user } = useUser();
+    testCases: [
+      {
+        input: "",
+        expectedOutput: "",
+      },
+    ],
+  })
+  const [isLoadingSave, setIsLoadingSave] = useState(false)
+  const [refetch, setRefetch] = useState(false)
+  const [deletingID, setDeletingID] = useState<number | null>(null)
+  const [zipFile, setZipFile] = useState<File | null>(null)
+  const [searchText, setSearchText] = useState("") // New state for search
+  const { isLoaded, user } = useUser()
 
-  if (!isLoaded) return null;
+  // New states for AI improvement confirmation
+  const [isAiModalVisible, setIsAiModalVisible] = useState(false)
+  const [aiGeneratedText, setAiGeneratedText] = useState("")
+  const [originalText, setOriginalText] = useState("")
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false)
 
-  if (!user) return null;
+  const [userId, setUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      setUserId(user.id)
+    }
+  }, [isLoaded, user])
+
+  if (!isLoaded) return null
+
+  if (!user) return null
 
   const rewriteStatement = async (statement: string): Promise<string> => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
 
       const prompt = `
         Eres un generador de problemas de programación contextualizados. Vas a recibir un problema clásico de programación (como búsqueda en matrices, árboles, grafos, dynamic programming, etc.), pero en vez de presentarlo con elementos genéricos, lo transformarás para que esté ambientado en Tech Mahindra.
@@ -92,119 +107,150 @@ const Problems = () => {
 
         El problema original es el siguiente, responde solo con el enunciado reescrito, sin explicaciones adicionales:
         """${statement}"""
-      `;
+      `
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+      const result = await model.generateContent(prompt)
+      const response = await result.response
+      const text = response.text()
 
-      return text;
+      return text
     } catch (error) {
-      console.error("Error llamando a Gemini:", error);
-      return "Hubo un error al reescribir el enunciado.";
+      console.error("Error llamando a Gemini:", error)
+      return "Hubo un error al reescribir el enunciado."
     }
-  };
+  }
 
   const handleRewrite = async () => {
-    if (!challengeData.question) return;
+    if (!challengeData.question) return
 
-    const rewritten = await rewriteStatement(challengeData.question);
+    setIsGeneratingAi(true)
+
+    try {
+      // Save the original text
+      setOriginalText(challengeData.question)
+
+      // Get the AI-generated text
+      const rewritten = await rewriteStatement(challengeData.question)
+      setAiGeneratedText(rewritten)
+
+      // Show the confirmation modal
+      setIsAiModalVisible(true)
+    } catch (error) {
+      console.error("Error generating AI text:", error)
+    } finally {
+      setIsGeneratingAi(false)
+    }
+  }
+
+  // Function to accept AI changes
+  const handleAcceptAiChanges = () => {
     setChallengeData((prev) => ({
       ...prev,
-      question: rewritten,
-    }));
-  };
+      question: aiGeneratedText,
+    }))
+    setIsAiModalVisible(false)
+  }
+
+  // Function to decline AI changes
+  const handleDeclineAiChanges = () => {
+    setIsAiModalVisible(false)
+  }
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`http://localhost:8080/problems?userId=${user.id}`)
-      .then((response) => response.json())
-      .then((data: ApiProblemType[]) => {
-        // Map the API data to match our table structure
-        const formattedProblems = data.map((problem) => {
-          return {
-            key: problem.problem_id,
-            title: problem.title,
-            difficulty: problem.difficulty,
-            tags: problem.tags || ["coding"], // Default tag if not provided
-            question: problem.question,
-
-          };
-        });
-        setProblemsData(formattedProblems);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching problems:", error);
-        setLoading(false);
-      });
-  }, [refetch]);
+    setLoading(true)
+    if (userId) {
+      fetch(`http://localhost:8080/problems?userId=${userId}`)
+        .then((response) => response.json())
+        .then((data: ApiProblemType[]) => {
+          // Map the API data to match our table structure
+          const formattedProblems = data.map((problem) => {
+            return {
+              key: problem.problem_id,
+              title: problem.title,
+              difficulty: problem.difficulty,
+              tags: problem.tags || ["coding"], // Default tag if not provided
+              question: problem.question,
+            }
+          })
+          setProblemsData(formattedProblems)
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.error("Error fetching problems:", error)
+          setLoading(false)
+        })
+    }
+  }, [refetch, userId])
 
   useEffect(() => {
-    console.log("Zip file changed:", zipFile);
-  }, [zipFile]);
+    console.log("Zip file changed:", zipFile)
+  }, [zipFile])
 
   const fetchProblem = async (problemId: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/challenge?probID=${problemId}&userID=${user.id}`);
-      const data = await response.json();
-      data.testCases = JSON.parse(data.tests);
+      const response = await fetch(`http://localhost:8080/challenge?probID=${problemId}&userID=${user.id}`)
+      const data = await response.json()
+      data.testCases = JSON.parse(data.tests)
       setChallengeData(data)
-      return data;
+      return data
     } catch (error) {
-      console.error("Error fetching problem:", error);
+      console.error("Error fetching problem:", error)
     }
   }
 
   const showAddModal = () => {
-    setIsEditing(false);
-    setIsDeleting(false);
-    setLoadingProblem(false);
-    setIsModalVisible(true);
-  };
+    setIsEditing(false)
+    setIsDeleting(false)
+    setLoadingProblem(false)
+    setIsModalVisible(true)
+  }
 
   const showEditModal = async (record: any) => {
-    setIsEditing(true);
-    setIsDeleting(false);
-    setLoadingProblem(true);
-    setIsModalVisible(true);
-    await fetchProblem(record.key);
-    setLoadingProblem(false);
-  };
+    setIsEditing(true)
+    setIsDeleting(false)
+    setLoadingProblem(true)
+    setIsModalVisible(true)
+    await fetchProblem(record.key)
+    setLoadingProblem(false)
+  }
 
   const showDeleteModal = async (record: any) => {
-    setIsEditing(false);
-    setIsDeleting(true);
-    setLoadingProblem(false);
-    setDeletingID(record.key);
-    setIsModalVisible(true);
+    setIsEditing(false)
+    setIsDeleting(true)
+    setLoadingProblem(false)
+    setDeletingID(record.key)
+    setIsModalVisible(true)
   }
 
   const validateForm = () => {
     if (challengeData.title === "" || challengeData.question === "") {
-      alert("Please complete all required fields.");
-      return false;
+      alert("Please complete all required fields.")
+      return false
     }
 
     if (challengeData.testCases?.some((testCase) => testCase.input === "" || testCase.expectedOutput === "")) {
-      alert("Please do not leave empty fields in the example test cases.");
-      return false;
+      alert("Please do not leave empty fields in the example test cases.")
+      return false
     }
     if (!isEditing && !zipFile) {
-      alert("Please select a zip file.");
-      return false;
+      alert("Please select a zip file.")
+      return false
     }
 
-    return true;
+    return true
   }
 
   const handleEditProblem = async () => {
-    console.log(challengeData);
-    const SampleTests = challengeData.testCases != undefined ? JSON.stringify(
-      challengeData.testCases.map((testCase: any) => ({
-        input: testCase.input, expectedOutput: testCase.expectedOutput,
-      }))
-    ) : "[]";
+    console.log(challengeData)
+    const SampleTests =
+      challengeData.testCases != undefined
+        ? JSON.stringify(
+            challengeData.testCases.map((testCase: any) => ({
+              input: testCase.input,
+              expectedOutput: testCase.expectedOutput,
+            })),
+          )
+        : "[]"
     const data = {
       problem_id: challengeData.problem_id,
       title: challengeData.title,
@@ -220,42 +266,59 @@ const Problems = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
-      });
-      const res = await response.json();
-      console.log("Response from server:", res);
-    } catch (error) {
-      console.error("Error uploading problem statement:", error);
-    }
+        body: JSON.stringify(data),
+      })
+      const res = await response.json()
+      console.log("Response from server:", res)
 
+      setProblemsData((prevData) =>
+        prevData.map((problem) =>
+          problem.key === challengeData.problem_id
+            ? {
+                ...problem,
+                title: challengeData.title,
+                difficulty: challengeData.difficulty,
+                tags: challengeData.tags || ["coding"],
+                question: challengeData.question,
+              }
+            : problem,
+        ),
+      )
+    } catch (error) {
+      console.error("Error uploading problem statement:", error)
+    }
   }
 
   const handleUploadTestcases = async (problemId: number) => {
     if (!zipFile) {
-      console.error("No file selected");
-      return;
+      console.error("No file selected")
+      return
     }
-    const formData = new FormData();
-    formData.append("file", zipFile);
+    const formData = new FormData()
+    formData.append("file", zipFile)
     try {
       const response = await fetch(`http://localhost:8080/admin/uploadTestcases?problemId=${problemId}`, {
         method: "POST",
         body: formData,
-      });
-      const res = await response.json();
-      console.log("Response from server:", res);
+      })
+      const res = await response.json()
+      console.log("Response from server:", res)
     } catch (error) {
-      console.error("Error uploading test cases:", error);
+      console.error("Error uploading test cases:", error)
     }
   }
 
   const handleUploadProblem = async () => {
-    const newProblem = { ...challengeData, key: Date.now().toString() };
-    const SampleTests = newProblem.testCases != undefined ? JSON.stringify(
-      newProblem.testCases.map((testCase: any) => ({
-        input: testCase.input, expectedOutput: testCase.expectedOutput,
-      }))
-    ) : "[]";
+    const newProblem = { ...challengeData, key: Date.now().toString() }
+    const SampleTests =
+      newProblem.testCases != undefined
+        ? JSON.stringify(
+            newProblem.testCases.map((testCase: any) => ({
+              input: testCase.input,
+              expectedOutput: testCase.expectedOutput,
+            })),
+          )
+        : "[]"
 
     const data = {
       title: newProblem.title,
@@ -264,9 +327,9 @@ const Problems = () => {
       memoryLimit: 256,
       sampleTests: SampleTests,
       question: newProblem.question,
-    };
-    console.log("data", data);
-    console.log("values", newProblem);
+    }
+    console.log("data", data)
+    console.log("values", newProblem)
 
     try {
       const response = await fetch("http://localhost:8080/admin/uploadProblemStatement", {
@@ -274,13 +337,13 @@ const Problems = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
-      });
-      const res = await response.json();
-      await handleUploadTestcases(res.problem_id);
-      setRefetch(!refetch);
+        body: JSON.stringify(data),
+      })
+      const res = await response.json()
+      await handleUploadTestcases(res.problem_id)
+      setRefetch(!refetch)
     } catch (error) {
-      console.error("Error uploading problem statement:", error);
+      console.error("Error uploading problem statement:", error)
     }
   }
 
@@ -291,56 +354,58 @@ const Problems = () => {
         headers: {
           "Content-Type": "application/json",
         },
-      });
+      })
       if (!response.ok) {
-        throw new Error("Error deleting problem");
+        throw new Error("Error deleting problem")
       }
-      const res = await response.json();
-      console.log("Response from server:", res);
+      const res = await response.json()
+      console.log("Response from server:", res)
     } catch (error) {
-      console.error("Error deleting problem:", error);
+      console.error("Error deleting problem:", error)
     }
-    setRefetch(!refetch);
+    setRefetch(!refetch)
   }
 
   const handleClose = () => {
-    setIsModalVisible(false);
+    setIsModalVisible(false)
     setChallengeData({
       title: "",
       difficulty: 1,
       tags: [],
       question: "",
-      testCases: [{
-        input: "",
-        expectedOutput: "",
-      }],
-    });
+      testCases: [
+        {
+          input: "",
+          expectedOutput: "",
+        },
+      ],
+    })
   }
 
   const handleOk = async () => {
     if (isEditing) {
       if (!validateForm()) {
-        return;
+        return
       }
-      setIsLoadingSave(true);
-      await handleEditProblem();
+      setIsLoadingSave(true)
+      await handleEditProblem()
     } else if (isDeleting) {
-      setIsLoadingSave(true);
-      await handleDeleteProblem();
+      setIsLoadingSave(true)
+      await handleDeleteProblem()
     } else {
       if (!validateForm()) {
-        return;
+        return
       }
-      setIsLoadingSave(true);
-      await handleUploadProblem();
+      setIsLoadingSave(true)
+      await handleUploadProblem()
     }
-    setIsLoadingSave(false);
-    handleClose();
-  };
+    setIsLoadingSave(false)
+    handleClose()
+  }
 
   const handleCancel = () => {
-    handleClose();
-  };
+    handleClose()
+  }
 
   const columns: ColumnsType<any> = [
     {
@@ -361,8 +426,8 @@ const Problems = () => {
           3: "★★★☆☆",
           4: "★★★★☆",
           5: "★★★★★",
-        };
-        return <Tag>{stars[difficulty]}</Tag>;
+        }
+        return <Tag>{stars[difficulty]}</Tag>
       },
     },
     {
@@ -372,7 +437,7 @@ const Problems = () => {
       width: "25%",
       render: (tags: string[]) => (
         <>
-          {tags.map(tag => (
+          {tags.map((tag) => (
             <Tag key={tag}>{tag}</Tag>
           ))}
         </>
@@ -385,16 +450,26 @@ const Problems = () => {
       align: "right",
       render: (_: any, record: any) => (
         <div className="flex justify-end gap-3">
-          <Button icon={<EditOutlined />} onClick={() => { showEditModal(record); }}>
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => {
+              showEditModal(record)
+            }}
+          >
             Edit
           </Button>
-          <Button danger onClick={() => { showDeleteModal(record); }}>
+          <Button
+            danger
+            onClick={() => {
+              showDeleteModal(record)
+            }}
+          >
             Delete
           </Button>
         </div>
       ),
     },
-  ];
+  ]
 
   return (
     <div className="w-full">
@@ -411,28 +486,24 @@ const Problems = () => {
             onSearch={(value) => setSearchText(value)}
           />
         </div>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={showAddModal}
-          label="Add Problem"
-        />
+        <Button type="primary" icon={<PlusOutlined />} onClick={showAddModal} label="Add Problem" />
       </div>
-      <Table 
-        columns={columns} 
-        dataSource={problemsData?.filter(problem => 
-          problem.title.toLowerCase().includes(searchText.toLowerCase()) ||
-          problem.tags.some(tag => tag.toLowerCase().includes(searchText.toLowerCase()))
-        )} 
+      <Table
+        columns={columns}
+        dataSource={problemsData?.filter(
+          (problem) =>
+            problem.title.toLowerCase().includes(searchText.toLowerCase()) ||
+            problem.tags.some((tag) => tag.toLowerCase().includes(searchText.toLowerCase())),
+        )}
       />
       <Modal
         style={{ marginTop: "-3rem" }}
-        title={isEditing ? "Edit Problem" : (isDeleting ? "Delete Problem" : "Add Problem")}
+        title={isEditing ? "Edit Problem" : isDeleting ? "Delete Problem" : "Add Problem"}
         visible={isModalVisible}
         onOk={handleOk}
         disabled={isLoadingSave}
         onCancel={handleCancel}
-        okText={isEditing ? "Save" : (isDeleting ? "Delete" : "Add")}
+        okText={isEditing ? "Save" : isDeleting ? "Delete" : "Add"}
         okButtonProps={{ loading: isLoadingSave }}
         cancelText="Cancel"
       >
@@ -441,14 +512,22 @@ const Problems = () => {
           <>
             <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               Title
-              <Input value={challengeData.title} onChange={(e: any) => { setChallengeData({ ...challengeData, title: e.target.value }) }} placeholder="Problem title" />
+              <Input
+                value={challengeData.title}
+                onChange={(e: any) => {
+                  setChallengeData({ ...challengeData, title: e.target.value })
+                }}
+                placeholder="Problem title"
+              />
             </div>
             <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               Difficulty
               <Select
                 placeholder="Select difficulty"
                 value={challengeData.difficulty}
-                onChange={(value) => { setChallengeData({ ...challengeData, difficulty: value }) }}
+                onChange={(value) => {
+                  setChallengeData({ ...challengeData, difficulty: value })
+                }}
                 options={[
                   { value: 1, label: "★☆☆☆☆ Very Easy" },
                   { value: 2, label: "★★☆☆☆ Easy" },
@@ -465,7 +544,9 @@ const Problems = () => {
                 style={{ width: "100%" }}
                 placeholder="Tags"
                 value={challengeData.tags}
-                onChange={(value) => { setChallengeData({ ...challengeData, tags: value }) }}
+                onChange={(value) => {
+                  setChallengeData({ ...challengeData, tags: value })
+                }}
                 options={[
                   { value: "Math", label: "Math" },
                   { value: "DP", label: "DP" },
@@ -491,7 +572,9 @@ const Problems = () => {
               Description
               <Input.TextArea
                 value={challengeData.question}
-                onChange={(e: any) => { setChallengeData({ ...challengeData, question: e.target.value }) }}
+                onChange={(e: any) => {
+                  setChallengeData({ ...challengeData, question: e.target.value })
+                }}
                 rows={6}
                 placeholder="Problem description"
               />
@@ -501,16 +584,15 @@ const Problems = () => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "end",
-              }}  
+              }}
             >
               <Button
                 type="primary"
-                onClick={() => {
-                  handleRewrite();
-                }}
+                onClick={handleRewrite}
+                loading={isGeneratingAi}
                 style={{ marginBottom: "1rem", width: "fit-content" }}
               >
-              <FaWandMagicSparkles className="mr-2" />
+                <FaWandMagicSparkles className="mr-2" />
                 Mejorar con IA
               </Button>
             </div>
@@ -524,12 +606,12 @@ const Problems = () => {
                       placeholder="Test input"
                       value={testCase.input}
                       onChange={(e: any) => {
-                        const updatedTestCases = [...(challengeData?.testCases || [])];
+                        const updatedTestCases = [...(challengeData?.testCases || [])]
                         updatedTestCases[index] = {
                           ...updatedTestCases[index],
                           input: e.target.value,
-                        };
-                        setChallengeData({ ...challengeData, testCases: updatedTestCases });
+                        }
+                        setChallengeData({ ...challengeData, testCases: updatedTestCases })
                       }}
                     />
                   </div>
@@ -541,29 +623,37 @@ const Problems = () => {
                       placeholder="Expected output"
                       value={testCase.expectedOutput}
                       onChange={(e: any) => {
-                        const updatedTestCases = [...(challengeData?.testCases || [])];
+                        const updatedTestCases = [...(challengeData?.testCases || [])]
                         updatedTestCases[index] = {
                           ...updatedTestCases[index],
                           expectedOutput: e.target.value,
-                        };
-                        setChallengeData({ ...challengeData, testCases: updatedTestCases });
+                        }
+                        setChallengeData({ ...challengeData, testCases: updatedTestCases })
                       }}
                     />
                   </div>
 
-                  <Button danger onClick={() => {
-                    const updatedTestCases = [...(challengeData?.testCases || [])];
-                    updatedTestCases.splice(index, 1);
-                    setChallengeData({ ...challengeData, testCases: updatedTestCases });
-                  }}>
+                  <Button
+                    danger
+                    onClick={() => {
+                      const updatedTestCases = [...(challengeData?.testCases || [])]
+                      updatedTestCases.splice(index, 1)
+                      setChallengeData({ ...challengeData, testCases: updatedTestCases })
+                    }}
+                  >
                     Delete Test Case
                   </Button>
                 </div>
               ))}
-              <Button style={{ marginBottom: "1rem" }} type="dashed" onClick={() => {
-                const updatedTestCases = [...(challengeData?.testCases || []), { input: "", expectedOutput: "" }];
-                setChallengeData({ ...challengeData, testCases: updatedTestCases });
-              }} block>
+              <Button
+                style={{ marginBottom: "1rem" }}
+                type="dashed"
+                onClick={() => {
+                  const updatedTestCases = [...(challengeData?.testCases || []), { input: "", expectedOutput: "" }]
+                  setChallengeData({ ...challengeData, testCases: updatedTestCases })
+                }}
+                block
+              >
                 Add Test Case
               </Button>
             </div>
@@ -575,11 +665,7 @@ const Problems = () => {
                   accept=".zip"
                   onChange={(e) => setZipFile(e.target.files?.[0] || null)}
                 />
-                {zipFile && (
-                  <div className="text-sm text-gray-600 italic mt-2">
-                    Selected file: {zipFile.name}
-                  </div>
-                )}
+                {zipFile && <div className="text-sm text-gray-600 italic mt-2">Selected file: {zipFile.name}</div>}
                 <div className="text-sm text-gray-600 italic mt-2">
                   Make sure the ZIP file contains the test cases in the format:
                   <br />
@@ -596,8 +682,33 @@ const Problems = () => {
         )}
       </Modal>
 
-    </div>
-  );
-};
+      {/* AI Improvement Confirmation Modal */}
+      <Modal
+        title="AI Improvement Suggestion"
+        visible={isAiModalVisible}
+        onOk={handleAcceptAiChanges}
+        onCancel={handleDeclineAiChanges}
+        okText="Accept"
+        cancelText="Decline"
+        width={800}
+      >
+        <div className="mb-4">
+          <h4 className="font-semibold mb-2">Original Text:</h4>
+          <div className="p-3 bg-gray-50 border rounded-md max-h-[200px] overflow-y-auto">{originalText}</div>
+        </div>
 
-export default Problems;
+        <div>
+          <h4 className="font-semibold mb-2">AI Improved Text:</h4>
+          <div className="p-3 bg-gray-50 border rounded-md max-h-[200px] overflow-y-auto">{aiGeneratedText}</div>
+        </div>
+
+        <div className="mt-4 text-sm text-gray-600">
+          Review the AI-generated text above. Click "Accept" to use this improved version or "Decline" to keep the
+          original.
+        </div>
+      </Modal>
+    </div>
+  )
+}
+
+export default Problems
