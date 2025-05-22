@@ -545,7 +545,7 @@ const Problems = () => {
             placeholder="Search problems..."
             style={{ width: 250 }}
             allowClear
-            onSearch={(value) => setSearchText(value)}
+            onChange={(e) => setSearchText(e.target.value)}
           />
         </div>
         <Button type="primary" icon={<PlusOutlined />} onClick={showAddModal} label="Add Problem" />

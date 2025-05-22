@@ -19,13 +19,13 @@ interface EditUserFormData {
   points: number;
 }
 
-const calculateRank = (points: number): string => {
-  if (points >= 20000) return "Grandmaster";
-  if (points >= 10000) return "Master";
-  if (points >= 7500) return "Candidate";
-  if (points >= 5000) return "Expert";
-  if (points >= 3000) return "Specialist";
-  if (points >= 1000) return "Pupil";
+const calculateRank = (level: number): string => {
+  if (level >= 100) return "Grandmaster";
+  if (level >= 80) return "Master";
+  if (level >= 60) return "Candidate";
+  if (level >= 40) return "Expert";
+  if (level >= 20) return "Specialist";
+  if (level >= 10) return "Pupil";
   return "Newbie";
 };
 
@@ -80,8 +80,8 @@ const Users = () => {
       level: user.level,
       points: user.points,
     });
-    setPreviewRank(calculateRank(user.points));
-    setPreviewRankColor(getRankColor(calculateRank(user.points)));
+    setPreviewRank(calculateRank(user.level));
+    setPreviewRankColor(getRankColor(calculateRank(user.level)));
     setIsEditModalVisible(true);
   };
 
@@ -157,7 +157,7 @@ const Users = () => {
     }
   };
 
-  const handlePointsChange = (value: number | null) => {
+  const handleLevelChange = (value: number | null) => {
     if (value !== null) {
       const newRank = calculateRank(value);
       setPreviewRank(newRank);
@@ -183,7 +183,7 @@ const Users = () => {
             placeholder="Search users..."
             style={{ width: 250 }}
             allowClear
-            onSearch={(value: string) => setSearchText(value)}
+            onChange={(e) => setSearchText(e.target.value)}
           />
         </div>
       </div>
@@ -202,7 +202,7 @@ const Users = () => {
           {users
             .filter((user) => user.name.toLowerCase().includes(searchText.toLowerCase()))
             .map((user) => {
-              const rank = calculateRank(user.points);
+              const rank = calculateRank(user.level);
               const rankColor = getRankColor(rank);
 
               return (
@@ -268,7 +268,7 @@ const Users = () => {
             label="Level" 
             rules={[{ required: true, message: "Please enter the user's level" }]}
           >
-            <InputNumber min={1} style={{ width: "100%" }} />
+            <InputNumber min={1} style={{ width: "100%" }} onChange={handleLevelChange} />
           </Form.Item>
 
           <Form.Item
@@ -276,7 +276,7 @@ const Users = () => {
             label="Points"
             rules={[{ required: true, message: "Please enter the user's points" }]}
           >
-            <InputNumber min={0} style={{ width: "100%" }} onChange={handlePointsChange} />
+            <InputNumber min={0} style={{ width: "100%" }} />
           </Form.Item>
 
           <div className="mt-4 p-3 bg-gray-50 rounded-md">
@@ -284,7 +284,7 @@ const Users = () => {
             <div className="flex items-center">
               <span className={previewRankColor + " text-lg font-medium"}>{previewRank}</span>
             </div>
-            <div className="text-xs text-gray-500 mt-1">Rank is calculated automatically based on points</div>
+            <div className="text-xs text-gray-500 mt-1">Rank is calculated automatically based on level</div>
           </div>
 
           {editingUser && <div className="mt-4 text-xs text-gray-500">User ID: {editingUser.id}</div>}

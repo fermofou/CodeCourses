@@ -18,6 +18,7 @@ const Medals = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentMedal, setCurrentMedal] = useState<MedalType | null>(null);
   const [medalsData, setMedalsData] = useState<MedalType[]>([]);
+  const [originalMedalsData, setOriginalMedalsData] = useState<MedalType[]>([]);
   const [api, contextHolder] = notification.useNotification();
 
   const [name, setName] = useState("");
@@ -38,6 +39,7 @@ const Medals = () => {
           createdAt: badge.created_at,
         }));
         setMedalsData(formatted);
+        setOriginalMedalsData(formatted);
       })
       .catch((err) => {
         console.error("Error fetching badges:", err);
@@ -132,6 +134,7 @@ const Medals = () => {
           duration: 4,
         });
         setMedalsData((prev) => prev.filter((medal) => medal.id !== id));
+        setOriginalMedalsData((prev) => prev.filter((medal) => medal.id !== id));
       })
       .catch((err) => {
         console.error(err);
@@ -240,8 +243,18 @@ const Medals = () => {
             placeholder="Search medals..."
             style={{ width: 250 }}
             allowClear
-            onSearch={(value) => {
-              console.log('search:', value);
+            onChange={(e) => {
+              const searchValue = e.target.value;
+              if (!searchValue) {
+                setMedalsData(originalMedalsData);
+                return;
+              }
+              const filteredMedals = originalMedalsData.filter(medal => 
+                medal.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                medal.description.toLowerCase().includes(searchValue.toLowerCase()) ||
+                medal.requirement.toLowerCase().includes(searchValue.toLowerCase())
+              );
+              setMedalsData(filteredMedals);
             }}
           />
         </div>

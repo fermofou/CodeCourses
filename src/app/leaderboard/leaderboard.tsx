@@ -37,15 +37,15 @@ const getRowStyle = (rank: number) => {
   }
 }
 
-const calculateRank = (points: number): string => {
-  if (points >= 20000) return "Grandmaster"
-  if (points >= 10000) return "Master"
-  if (points >= 7500) return "Candidate"
-  if (points >= 5000) return "Expert"
-  if (points >= 3000) return "Specialist"
-  if (points >= 1000) return "Pupil"
-  return "Newbie"
-}
+const calculateRank = (level: number): string => {
+  if (level >= 100) return "Grandmaster";
+  if (level >= 80) return "Master";
+  if (level >= 60) return "Candidate";
+  if (level >= 40) return "Expert";
+  if (level >= 20) return "Specialist";
+  if (level >= 10) return "Pupil";
+  return "Newbie";
+};
 
 const getRankColor = (rank: string): string => {
   switch (rank) {
@@ -66,7 +66,7 @@ const getRankColor = (rank: string): string => {
     default:
       return ""
   }
-}
+};
 
 const Leaderboard: React.FC = () => {
   const { user } = useUser()
@@ -105,7 +105,7 @@ const Leaderboard: React.FC = () => {
           {leaderboard.map((entry, index) => {
             const { color } = getMedalInfo(index)
             const isCurrentUser = user?.fullName === entry.name
-            const rank = calculateRank(entry.points)
+            const rank = calculateRank(entry.level)
             const rankColor = getRankColor(rank)
 
             return (
