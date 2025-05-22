@@ -135,23 +135,39 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
 
         <div className="space-y-4">
           <div>
-            <h3 className="text-lg font-semibold mb-2">Achievements</h3>
+            <h3 className="text-lg font-semibold mb-2">Recent Achievements</h3>
             {loading ? (
               <div className="text-gray-500">Loading badges...</div>
             ) : badgesCount > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {userBadges.map((badge) => {
-                  console.log('Rendering badge:', badge);
-                  return (
-                    <Tag 
+              <div className="grid grid-cols-3 gap-4">
+                {userBadges
+                  .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                  .slice(0, 3)
+                  .map((badge) => (
+                    <div 
                       key={badge.badge_id} 
-                      color="blue"
-                      title={`${badge.description} - Awarded on ${new Date(badge.created_at).toLocaleDateString()}`}
+                      className="flex flex-col items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      title={`${badge.name} - ${badge.description}`}
                     >
-                      {badge.name}
-                    </Tag>
-                  );
-                })}
+                      {badge.image_url ? (
+                        <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-200 mb-2 flex items-center justify-center bg-white">
+                          <img 
+                            src={badge.image_url} 
+                            alt={badge.name}
+                            className="w-20 h-20 object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-16 h-16 rounded-full bg-gray-200 mb-2 flex items-center justify-center">
+                          <Trophy className="w-8 h-8 text-gray-400" />
+                        </div>
+                      )}
+                      <span className="text-sm font-medium text-center">{badge.name}</span>
+                      <span className="text-xs text-gray-500">
+                        {new Date(badge.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  ))}
               </div>
             ) : (
               <div className="text-gray-500">No badges earned yet</div>
@@ -159,21 +175,24 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-2">Recent Activity</h3>
-            <div className="space-y-2">
-              {badgesCount > 0 ? (
-                userBadges
-                  .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-                  .slice(0, 3)
-                  .map((badge) => (
-                    <div key={badge.badge_id} className="text-sm text-gray-600">
-                      Earned "{badge.name}" - {new Date(badge.created_at).toLocaleDateString()}
-                    </div>
-                  ))
-              ) : (
-                <div className="text-gray-500">No recent activity</div>
-              )}
-            </div>
+            <h3 className="text-lg font-semibold mb-2">All Badges</h3>
+            {loading ? (
+              <div className="text-gray-500">Loading badges...</div>
+            ) : badgesCount > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {userBadges.map((badge) => (
+                  <Tag 
+                    key={badge.badge_id} 
+                    color="blue"
+                    title={`${badge.description} - Awarded on ${new Date(badge.created_at).toLocaleDateString()}`}
+                  >
+                    {badge.name}
+                  </Tag>
+                ))}
+              </div>
+            ) : (
+              <div className="text-gray-500">No badges earned yet</div>
+            )}
           </div>
         </div>
       </div>
