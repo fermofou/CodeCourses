@@ -20,6 +20,7 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useUserData } from "../userData";
 
 type LeaderboardEntry = {
+  id: string;
   name: string;
   points: number;
   level: number;
@@ -39,8 +40,9 @@ export default function Home() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/leaderboard");
+        const res = await fetch("/api/leaderboard");
         const data = await res.json();
+        console.log("Leaderboard data:", data);
         setLeaderboard(data);
       } catch (err) {
         console.error("Error fetching leaderboard:", err);
@@ -506,7 +508,7 @@ Example Output:
                 <CardContent className="p-6">
                   {leaderboard.slice(0, 5).map((entry: LeaderboardEntry, index: number) => (
                     <div
-                      key={`${entry.name}-${entry.points}`}
+                      key={entry.id}
                       className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${index === 0 ? "bg-primary/5 rounded-lg" : ""
                         }`}
                     >
