@@ -655,7 +655,7 @@ const Problems = () => {
                 style={{ marginBottom: "1rem", width: "fit-content" }}
               >
                 <FaWandMagicSparkles className="mr-2" />
-                Mejorar con IA
+                Enhance with AI
               </Button>
             </div>
             <div>
