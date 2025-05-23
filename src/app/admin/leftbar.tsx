@@ -1,5 +1,5 @@
 import { JSX, useState } from "react";
-import { Settings, Users, Folder, Award, Home, CodeXml } from "lucide-react";
+import { Settings, Users, Folder, Award, Home, CodeXml, LayoutDashboard, Target, Trophy } from "lucide-react";
 
 interface MenuItem {
   name: string;
@@ -9,10 +9,11 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   // { name: "General", icon: <Home size={20} /> },
-  { name: "Problems", icon: <CodeXml size={20} /> },
-  { name: "Users", icon: <Users size={20} /> },
-  { name: "Medals", icon: <Award size={20} /> },
-  { name: "Settings", icon: <Settings size={20} /> }
+  { name: "Dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
+  { name: "Problems", icon: <Target className="w-5 h-5" /> },
+  { name: "Users", icon: <Users className="w-5 h-5" /> },
+  { name: "Medals", icon: <Trophy className="w-5 h-5" /> },
+  { name: "Settings", icon: <Settings className="w-5 h-5" /> }
 ];
 
 interface LeftbarProps {
@@ -22,27 +23,21 @@ interface LeftbarProps {
 
 export default function Leftbar({ setMenuOption, menuOption }: LeftbarProps) {
   return (
-    <div className="w-64 h-full bg-white shadow-md p-4 flex flex-col">
-      <div className="mt-4">
+    <div className="w-64 h-screen bg-white border-r border-gray-200 p-4">
+      <div className="space-y-2">
         {menuItems.map((item) => (
-          <div key={item.name} onClick={() => setMenuOption(item.name)} className="cursor-pointer">
-            <div
-              className={`flex items-center justify-between w-full py-2 px-2 rounded-md ${menuOption === item.name
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-700 hover:bg-gray-100"
-                }`}
-            >
-              <div className="flex items-center space-x-2">
-                {item.icon}
-                <span>{item.name}</span>
-              </div>
-              {item.badge && (
-                <span className="ml-auto bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded-full">
-                  {item.badge}
-                </span>
-              )}
-            </div>
-          </div>
+          <button
+            key={item.name}
+            onClick={() => setMenuOption(item.name)}
+            className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
+              menuOption === item.name
+                ? "bg-blue-50 text-blue-600"
+                : "text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            {item.icon}
+            <span>{item.name}</span>
+          </button>
         ))}
       </div>
     </div>
