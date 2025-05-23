@@ -241,14 +241,12 @@ const Users = () => {
                   <TableCell className="w-[15%] text-right">
                     <div className="flex justify-end gap-3">
                       <Button 
-                        type="primary"
                         icon={<UserOutlined />} 
                         onClick={() => showUserProfile(user)}
                       >
                         Profile
                       </Button>
                       <Button 
-                        type="primary"
                         icon={<EditOutlined />} 
                         onClick={() => showEditModal(user)}
                       >
