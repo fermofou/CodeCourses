@@ -12,7 +12,7 @@ interface UserData {
   name?: string;
   points?: number;
   level?: number;
-  is_admin?: boolean;
+  admin?: boolean;
   // Add any other user properties you need
 }
 

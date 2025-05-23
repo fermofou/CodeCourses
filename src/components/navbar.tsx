@@ -13,6 +13,10 @@ const Navbar = () => {
     state: { userData, loading, error },
   } = useUserData();
 
+  // Add debug logs
+  console.log('Navbar userData:', userData);
+  console.log('admin value:', userData?.admin);
+
   // Get the challenge functions if we're on the challenge page
   const challengeFunctions = isChallengePage
     ? useContext(ChallengeContext)
@@ -88,18 +92,14 @@ const Navbar = () => {
             >
               Rewards
             </Link>
-            <Link
-              to="/repos"
-              className="text-black transition-colors hover:text-primary"
-            >
-              Repos
-            </Link>
-            <Link
-              to="/admin"
-              className="text-black transition-colors hover:text-primary"
-            >
-              Admin
-            </Link>
+            {userData?.admin && (
+              <Link
+                to="/admin"
+                className="text-black transition-colors hover:text-primary"
+              >
+                Admin
+              </Link>
+            )}
           </nav>
         )}
 

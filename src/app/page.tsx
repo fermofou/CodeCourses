@@ -134,18 +134,14 @@ export default function Home() {
             >
               Rewards
             </Link>
-            <Link
-              to="/repos"
-              className="text-black transition-colors hover:text-primary"
-            >
-              Repos
-            </Link>
-            <Link
-              to="/admin"
-              className="text-black transition-colors hover:text-primary"
-            >
-              Admin
-            </Link>
+            {userData?.admin && (
+              <Link
+                to="/admin"
+                className="text-black transition-colors hover:text-primary"
+              >
+                Admin
+              </Link>
+            )}
           </nav>
 
           {/* Updated Auth Section */}
@@ -248,20 +244,15 @@ export default function Home() {
               >
                 Rewards
               </Link>
-              <Link
-                to="/repos"
-                className="text-black px-2 py-1.5"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Repositories
-              </Link>
-              <Link
-                to="/admin"
-                className="text-black px-2 py-1.5"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Admin
-              </Link>
+              {userData?.admin && (
+                <Link
+                  to="/admin"
+                  className="text-black px-2 py-1.5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Admin
+                </Link>
+              )}
               <SignedOut>
                 <div className="flex flex-col space-y-2 pt-2 border-t">
                   <Button
