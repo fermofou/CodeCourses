@@ -50,7 +50,7 @@ export default function Home() {
     };
 
     fetchLeaderboard();
-    const interval = setInterval(fetchLeaderboard, 5000);
+    const interval = setInterval(fetchLeaderboard, 60000);
     return () => clearInterval(interval);
   }, []);
 
@@ -506,54 +506,58 @@ Example Output:
             <div className="max-w-3xl mx-auto">
               <Card>
                 <CardContent className="p-6">
-                  {leaderboard.slice(0, 5).map((entry: LeaderboardEntry, index: number) => (
-                    <div
-                      key={entry.id}
-                      className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${index === 0 ? "bg-primary/5 rounded-lg" : ""
+                  {leaderboard
+                    .slice(0, 5)
+                    .map((entry: LeaderboardEntry, index: number) => (
+                      <div
+                        key={entry.id}
+                        className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${
+                          index === 0 ? "bg-primary/5 rounded-lg" : ""
                         }`}
-                    >
-                      <div className="flex items-center gap-6">
-                        <div className="text-2xl font-bold text-muted-foreground">
-                          {index === 0 && (
-                            <Crown className="h-7 w-7 inline mr-2 text-primary" />
-                          )}
-                          {index + 1}°
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`w-12 h-12 rounded-full flex items-center justify-center ${index === 0 ? "bg-zinc-200" : "bg-muted"
-                              }`}
-                          >
-                            <User className="h-6 w-6 text-muted-foreground" />
+                      >
+                        <div className="flex items-center gap-6">
+                          <div className="text-2xl font-bold text-muted-foreground">
+                            {index === 0 && (
+                              <Crown className="h-7 w-7 inline mr-2 text-primary" />
+                            )}
+                            {index + 1}°
                           </div>
-                          <div className="space-y-1">
-                            <span className="font-semibold">
-                              {entry.name}
-                            </span>
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <span>Level {entry.level}</span>
-                              <span>•</span>
-                              <span>{entry.points} points</span>
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                                index === 0 ? "bg-zinc-200" : "bg-muted"
+                              }`}
+                            >
+                              <User className="h-6 w-6 text-muted-foreground" />
+                            </div>
+                            <div className="space-y-1">
+                              <span className="font-semibold">
+                                {entry.name}
+                              </span>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span>Level {entry.level}</span>
+                                <span>•</span>
+                                <span>{entry.points} points</span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="flex items-center gap-2">
-                          <Sparkles className="h-4 w-4 text-primary" />
-                          <span className="font-semibold">
-                            {entry.points} XP
-                          </span>
+                        <div className="flex flex-col items-end gap-1">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="h-4 w-4 text-primary" />
+                            <span className="font-semibold">
+                              {entry.points} XP
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-primary">
+                            <Coins className="h-4 w-4" />
+                            <span className="font-medium">
+                              {entry.points} MC
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-primary">
-                          <Coins className="h-4 w-4" />
-                          <span className="font-medium">
-                            {entry.points} MC
-                          </span>
-                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </CardContent>
               </Card>
             </div>
