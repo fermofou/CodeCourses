@@ -24,6 +24,7 @@ type LeaderboardEntry = {
   name: string;
   points: number;
   level: number;
+  image_url: string;
 };
 
 export default function Home() {
@@ -524,12 +525,23 @@ Example Output:
                           </div>
                           <div className="flex items-center gap-3">
                             <div
-                              className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                              className={`w-12 h-12 rounded-full overflow-hidden ${
                                 index === 0 ? "bg-zinc-200" : "bg-muted"
                               }`}
                             >
-                              <User className="h-6 w-6 text-muted-foreground" />
+                              {entry.image_url ? (
+                                <img
+                                  src={entry.image_url}
+                                  alt={`${entry.name}'s avatar`}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <User className="h-6 w-6 text-muted-foreground" />
+                                </div>
+                              )}
                             </div>
+
                             <div className="space-y-1">
                               <span className="font-semibold">
                                 {entry.name}
