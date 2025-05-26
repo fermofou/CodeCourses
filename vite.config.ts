@@ -84,6 +84,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/admin/, "/admin"),
       },
+      "/api/myRewards": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/myRewards/, "/myRewards"),
+      },
     },
   },
 });

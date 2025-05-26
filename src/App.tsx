@@ -9,7 +9,7 @@ import Home from "./app/page";
 import LoginPage from "./app/login/page";
 import ChallengePage from "./app/challenge/page";
 import ChallengesPage from "./app/challenges/page";
-import RewardsPage from "./app/rewards/rewards";
+import RewardsPage from "./app/rewards/page";
 import LeaderboardPage from "./app/leaderboard/page";
 import ReposPage from "./app/repos/repos";
 import AdminPage from "./app/admin/page";
@@ -41,7 +41,11 @@ function App() {
           <Route
             path="/challenges"
             element={
-              !isSignedIn ? <Navigate to="/login" replace /> : <ChallengesPage />
+              !isSignedIn ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <ChallengesPage />
+              )
             }
           />
           <Route
@@ -53,7 +57,11 @@ function App() {
           <Route
             path="/leaderboard"
             element={
-              !isSignedIn ? <Navigate to="/login" replace /> : <LeaderboardPage />
+              !isSignedIn ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <LeaderboardPage />
+              )
             }
           />
           <Route
