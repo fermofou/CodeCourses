@@ -126,14 +126,16 @@ const Users = () => {
     form.resetFields();
   };
 
-  const handleEditOk = async () => {
-    try {
-      if (!editingUser) throw new Error("No user selected");
-      const values = await form.validateFields();
-      setIsLoadingSave(true);
+const handleEditOk = async () => {
+  try {
+    if (!editingUser) throw new Error("No user selected");
+    const values = await form.validateFields();
+    setIsLoadingSave(true);
 
-      console.log("medals :",values.medals);
-      const response = await fetch(`http://localhost:8080/admin/updateUser/${editingUser.id}`, {
+    // 1) Actualizo datos básicos del usuario
+    const userResp = await fetch(
+      `http://localhost:8080/admin/updateUser/${editingUser.id}`,
+      {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -141,23 +143,49 @@ const Users = () => {
           level: values.level,
           points: values.points,
         }),
-      });
-
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(errText);
       }
-
-      setUsers(prev => prev.map(u => u.id === editingUser.id ? { ...u, ...values, medals: allMedals.filter(m => values.medals.includes(m.id)) } : u));
-      api.success({ message: "User updated successfully" });
-      handleEditCancel();
-    } catch (err) {
-      console.error(err);
-      api.error({ message: "Error updating user" });
-    } finally {
-      setIsLoadingSave(false);
+    );
+    if (!userResp.ok) {
+      const errText = await userResp.text();
+      throw new Error(errText);
     }
-  };
+
+    // 2) Actualizo medallas/badges
+    const badgeResp = await fetch(
+      `http://localhost:8080/admin/user/${editingUser.id}/updateBadges`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values.medals), // [1, 3, 7,...]
+      }
+    );
+    if (!badgeResp.ok) {
+      const errText = await badgeResp.text();
+      throw new Error(`Badges update failed: ${errText}`);
+    }
+
+    setUsers(prev =>
+      prev.map(u =>
+        u.id === editingUser.id
+          ? {
+              ...u,
+              ...values,
+              medals: allMedals.filter(m => values.medals.includes(m.id)),
+            }
+          : u
+      )
+    );
+
+    api.success({ message: "User y badges actualizados correctamente" });
+    handleEditCancel();
+  } catch (err) {
+    console.error(err);
+    api.error({ message: "Error al actualizar usuario o badges" });
+  } finally {
+    setIsLoadingSave(false);
+  }
+};
+
 
   const handleLevelChange = (value: number | null) => {
     if (value !== null) {

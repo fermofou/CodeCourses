@@ -79,6 +79,12 @@ export default defineConfig({
         rewrite: (path) =>
           path.replace(/^\/admin\/user\/(.*)\/badges/, "/admin/user/$1/badges"),
       },
+      "/admin/user/:id/updateBadges": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) =>
+          path.replace(/^\/admin\/user\/(.*)\/badges/, "/admin/user/$1/updateBadges"),
+      },
       "/api/admin/claims": {
         target: "http://localhost:8080",
         changeOrigin: true,
