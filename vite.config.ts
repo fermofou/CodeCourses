@@ -70,12 +70,19 @@ export default defineConfig({
       "/api/admin/users/:id": {
         target: "http://localhost:8080",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/admin\/users\/(.*)/, "/admin/updateUser/$1"),
+        rewrite: (path) =>
+          path.replace(/^\/api\/admin\/users\/(.*)/, "/admin/updateUser/$1"),
       },
       "/admin/user/:id/badges": {
         target: "http://localhost:8080",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/admin\/user\/(.*)\/badges/, "/admin/user/$1/badges"),
+        rewrite: (path) =>
+          path.replace(/^\/admin\/user\/(.*)\/badges/, "/admin/user/$1/badges"),
+      },
+      "/api/admin/claims": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/admin/, "/admin"),
       },
     },
   },

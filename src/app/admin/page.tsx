@@ -6,6 +6,7 @@ import Users from "./users";
 import Medals from "./medals";
 import Settings from "./settings";
 import AdminDashboard from "./dashboard";
+import Claims from "./claims";
 
 export default function AdminPage() {
   const [menuOption, setMenuOption] = useState("Dashboard");
@@ -21,6 +22,7 @@ export default function AdminPage() {
           {menuOption === "Users" && <Users />}
           {menuOption === "Medals" && <Medals />}
           {menuOption === "Settings" && <Settings />}
+          {menuOption === "Claims" && <Claims />}
         </div>
       </div>
     </div>

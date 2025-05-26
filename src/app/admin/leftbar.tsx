@@ -1,5 +1,16 @@
 import { JSX, useState } from "react";
-import { Settings, Users, Folder, Award, Home, CodeXml, LayoutDashboard, Target, Trophy } from "lucide-react";
+import {
+  Settings,
+  Users,
+  Folder,
+  Award,
+  Home,
+  CodeXml,
+  LayoutDashboard,
+  Target,
+  Trophy,
+  ShoppingCart,
+} from "lucide-react";
 
 interface MenuItem {
   name: string;
@@ -13,7 +24,8 @@ const menuItems: MenuItem[] = [
   { name: "Problems", icon: <Target className="w-5 h-5" /> },
   { name: "Users", icon: <Users className="w-5 h-5" /> },
   { name: "Medals", icon: <Trophy className="w-5 h-5" /> },
-  { name: "Settings", icon: <Settings className="w-5 h-5" /> }
+  { name: "Settings", icon: <Settings className="w-5 h-5" /> },
+  { name: "Claims", icon: <ShoppingCart className="w-5 h-5" /> },
 ];
 
 interface LeftbarProps {
