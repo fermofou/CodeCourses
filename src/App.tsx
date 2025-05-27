@@ -14,6 +14,7 @@ import LeaderboardPage from "./app/leaderboard/page";
 import ReposPage from "./app/repos/repos";
 import AdminPage from "./app/admin/page";
 import Layout from "./app/layout";
+import SignUpPage from "./app/signup/page";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -31,6 +32,10 @@ function App() {
           <Route
             path="/login"
             element={isSignedIn ? <Navigate to="/" replace /> : <LoginPage />}
+          />
+          <Route
+            path="/signup"
+            element={isSignedIn ? <Navigate to="/" replace /> : <SignUpPage />}
           />
           <Route
             path="/challenge"

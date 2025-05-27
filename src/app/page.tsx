@@ -158,7 +158,7 @@ export default function Home() {
                 Sign In
               </Button>
               <Button
-                onClick={() => navigate("/register")}
+                onClick={() => navigate("/signup")}
                 className="hidden sm:inline-flex"
               >
                 Register
