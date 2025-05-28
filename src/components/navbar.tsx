@@ -131,7 +131,7 @@ const Navbar = () => {
           {/* User Section */}
           <SignedIn>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-4 hidden md:inline">
+              <div className="hidden md:flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <Coins className="h-4 w-4 text-primary" />
                   <span className="text-sm font-medium">
