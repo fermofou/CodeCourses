@@ -9,7 +9,7 @@ interface Purchase {
   name: string;
   description: string;
   cost: number;
-  purchase_date: string;
+  timestamp: string;
   status: string;
 }
 
