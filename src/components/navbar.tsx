@@ -209,6 +209,7 @@ const Navbar = () => {
             >
               Rewards
             </Link>
+            {/* 
             {userData?.admin && (
               <Link
                 to="/admin"
@@ -218,6 +219,7 @@ const Navbar = () => {
                 Admin
               </Link>
             )}
+              */}
             <SignedOut>
               <div className="flex flex-col space-y-2 pt-2 border-t">
                 <Button
