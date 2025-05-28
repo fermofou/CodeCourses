@@ -1,14 +1,18 @@
-import { Link, useLocation } from "react-router-dom";
-import { SignedIn, UserButton } from "@clerk/clerk-react";
-import { Coins, Trophy, PlayCircle, CheckCircle2 } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { SignedIn, UserButton, SignedOut } from "@clerk/clerk-react";
+import { Coins, Trophy, PlayCircle, CheckCircle2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useContext, useEffect } from "react";
+import { useContext, useState, useRef } from "react";
 import { ChallengeContext } from "@/app/challenge/page";
 import { useUserData } from "../userData";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isChallengePage = location.pathname === "/challenge";
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const {
     state: { userData, loading, error },
   } = useUserData();
@@ -24,10 +28,13 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 ">
-      <div className="container flex h-14 items-center justify-between">
+      <div className="container mx-auto flex h-16 items-center justify-between overflow-x-auto whitespace-nowrap px-4 md:px-8">
         {/* Logo section */}
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link
+            to="/"
+            className="flex items-center space-x-2 text-black transition-colors hover:text-primary"
+          >
             <div className="flex items-center justify-center w-8 h-8 border border-black rounded-md">
               <div className="flex items-center">
                 <span className="text-[#6D6C71] text-lg font-bold leading-none">
@@ -38,6 +45,7 @@ const Navbar = () => {
                 </span>
               </div>
             </div>
+            <span className="text-xl font-bold">CodeCourses</span>
           </Link>
           <div className="h-4 w-px bg-border" />
           {isChallengePage && (
@@ -73,7 +81,7 @@ const Navbar = () => {
             </div>
           </div>
         ) : (
-          <nav className="items-center space-x-8 text-sm font-medium">
+          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <Link
               to="/challenges"
               className="text-black transition-colors hover:text-primary"
@@ -102,38 +110,138 @@ const Navbar = () => {
             )}
           </nav>
         )}
+        {/* Updated Auth Section */}
+        <div className="flex items-center gap-4">
+          <SignedOut>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/login")}
+              className="hidden sm:inline-flex"
+            >
+              Sign In
+            </Button>
+            <Button
+              onClick={() => navigate("/signup")}
+              className="hidden sm:inline-flex"
+            >
+              Register
+            </Button>
+          </SignedOut>
 
-        {/* User Section */}
-        <SignedIn>
-          <div className="flex items-center gap-4">
+          {/* User Section */}
+          <SignedIn>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Coins className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">
-                  {userData?.points} MC
-                </span>
+              <div className="flex items-center gap-4 hidden md:inline">
+                <div className="flex items-center gap-2">
+                  <Coins className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">
+                    {userData?.points} MC
+                  </span>
+                </div>
+                <div className="h-4 w-px bg-border" />
+                <div className="flex items-center gap-2">
+                  <Trophy className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">
+                    Nivel {userData?.level}
+                  </span>
+                </div>
               </div>
-              <div className="h-4 w-px bg-border" />
-              <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">
-                  Nivel {userData?.level}
-                </span>
-              </div>
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: {
+                    avatarBox:
+                      "w-8 h-8 rounded-full ring-2 ring-primary/10 hover:ring-primary/30 transition-all",
+                    userButtonTrigger: "ring-0 outline-0",
+                  },
+                }}
+              />
             </div>
-            <UserButton
-              afterSignOutUrl="/"
-              appearance={{
-                elements: {
-                  avatarBox:
-                    "w-8 h-8 rounded-full ring-2 ring-primary/10 hover:ring-primary/30 transition-all",
-                  userButtonTrigger: "ring-0 outline-0",
-                },
-              }}
-            />
-          </div>
-        </SignedIn>
+          </SignedIn>
+          {/* Mobile Menu Button */}
+          <Button
+            ref={buttonRef}
+            variant="outline"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <Menu className="h-6 w-6" />
+          </Button>
+        </div>
       </div>
+      {/* Updated Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div ref={menuRef} className="md:hidden border-t">
+          <div className="container flex flex-col space-y-4 py-4 px-4">
+            <SignedIn>
+              <div className="flex items-center justify-between p-2 mb-2 bg-muted/50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Coins className="h-5 w-5 text-primary" />
+                  <span className="font-medium">{userData?.points} MC</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Trophy className="h-5 w-5 text-primary" />
+                  <span className="font-medium">Level {userData?.level}</span>
+                </div>
+              </div>
+            </SignedIn>
+            {/*
+              <Link
+                to="/challenges"
+                className="text-black px-2 py-1.5"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Programming Challenges
+              </Link>{" "}
+              */}
+            <Link
+              to="/leaderboard"
+              className="text-black px-2 py-1.5"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Leaderboard
+            </Link>
+            <Link
+              to="/rewards"
+              className="text-black px-2 py-1.5"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Rewards
+            </Link>
+            {userData?.admin && (
+              <Link
+                to="/admin"
+                className="text-black px-2 py-1.5"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
+              </Link>
+            )}
+            <SignedOut>
+              <div className="flex flex-col space-y-2 pt-2 border-t">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    navigate("/login");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  onClick={() => {
+                    navigate("/register");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  Register
+                </Button>
+              </div>
+            </SignedOut>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
