@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Grid2x2, List } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -32,6 +32,7 @@ export default function Rewards() {
     state: { userData, loading, error },
   } = useUserData();
   const [userPoints, setUserPoints] = useState(userData?.points ?? 0);
+  const [displayMode, setDisplayMode] = useState<"card" | "gallery">("card");
 
   const addToCart = (product: Product) => {
     setCartItems([...cartItems, product]);
@@ -75,23 +76,45 @@ export default function Rewards() {
               </Badge>
             )}
           </button>
+          <div className="mb-4 block md:hidden">
+            <Button
+              variant="outline"
+              onClick={() =>
+                setDisplayMode(displayMode === "card" ? "gallery" : "card")
+              }
+            >
+              {displayMode === "card" ? (
+                <Grid2x2 className="h-6 w-6 text-primary" />
+              ) : (
+                <List className="h-6 w-6" />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div
+        className={`${
+          displayMode === "card"
+            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            : "grid grid-cols-2 gap-4 overflow-x-auto md:grid-cols-2"
+        } mb-12`}
+      >
         {rewards.map((reward) => (
           <div
             key={reward.reward_id}
-            className="rounded-lg border p-4 cursor-pointer hover:shadow-md transition-shadow"
+            className={`rounded-lg border p-4 cursor-pointer hover:shadow-md transition-shadow ${
+              displayMode === "gallery" ? "min-w-[45%]" : ""
+            }`}
             onClick={() => setSelectedProduct(reward)}
           >
             <img
               src={`assets/${reward.reward_id}.jpg`}
               alt={reward.name}
-              className="w-full h-48 object-cover rounded-md mb-3"
+              className="w-full h-40 object-cover rounded-md mb-3"
             />
-            <h3 className="font-medium">{reward.name}</h3>
-            <p className="text-sm text-gray-600">{reward.cost} mahindricks</p>
+            <h3 className="font-medium text-sm">{reward.name}</h3>
+            <p className="text-xs text-gray-600">{reward.cost} mahindricks</p>
           </div>
         ))}
       </div>

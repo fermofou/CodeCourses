@@ -36,7 +36,7 @@
     "codemirror-console": "^3.2.0",
     "codemirror-console-ui": "^3.2.0",
     "framer-motion": "^12.4.7",
-    "lucide-react": "^0.475.0",
+    "lucide-react": "^0.511.0",
     "next": "^15.1.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

@@ -13,27 +13,21 @@ export default function LeftBar({ activeView, onViewChange }: LeftBarProps) {
   ];
 
   return (
-    <aside className="w-64 border-r p-4">
-      <div className="space-y-8">
-        <div>
-          <h2 className="mb-2 text-lg font-semibold">Rewards</h2>
-          <nav className="space-y-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => onViewChange(item.id)}
-                className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-left hover:bg-gray-100 ${
-                  activeView === item.id
-                    ? "bg-gray-100 font-medium text-black"
-                    : "text-black"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </div>
-    </aside>
+    <nav className="space-y-4">
+      <h2 className="text-lg font-semibold">Rewards</h2>
+      {navItems.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => onViewChange(item.id)}
+          className={`w-full text-left px-3 py-2 rounded-md text-sm ${
+            activeView === item.id
+              ? "bg-gray-100 font-medium"
+              : "hover:bg-gray-100"
+          }`}
+        >
+          {item.label}
+        </button>
+      ))}
+    </nav>
   );
 }
