@@ -32,7 +32,7 @@ export default function MyPurchases() {
         }
 
         const data = await response.json();
-        setPurchases(data);
+        setPurchases(data ?? []);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
         console.error("Error fetching purchases:", err);
@@ -76,12 +76,14 @@ export default function MyPurchases() {
       </div>
 
       {purchases.length === 0 ? (
-        <div className="text-center py-8">
-          <p className="text-gray-500 mb-4">
-            You haven't made any purchases yet.
+        <div className="text-center py-12 text-gray-600">
+          <div className="text-5xl mb-4">🛒</div>
+          <h2 className="text-xl font-semibold mb-2">No purchases yet</h2>
+          <p className="text-gray-500 mb-1">
+            Buy something and see your history here!
           </p>
           <p className="text-sm text-gray-400">
-            Start browsing items to earn cool rewards!
+            Start browsing items to earn cool rewards.
           </p>
         </div>
       ) : (
