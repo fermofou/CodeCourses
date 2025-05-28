@@ -119,11 +119,13 @@ const Leaderboard: React.FC = () => {
       <h1 className="text-3xl font-bold mb-6 text-[#ED2831]">Leaderboard</h1>
       <Table>
         <TableHeader>
-          <TableRow className="border-b-2 border-[#ED2831]/20">
+          <TableRow className="text-sm sm:text-base px-2 sm:px-4 border-b-2 border-[#ED2831]/20">
             <TableHead className="w-20 text-[#ED2831]">Rank</TableHead>
             <TableHead className="text-[#ED2831]">User</TableHead>
             <TableHead className="text-[#ED2831]">Division</TableHead>
-            <TableHead className="text-right text-[#ED2831]">Points</TableHead>
+            <TableHead className="text-right text-[#ED2831] hidden sm:table-cell">
+              Points
+            </TableHead>
             <TableHead className="text-right text-[#ED2831]">Level</TableHead>
           </TableRow>
         </TableHeader>
@@ -176,7 +178,7 @@ const Leaderboard: React.FC = () => {
                 <TableCell>
                   <span className={`font-medium ${rankColor}`}>{rank}</span>
                 </TableCell>
-                <TableCell className="text-right font-medium">
+                <TableCell className="text-right font-medium hidden sm:table-cell">
                   {entry.points}
                 </TableCell>
                 <TableCell className="text-right font-medium">

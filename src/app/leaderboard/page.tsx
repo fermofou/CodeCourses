@@ -1,5 +1,5 @@
-import Navbar from "@/components/navbar"
-import Leaderboard from "./leaderboard"
+import Navbar from "@/components/navbar";
+import Leaderboard from "./leaderboard";
 
 export default function LeaderboardPage() {
   return (
@@ -9,6 +9,5 @@ export default function LeaderboardPage() {
         <Leaderboard />
       </main>
     </div>
-  )
+  );
 }
-
