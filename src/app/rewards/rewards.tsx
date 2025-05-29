@@ -226,6 +226,13 @@ export default function Rewards() {
                   >
                     {userPoints < item.cost ? "Not enough points" : "Buy"}
                   </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      setCartItems((prev) => prev.filter((_, i) => i !== index))
+                    }>
+                    Remove
+                  </Button>
                 </div>
               ))
             )}
