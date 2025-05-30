@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
+import { csharp } from "@replit/codemirror-lang-csharp";
 import { cpp } from "@codemirror/lang-cpp";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { Button } from "@/components/ui/button";
@@ -84,6 +85,7 @@ const languageOptions = [
   { value: "javascript", label: "JavaScript", extension: javascript },
   { value: "python", label: "Python", extension: python },
   { value: "cpp", label: "C++", extension: cpp },
+  { value: "csharp", label: "C#", extension: csharp },
 ];
 
 const startingCodeTemplates = {
@@ -104,6 +106,25 @@ string solution(string input) {
     
     return result;
 }`,
+  csharp: `
+using System;
+
+class Program
+{
+    static string Solution(string input)
+    {
+        // Your code here
+        string result = input.ToUpper(); // Example modification
+        return result;
+    }
+
+    static void Main()
+    {
+        Console.WriteLine(Solution("Hello"));
+    }
+}
+
+`,
 };
 
 // Create a context for the challenge page functions
@@ -161,11 +182,11 @@ export default function ChallengePage() {
         );
         const dataChallenge = await response.json();
         // Handle test cases properly
-        if (typeof dataChallenge.tests === 'string') {
+        if (typeof dataChallenge.tests === "string") {
           try {
             dataChallenge.testCases = JSON.parse(dataChallenge.tests);
           } catch (e) {
-            console.error('Failed to parse test cases:', e);
+            console.error("Failed to parse test cases:", e);
             dataChallenge.testCases = [];
           }
         } else {
