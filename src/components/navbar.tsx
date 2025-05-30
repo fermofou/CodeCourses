@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SignedIn, UserButton, SignedOut } from "@clerk/clerk-react";
 import { Coins, Trophy, PlayCircle, CheckCircle2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { ChallengeContext } from "@/app/challenge/page";
 import { useUserData } from "../userData";
 
@@ -17,9 +17,10 @@ const Navbar = () => {
     state: { userData, loading, error },
   } = useUserData();
 
-  // Add debug logs
-  console.log("Navbar userData:", userData);
-  console.log("admin value:", userData?.admin);
+  useEffect(() => {
+    console.log("Navbar userData:", userData);
+    console.log("admin value:", userData?.admin);
+  }, [userData]);
 
   // Get the challenge functions if we're on the challenge page
   const challengeFunctions = isChallengePage

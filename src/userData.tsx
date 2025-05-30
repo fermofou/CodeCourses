@@ -4,6 +4,7 @@ import React, {
   useContext,
   useEffect,
   ReactNode,
+  useRef,
 } from "react";
 import { useUser } from "@clerk/clerk-react";
 
@@ -31,10 +32,10 @@ type UserDataAction =
 // Create context with type safety
 const UserDataContext = createContext<
   | {
-    state: UserDataState;
-    dispatch: React.Dispatch<UserDataAction>;
-    refreshUserData: () => void;
-  }
+      state: UserDataState;
+      dispatch: React.Dispatch<UserDataAction>;
+      refreshUserData: () => void;
+    }
   | undefined
 >(undefined);
 
@@ -94,6 +95,8 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const hasFetched = useRef(false);
+
   // Expose refresh function
   const refreshUserData = () => {
     fetchUserData();
@@ -101,12 +104,13 @@ export function UserDataProvider({ children }: { children: ReactNode }) {
 
   // Initial fetch
   useEffect(() => {
-    if (isLoaded && isSignedIn && user?.id) {
+    if (isLoaded && isSignedIn && user?.id && !hasFetched.current) {
       fetchUserData();
+      hasFetched.current = true;
     } else if (isLoaded && !isSignedIn) {
       dispatch({ type: "CLEAR" });
     }
-  }, [isLoaded, isSignedIn, user?.id]);
+  }, [isLoaded, isSignedIn]);
 
   return (
     <UserDataContext.Provider value={{ state, dispatch, refreshUserData }}>

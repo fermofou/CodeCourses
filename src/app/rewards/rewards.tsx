@@ -33,7 +33,7 @@ export default function Rewards() {
   } = useUserData();
   const [userPoints, setUserPoints] = useState(userData?.points ?? 0);
   const [displayMode, setDisplayMode] = useState<"card" | "gallery">("card");
-
+  const { refreshUserData } = useUserData();
   const addToCart = (product: Product) => {
     setCartItems([...cartItems, product]);
     setSelectedProduct(null);
@@ -200,6 +200,7 @@ export default function Rewards() {
                           if (response.ok) {
                             alert(data.message);
                             setUserPoints((prev) => prev - item.cost);
+                            refreshUserData();
                           } else {
                             alert(
                               `Error: ${data.message || "Failed to claim"}`
@@ -230,7 +231,8 @@ export default function Rewards() {
                     variant="outline"
                     onClick={() =>
                       setCartItems((prev) => prev.filter((_, i) => i !== index))
-                    }>
+                    }
+                  >
                     Remove
                   </Button>
                 </div>
