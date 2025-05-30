@@ -103,13 +103,13 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/admin/, "/admin"),
       },
-      /*
+
       "/api/admin/stats": {
         target: "http://142.93.10.227:8080",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/admin\/stats/, "/api/admin/stats"),
+        rewrite: (path) => path.replace(/^\/api\/admin\/stats/, "/admin/stats"),
       },
-      */
+
       "/api": {
         target: "http://142.93.10.227:8080",
         changeOrigin: true,
