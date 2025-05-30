@@ -191,7 +191,7 @@ const Problems = () => {
   const fetchProblem = async (problemId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/challenge?probID=${problemId}&userID=${user.id}`
+        `/api/challenge?probID=${problemId}&userID=${user.id}`
       );
       const data = await response.json();
       data.testCases = JSON.parse(data.tests);
@@ -285,16 +285,13 @@ const Problems = () => {
       question: challengeData.question,
     };
     try {
-      const response = await fetch(
-        "http://localhost:8080/admin/editProblemStatement",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("/api/admin/editProblemStatement", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       const res = await response.json();
       console.log("Response from server:", res);
 
@@ -338,7 +335,7 @@ const Problems = () => {
     formData.append("file", zipFile);
     try {
       const response = await fetch(
-        `http://localhost:8080/admin/uploadTestcases?problemId=${problemId}`,
+        `/api/admin/uploadTestcases?problemId=${problemId}`,
         {
           method: "POST",
           body: formData,
@@ -381,16 +378,13 @@ const Problems = () => {
     console.log("values", newProblem);
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/admin/uploadProblemStatement",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("/api/admin/uploadProblemStatement", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
       const res = await response.json();
       await handleUploadTestcases(res.problem_id);
       setRefetch(!refetch);
@@ -415,7 +409,7 @@ const Problems = () => {
   const handleDeleteProblem = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/admin/deleteProblem?problemId=${deletingID}`,
+        `/api/admin/deleteProblem?problemId=${deletingID}`,
         {
           method: "DELETE",
           headers: {
