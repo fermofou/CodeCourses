@@ -42,8 +42,8 @@ export function SignUpForm({
           },
           layout: {
             socialButtonsPlacement: "bottom",
-            termsPageUrl: "/terms",
-            privacyPageUrl: "/privacy",
+            termsPageUrl: "./terms",
+            privacyPageUrl: "./privacy",
           },
         }}
       />

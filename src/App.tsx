@@ -15,6 +15,8 @@ import ReposPage from "./app/repos/repos";
 import AdminPage from "./app/admin/page";
 import Layout from "./app/layout";
 import SignUpPage from "./app/signup/page";
+import PrivacyPolicy from "./components/privacy";
+import Terms from "./components/terms";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -79,6 +81,16 @@ function App() {
             path="/admin"
             element={
               !isSignedIn ? <Navigate to="/login" replace /> : <AdminPage />
+            }
+          />
+          <Route 
+            path="/privacy" 
+            element={<PrivacyPolicy />
+            } 
+          />
+          <Route 
+            path="/terms" 
+            element={<Terms />
             }
           />
         </Routes>
