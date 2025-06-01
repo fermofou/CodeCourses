@@ -236,7 +236,7 @@ export default function ChallengePage() {
         language: selectedLanguage.value,
         code: code,
         // Add test cases if available
-        testCases: challenge?.testCases || [],
+        //testCases: challenge?.testCases || [],
       };
       console.log("Sending request with payload:", payload);
       setConsoleOutput((prev) => [...prev, "Processing..."]);
@@ -454,7 +454,8 @@ export default function ChallengePage() {
         language: selectedLanguage.value,
         code: code,
         // Add test cases if available
-        testCases: challenge?.testCases || [],
+        inputs: challenge?.inputs,
+        outputs: challenge?.outputs,
       };
       console.log("Sending submission with payload:", payload);
       setConsoleOutput((prev) => [...prev, "Processing..."]);
