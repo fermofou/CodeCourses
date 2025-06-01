@@ -314,12 +314,6 @@ const Users = () => {
                       >
                         Edit
                       </Button>
-                      <Button
-                        danger
-                        onClick={() => console.log("Delete", user.id)}
-                      >
-                        Delete
-                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>
