@@ -59,7 +59,7 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
       setLoading(true);
       try {
         console.log('Fetching badges for user:', user.id);
-        const response = await fetch(`http://localhost:8080/admin/user/${user.id}/badges`);
+        const response = await fetch(`http://142.93.10.227:8080/admin/user/${user.id}/badges`);
         if (!response.ok) throw new Error('Failed to fetch badges');
         const data = await response.json();
         console.log('Received badges data:', data);

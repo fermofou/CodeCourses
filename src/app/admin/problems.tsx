@@ -506,25 +506,12 @@ const Problems = () => {
       },
     },
     {
-      title: "Tags",
-      dataIndex: "tags",
-      key: "tags",
-      width: "25%",
-      render: (tags: string[]) => (
-        <>
-          {tags.map((tag) => (
-            <Tag key={tag}>{tag}</Tag>
-          ))}
-        </>
-      ),
-    },
-    {
-      title: "Action",
+      title: <div className="text-center w-full">Action</div>,
       key: "action",
       width: "15%",
-      align: "right",
+      align: "right", // Esto es para el contenido de las celdas, no afecta el título
       render: (_: any, record: any) => (
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-center gap-3">
           <Button
             icon={<EditOutlined />}
             onClick={() => {
@@ -637,44 +624,6 @@ const Problems = () => {
                   { value: 3, label: "★★★☆☆ Medium" },
                   { value: 4, label: "★★★★☆ Hard" },
                   { value: 5, label: "★★★★★ Very Hard" },
-                ]}
-              />
-            </div>
-            <div
-              style={{
-                marginBottom: "1rem",
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
-              Tags
-              <Select
-                mode="tags"
-                style={{ width: "100%" }}
-                placeholder="Tags"
-                value={challengeData.tags}
-                onChange={(value) => {
-                  setChallengeData({ ...challengeData, tags: value });
-                }}
-                options={[
-                  { value: "Math", label: "Math" },
-                  { value: "DP", label: "DP" },
-                  { value: "Greedy", label: "Greedy" },
-                  { value: "Graphs", label: "Graphs" },
-                  { value: "Binary Search", label: "Binary Search" },
-                  { value: "Brute Force", label: "Brute Force" },
-                  { value: "Combinatorics", label: "Combinatorics" },
-                  { value: "Data Structures", label: "Data Structures" },
-                  { value: "Divide and Conquer", label: "Divide and Conquer" },
-                  { value: "Geometry", label: "Geometry" },
-                  { value: "Implementation", label: "Implementation" },
-                  { value: "Number Theory", label: "Number Theory" },
-                  { value: "Shortest Paths", label: "Shortest Paths" },
-                  { value: "Sorting", label: "Sorting" },
-                  { value: "Strings", label: "Strings" },
-                  { value: "Trees", label: "Trees" },
-                  { value: "Two Pointers", label: "Two Pointers" },
                 ]}
               />
             </div>

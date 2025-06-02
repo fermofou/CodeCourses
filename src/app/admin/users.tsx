@@ -127,7 +127,7 @@ const Users = () => {
   const showEditModal = (user: UserType) => {
     setEditingUser(user);
     // Fetch user's current medals
-    fetch(`http://localhost:8080/admin/user/${user.id}/badges`)
+    fetch(`http://142.93.10.227:8080/admin/user/${user.id}/badges`)
       .then((res) => res.json())
       .then((badges: any[]) => {
         const medalIds = badges.map((b) => b.badge_id);
@@ -170,7 +170,7 @@ const Users = () => {
 
       // 1) Actualizo datos básicos del usuario
       const userResp = await fetch(
-        `http://localhost:8080/admin/updateUser/${editingUser.id}`,
+        `http://142.93.10.227:8080/admin/updateUser/${editingUser.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -188,7 +188,7 @@ const Users = () => {
 
       // 2) Actualizo medallas/badges
       const badgeResp = await fetch(
-        `http://localhost:8080/admin/user/${editingUser.id}/updateBadges`,
+        `http://142.93.10.227:8080/admin/user/${editingUser.id}/updateBadges`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
