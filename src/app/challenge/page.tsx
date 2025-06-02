@@ -108,6 +108,10 @@ export default function ChallengePage() {
             status={submissionResult.status}
             message={submissionResult.message}
             onClose={clearSubmissionResult}
+            executionTime={submissionResult.executionTime}
+            coinsEarned={submissionResult.coinsEarned}
+            testCasesPassed={submissionResult.testCasesPassed}
+            totalTestCases={submissionResult.totalTestCases}
           />
         )}
       </div>

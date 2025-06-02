@@ -3,6 +3,15 @@ import { languageOptions, startingCodeTemplates } from "../constants";
 import { useUser } from "@clerk/clerk-react";
 import { getProbId } from "../utils/url";
 
+interface SubmissionResult {
+  status: "accept" | "deny";
+  message: string;
+  executionTime?: number;
+  coinsEarned?: number;
+  testCasesPassed?: number;
+  totalTestCases?: number;
+}
+
 export function useCodeExecution() {
   const [code, setCode] = useState(startingCodeTemplates.javascript);
   const [selectedLanguage, setSelectedLanguage] = useState(languageOptions[0]);
@@ -13,10 +22,7 @@ export function useCodeExecution() {
   const [isExecuting, setIsExecuting] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
-  const [submissionResult, setSubmissionResult] = useState<{
-    status: "accept" | "deny";
-    message: string;
-  } | null>(null);
+  const [submissionResult, setSubmissionResult] = useState<SubmissionResult | null>(null);
 
   const { user } = useUser();
   const probId = getProbId();
@@ -232,7 +238,11 @@ export function useCodeExecution() {
       if (data.status === "accept") {
         setSubmissionResult({
           status: "accept",
-          message: "Your solution passed all test cases! Great job!"
+          message: "Your solution passed all test cases! Great job!",
+          executionTime: data.executionTime,
+          coinsEarned: data.coinsEarned,
+          testCasesPassed: data.testCasesPassed,
+          totalTestCases: data.totalTestCases
         });
       } else if (data.status === "deny") {
         setSubmissionResult({
