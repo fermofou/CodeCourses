@@ -20,6 +20,7 @@ type LeaderboardEntry = {
   id: string;
   image_url: string;
   is_admin: boolean;
+  mail: string;
 };
 
 const getMedalInfo = (rank: number) => {
@@ -193,7 +194,15 @@ const Leaderboard: React.FC = () => {
       <UserProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
-        user={selectedUser}
+        user={selectedUser ? {
+          id: selectedUser.id,
+          name: selectedUser.name,
+          level: selectedUser.level,
+          points: selectedUser.points,
+          mail: selectedUser.mail,
+          is_admin: selectedUser.is_admin,
+          image_url: selectedUser.image_url
+        } : null}
       />
     </div>
   );
