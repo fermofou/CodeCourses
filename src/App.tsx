@@ -71,28 +71,15 @@ function App() {
               )
             }
           />
-          <Route
-            path="/repos"
-            element={
-              !isSignedIn ? <Navigate to="/login" replace /> : <ReposPage />
-            }
-          />
+
           <Route
             path="/admin"
             element={
               !isSignedIn ? <Navigate to="/login" replace /> : <AdminPage />
             }
           />
-          <Route 
-            path="/privacy" 
-            element={<PrivacyPolicy />
-            } 
-          />
-          <Route 
-            path="/terms" 
-            element={<Terms />
-            }
-          />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
         </Routes>
       </Layout>
     </Router>

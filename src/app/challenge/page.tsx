@@ -38,9 +38,8 @@ type Challenge = {
   testCases: { input: string; expectedOutput: string }[];
   memoryLimit: number;
   question: string;
-  inputs: string[];
-  outputs: string[];
 };
+const user = { useUser };
 
 function getProbId() {
   const url = new URL(window.location.href);
@@ -171,14 +170,13 @@ export default function ChallengePage() {
 
     checkBackend();
   }, []);
-  const userID = 6;
+
   useEffect(() => {
     let probID = getProbId();
     const fetchChallenge = async () => {
-      //console.log(`http://localhost:8080/challenge?probID=${probID}&userID=${userID}`);
       try {
         const response = await fetch(
-          `api/challenge?probID=${probID}&userID=${userID}`
+          `api/challenge?probID=${probID}&userID=${user?.id}`
         );
         const dataChallenge = await response.json();
         // Handle test cases properly
@@ -214,7 +212,7 @@ export default function ChallengePage() {
   }, []);
 
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
-
+  //sin submit, mostrar todo
   const handleRunCode = useCallback(async () => {
     // Clear previous results and console output
     setResults(null);
@@ -235,8 +233,6 @@ export default function ChallengePage() {
       const payload = {
         language: selectedLanguage.value,
         code: code,
-        // Add test cases if available
-        //testCases: challenge?.testCases || [],
       };
       console.log("Sending request with payload:", payload);
       setConsoleOutput((prev) => [...prev, "Processing..."]);
@@ -439,6 +435,7 @@ export default function ChallengePage() {
   }, [code, selectedLanguage, challenge, timeoutId]);
 
   const handleSubmitCode = useCallback(async () => {
+    const { user } = useUser();
     setConsoleOutput((prev) => [...prev, "Submitting code..."]);
     setIsExecuting(true);
 
@@ -453,9 +450,9 @@ export default function ChallengePage() {
       const payload = {
         language: selectedLanguage.value,
         code: code,
-        // Add test cases if available
-        inputs: challenge?.inputs,
-        outputs: challenge?.outputs,
+        // si es submit, userId y problem id
+        userId: user?.id,
+        probId: challenge?.id,
       };
       console.log("Sending submission with payload:", payload);
       setConsoleOutput((prev) => [...prev, "Processing..."]);
