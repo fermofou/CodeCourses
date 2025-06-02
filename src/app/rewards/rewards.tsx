@@ -56,15 +56,15 @@ export default function Rewards() {
     <div className="p-6">
       <div className="mb-6 flex items-center justify-between">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold mb-1">Earn cool stuff!</h1>
-          <p className="text-gray-600 text-sm">
+          <h1 className="text-2xl font-bold mb-1 text-foreground">Earn cool stuff!</h1>
+          <p className="text-muted-foreground text-sm">
             Top picks for you. Updated daily.
           </p>
         </div>
         <div className="relative">
           <button
             onClick={() => setCartOpen(true)}
-            className="relative p-2 rounded-full bg-white hover:bg-gray-50 transition-colors"
+            className="relative p-2 rounded-full bg-card hover:bg-accent transition-colors"
           >
             <ShoppingCart className="h-6 w-6 text-primary" />
             {cartItems.length > 0 && (
@@ -103,7 +103,7 @@ export default function Rewards() {
         {rewards.map((reward) => (
           <div
             key={reward.reward_id}
-            className={`rounded-lg border p-4 cursor-pointer hover:shadow-md transition-shadow ${
+            className={`rounded-lg border border-border bg-card p-4 cursor-pointer hover:shadow-md transition-shadow ${
               displayMode === "gallery" ? "min-w-[45%]" : ""
             }`}
             onClick={() => setSelectedProduct(reward)}
@@ -113,8 +113,8 @@ export default function Rewards() {
               alt={reward.name}
               className="w-full h-40 object-cover rounded-md mb-3"
             />
-            <h3 className="font-medium text-sm">{reward.name}</h3>
-            <p className="text-xs text-gray-600">{reward.cost} mahindricks</p>
+            <h3 className="font-medium text-sm text-foreground">{reward.name}</h3>
+            <p className="text-xs text-muted-foreground">{reward.cost} mahindricks</p>
           </div>
         ))}
       </div>
@@ -126,7 +126,7 @@ export default function Rewards() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{selectedProduct?.name}</DialogTitle>
+            <DialogTitle className="text-foreground">{selectedProduct?.name}</DialogTitle>
             <DialogDescription>Product Details</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -137,10 +137,10 @@ export default function Rewards() {
                 className="w-full h-64 object-cover rounded-md"
               />
               <div>
-                <p className="text-lg font-semibold mb-2">
+                <p className="text-lg font-semibold mb-2 text-foreground">
                   {selectedProduct?.cost} mahindricks
                 </p>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   Available: {selectedProduct?.inventory_count}
                 </p>
                 <Button
@@ -158,23 +158,23 @@ export default function Rewards() {
       <Dialog open={cartOpen} onOpenChange={setCartOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Your Cart</DialogTitle>
+            <DialogTitle className="text-foreground">Your Cart</DialogTitle>
             <DialogDescription>
               Review your items and purchase one at a time.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             {cartItems.length === 0 ? (
-              <p className="text-sm text-gray-500">Your cart is empty.</p>
+              <p className="text-sm text-muted-foreground">Your cart is empty.</p>
             ) : (
               cartItems.map((item, index) => (
                 <div
                   key={`${item.reward_id}-${index}`}
-                  className="flex items-center justify-between border rounded-lg p-3"
+                  className="flex items-center justify-between border border-border rounded-lg p-3 bg-card"
                 >
                   <div>
-                    <p className="font-semibold">{item.name}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-semibold text-foreground">{item.name}</p>
+                    <p className="text-sm text-muted-foreground">
                       {item.cost} mahindricks
                     </p>
                   </div>

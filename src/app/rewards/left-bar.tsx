@@ -14,15 +14,15 @@ export default function LeftBar({ activeView, onViewChange }: LeftBarProps) {
 
   return (
     <nav className="space-y-4">
-      <h2 className="text-lg font-semibold">Rewards</h2>
+      <h2 className="text-lg font-semibold text-foreground">Rewards</h2>
       {navItems.map((item) => (
         <button
           key={item.id}
           onClick={() => onViewChange(item.id)}
           className={`w-full text-left px-3 py-2 rounded-md text-sm ${
             activeView === item.id
-              ? "bg-gray-100 font-medium"
-              : "hover:bg-gray-100"
+              ? "bg-primary/10 text-primary font-medium"
+              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
           }`}
         >
           {item.label}

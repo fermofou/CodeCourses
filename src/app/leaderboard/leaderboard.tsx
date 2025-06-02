@@ -100,7 +100,7 @@ const Leaderboard = () => {
   const restOfLeaderboard = leaderboard.slice(3)
 
   return (
-    <div className="container mx-auto px-4 py-12 bg-gradient-to-b from-white to-white rounded-xl">
+    <div className="container mx-auto px-4 py-12 bg-gradient-to-b from-background to-background rounded-xl">
       <div className="mb-12">
       </div>
 
@@ -113,7 +113,7 @@ const Leaderboard = () => {
               <div className="flex flex-col items-center">
                 <div className="relative">
                   <Avatar 
-                    className="w-20 h-20 border-4 border-gray-300 cursor-pointer"
+                    className="w-20 h-20 border-4 border-gray-300 dark:border-gray-600 cursor-pointer"
                     onClick={() => showUserProfile(top3[1])}
                   >
                     {top3[1].image_url ? (
@@ -129,14 +129,14 @@ const Leaderboard = () => {
                 </div>
                 <div className="text-center mt-2">
                   <p 
-                    className="font-bold text-lg cursor-pointer hover:text-red-600"
+                    className="font-bold text-lg cursor-pointer hover:text-red-600 dark:text-gray-100"
                     onClick={() => showUserProfile(top3[1])}
                   >
                     {top3[1].name}
                   </p>
-                  <p className="text-sm text-gray-600">{top3[1].points} pts</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{top3[1].points} pts</p>
                 </div>
-                <div className="w-28 h-28 bg-gray-300 rounded-t-lg flex items-center justify-center mt-2">
+                <div className="w-28 h-28 bg-gray-300 dark:bg-gray-700 rounded-t-lg flex items-center justify-center mt-2">
                   <span className="text-4xl font-bold text-white">2</span>
                 </div>
               </div>
@@ -164,12 +164,12 @@ const Leaderboard = () => {
                 </div>
                 <div className="text-center mt-2">
                   <p 
-                    className="font-bold text-xl cursor-pointer hover:text-red-600"
+                    className="font-bold text-xl cursor-pointer hover:text-red-600 dark:text-gray-100"
                     onClick={() => showUserProfile(top3[0])}
                   >
                     {top3[0].name}
                   </p>
-                  <p className="text-sm text-gray-600">{top3[0].points} pts</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{top3[0].points} pts</p>
                 </div>
                 <div className="w-32 h-36 bg-yellow-400 rounded-t-lg flex items-center justify-center mt-2">
                   <span className="text-5xl font-bold text-white">1</span>
@@ -198,12 +198,12 @@ const Leaderboard = () => {
                 </div>
                 <div className="text-center mt-2">
                   <p 
-                    className="font-bold text-lg cursor-pointer hover:text-red-600"
+                    className="font-bold text-lg cursor-pointer hover:text-red-600 dark:text-gray-100"
                     onClick={() => showUserProfile(top3[2])}
                   >
                     {top3[2].name}
                   </p>
-                  <p className="text-sm text-gray-600">{top3[2].points} pts</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{top3[2].points} pts</p>
                 </div>
                 <div className="w-28 h-28 bg-amber-700 rounded-t-lg flex items-center justify-center mt-2">
                   <span className="text-4xl font-bold text-white">3</span>
@@ -216,15 +216,15 @@ const Leaderboard = () => {
       )}
 
       {/* Rest of Leaderboard */}
-      <Card className="overflow-hidden border-2 border-red-200">
+      <Card className="overflow-hidden border-2 border-red-200 dark:border-red-800">
         <Table>
           <TableHeader>
-            <TableRow className="text-sm sm:text-base px-2 sm:px-4 border-b-2 border-red-200 bg-red-50">
-              <TableHead className="w-20 text-[#333333] font-bold">Rank</TableHead>
-              <TableHead className="text-[#333333] font-bold">User</TableHead>
-              <TableHead className="text-[#333333] font-bold">Division</TableHead>
-              <TableHead className="text-right text-[#333333] font-bold hidden sm:table-cell">Points</TableHead>
-              <TableHead className="text-right text-[#333333] font-bold">Level</TableHead>
+            <TableRow className="text-sm sm:text-base px-2 sm:px-4 border-b-2 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950">
+              <TableHead className="w-20 text-[#333333] dark:text-gray-100 font-bold">Rank</TableHead>
+              <TableHead className="text-[#333333] dark:text-gray-100 font-bold">User</TableHead>
+              <TableHead className="text-[#333333] dark:text-gray-100 font-bold">Division</TableHead>
+              <TableHead className="text-right text-[#333333] dark:text-gray-100 font-bold hidden sm:table-cell">Points</TableHead>
+              <TableHead className="text-right text-[#333333] dark:text-gray-100 font-bold">Level</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -237,20 +237,20 @@ const Leaderboard = () => {
               return (
                 <TableRow
                   key={`${entry.name}-${entry.points}`}
-                  className={`${isCurrentUser ? "bg-red-50" : ""} 
-                    hover:bg-gray-50 border-b transition-colors cursor-pointer`}
+                  className={`${isCurrentUser ? "bg-red-50 dark:bg-red-950" : ""} 
+                    hover:bg-gray-50 dark:hover:bg-gray-800 border-b transition-colors cursor-pointer`}
                   onClick={() => showUserProfile(entry)}
                 >
                   <TableCell className="w-20 font-medium">
                     <div className="text-center flex items-center justify-center">
-                      <div className="bg-red-100 w-8 h-8 rounded-full flex items-center justify-center">
+                      <div className="bg-red-100 dark:bg-red-900 w-8 h-8 rounded-full flex items-center justify-center">
                         {actualRank}
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center space-x-3">
-                      <Avatar className="border border-red-200">
+                      <Avatar className="border border-red-200 dark:border-red-800">
                         {entry.image_url ? (
                           <img
                             src={entry.image_url || "/placeholder.svg"}
@@ -261,14 +261,14 @@ const Leaderboard = () => {
                           <AvatarFallback>{entry.name.charAt(0)}</AvatarFallback>
                         )}
                       </Avatar>
-                      <span className="font-medium">{entry.name}</span>
+                      <span className="font-medium dark:text-gray-100">{entry.name}</span>
                     </div>
                   </TableCell>
                   <TableCell>
                     <span className={`font-medium ${rankColor}`}>{rank}</span>
                   </TableCell>
-                  <TableCell className="text-right font-medium hidden sm:table-cell">{entry.points}</TableCell>
-                  <TableCell className="text-right font-medium">{entry.level}</TableCell>
+                  <TableCell className="text-right font-medium hidden sm:table-cell dark:text-gray-100">{entry.points}</TableCell>
+                  <TableCell className="text-right font-medium dark:text-gray-100">{entry.level}</TableCell>
                 </TableRow>
               )
             })}

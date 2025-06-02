@@ -34,17 +34,16 @@ interface LeftbarProps {
 
 export default function Leftbar({ setMenuOption, menuOption }: LeftbarProps) {
   return (
-    <div className="w-64 h-screen bg-white border-r border-gray-200 p-4">
+    <div className="w-64 h-screen bg-card border-r border-border p-4">
       <div className="space-y-2">
         {menuItems.map((item) => (
           <button
             key={item.name}
             onClick={() => setMenuOption(item.name)}
-            className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${
-              menuOption === item.name
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
+            className={`w-full flex items-center space-x-3 px-4 py-2 rounded-lg transition-colors ${menuOption === item.name
+                ? "bg-primary/10 text-primary"
+                : "text-muted-foreground hover:bg-muted"
+              }`}
           >
             {item.icon}
             <span>{item.name}</span>

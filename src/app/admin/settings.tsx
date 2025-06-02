@@ -348,17 +348,17 @@ const Settings = () => {
                         {key === "marketingEmails" && "Receive information about new features and promotions"}
                       </p>
                     </div>
-                    <div className="relative inline-block w-12 h-6 transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    <div className="relative inline-block w-12 h-6 transition-colors duration-200 ease-in-out border-2 border-transparent rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                       onClick={() => handleNotificationChange(key)}
                     >
                       <span
                         className={`inline-block h-5 w-5 rounded-full transition-transform duration-200 ease-in-out transform ${
-                          notificationSettings[key] ? "translate-x-6 bg-white" : "translate-x-0 bg-white"
-                        } ${notificationSettings[key] ? "bg-blue-600" : "bg-gray-200"}`}
+                          notificationSettings[key] ? "translate-x-6" : "translate-x-0"
+                        } ${notificationSettings[key] ? "bg-primary" : "bg-muted"}`}
                       ></span>
                       <span
                         className={`absolute inset-0 rounded-full ${
-                          notificationSettings[key] ? "bg-blue-600" : "bg-gray-200"
+                          notificationSettings[key] ? "bg-primary/20" : "bg-muted"
                         }`}
                       ></span>
                     </div>

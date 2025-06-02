@@ -204,22 +204,16 @@ const DailyChallenge = ({ onClick }: { onClick?: () => void }) => {
             ))}
           </div>
         </div>
-        <span className="text-2xl font-bold text-gray-800">
-          {challenge.title}
-        </span>
-        <p className="w-[24rem] text-gray-600 text-sm leading-relaxed">
-          {challenge.question}
-        </p>
+        <span className="text-2xl font-bold text-gray-900">{challenge.title}</span>
+        <p className="w-[24rem] text-gray-600 text-sm leading-relaxed">{challenge.question}</p>
         <div className="flex flex-row gap-6">
-          <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm">
+          <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full shadow-sm">
             <Trophy className="h-5 w-5 text-yellow-500" />
-            <span className="font-medium text-gray-700">
-              {challenge.difficulty * 20} MC
-            </span>
+            <span className="font-medium text-gray-900">{challenge.difficulty * 20} MC</span>
           </div>
-          <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full shadow-sm">
+          <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full shadow-sm">
             <FaFileCode className="h-5 w-5 text-blue-500" />
-            <span className="font-medium text-gray-700">Arrays</span>
+            <span className="font-medium text-gray-900">Arrays</span>
           </div>
         </div>
       </div>
