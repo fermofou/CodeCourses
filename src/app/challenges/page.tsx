@@ -71,27 +71,6 @@ const columns: ColumnsType<ProblemsTableType> = [
     ),
   },
   {
-    title: "Tags",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_: unknown, { tags }: ProblemsTableType) => (
-      <>
-        {tags &&
-          tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "tag") {
-              color = "volcano";
-            }
-            return (
-              <AntdTag color={color} key={tag}>
-                {tag}
-              </AntdTag>
-            );
-          })}
-      </>
-    ),
-  },
-  {
     title: "Difficulty",
     dataIndex: "difficulty",
     key: "difficulty",
