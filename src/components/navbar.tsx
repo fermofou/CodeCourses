@@ -3,7 +3,7 @@ import { SignedIn, UserButton, SignedOut } from "@clerk/clerk-react";
 import { Coins, Trophy, PlayCircle, CheckCircle2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useContext, useState, useRef, useEffect } from "react";
-import { ChallengeContext } from "@/app/challenge/page";
+import { ChallengeContext } from "@/app/challenge/context/ChallengeContext";
 import { useUserData } from "../userData";
 
 const Navbar = () => {
