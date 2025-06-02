@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { ChallengeDescription } from "./components/ChallengeDescription";
 import { CodeEditor } from "./components/CodeEditor";
 import { ConsoleOutput } from "./components/ConsoleOutput";
+import { SubmissionResult } from "./components/SubmissionResult";
 import { useChallengeData } from "./hooks/useChallengeData";
 import { useBackendHealth } from "./hooks/useBackendHealth";
 import { ChallengeContext } from "./context/ChallengeContext";
@@ -20,8 +21,10 @@ export default function ChallengePage() {
     consoleOutput,
     results,
     isExecuting,
+    submissionResult,
     handleRunCode,
-    handleSubmitCode
+    handleSubmitCode,
+    clearSubmissionResult
   } = useCodeExecution();
 
   return (
@@ -98,6 +101,15 @@ export default function ChallengePage() {
             </div>
           </Section>
         </Container>
+
+        {/* Submission Result Modal */}
+        {submissionResult && (
+          <SubmissionResult
+            status={submissionResult.status}
+            message={submissionResult.message}
+            onClose={clearSubmissionResult}
+          />
+        )}
       </div>
     </ChallengeContext.Provider>
   );

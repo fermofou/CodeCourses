@@ -1,16 +1,7 @@
 import { useState, useEffect } from "react";
 import { Challenge } from "../types";
 import { languageOptions, startingCodeTemplates } from "../constants";
-
-function getProbId() {
-  const url = new URL(window.location.href);
-  const query = url.search.substring(1);
-
-  if (/^\d+$/.test(query)) return query;
-  if (/^\d+=?$/.test(query)) return query.split("=")[0];
-
-  return null;
-}
+import { getProbId } from "../utils/url";
 
 export function useChallengeData() {
   const [challenge, setChallenge] = useState<Challenge | null>(null);
