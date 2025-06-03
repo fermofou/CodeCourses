@@ -16,10 +16,15 @@ import AdminPage from "./app/admin/page";
 import Layout from "./app/layout";
 import SignUpPage from "./app/signup/page";
 import PrivacyPolicy from "./components/privacy";
+import { useUserData } from "./userData";
 import Terms from "./components/terms";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
+
+  const {
+    state: { userData, loading, error },
+  } = useUserData();
 
   // Show loading state while Clerk loads
   if (!isLoaded) {
@@ -80,7 +85,15 @@ function App() {
           <Route
             path="/admin"
             element={
-              !isSignedIn ? <Navigate to="/login" replace /> : <AdminPage />
+              !isSignedIn ? (
+                <Navigate to="/login" replace />
+              ) : loading ? (
+                <div>Loading...</div>
+              ) : !userData?.admin ? (
+                <Navigate to="/" replace />
+              ) : (
+                <AdminPage />
+              )
             }
           />
           <Route 
@@ -93,6 +106,7 @@ function App() {
             element={<Terms />
             }
           />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
     </Router>
