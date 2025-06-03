@@ -94,7 +94,8 @@ export function useCodeExecution() {
           const resultData = await resultResponse.json();
           if (
             resultData.status === "completed" ||
-            resultData.status === "success"
+            resultData.status === "success" ||
+            resultData.status === "accept"
           ) {
             clearInterval(pollInterval);
             clearTimeout(newTimeoutId);
