@@ -21,6 +21,7 @@ interface UserProfileModalProps {
     points: number;
     mail: string;
     is_admin: boolean;
+    image_url: string;
   } | null;
 }
 
@@ -97,7 +98,15 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
       <div className="p-4">
         <div className="flex items-center space-x-4 mb-6">
           <Avatar size={64} className="border border-gray-200">
-            {user.name.charAt(0)}
+            {user.image_url ? (
+              <img
+                src={user.image_url}
+                alt={`${user.name}'s profile`}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              user.name.charAt(0)
+            )}
           </Avatar>
           <div>
             <h2 className="text-2xl font-bold">{user.name}</h2>
