@@ -235,7 +235,7 @@ export function useCodeExecution() {
         language: selectedLanguage.value,
         code: code,
         userId: user.id,
-        probId: probId,
+        probId: String(probId),
       };
 
       console.log("Sending submission with payload:", payload);
