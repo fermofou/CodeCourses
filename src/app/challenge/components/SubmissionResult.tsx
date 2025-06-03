@@ -10,18 +10,18 @@ interface SubmissionResultProps {
   onClose: () => void;
   executionTime?: number;
   coinsEarned?: number;
-  testCasesPassed?: number;
-  totalTestCases?: number;
+  TestCases?: number;
+  totalCases?: number;
 }
 
-export function SubmissionResult({ 
-  status, 
-  message, 
+export function SubmissionResult({
+  status,
+  message,
   onClose,
   executionTime,
   coinsEarned,
-  testCasesPassed,
-  totalTestCases
+  TestCases,
+  totalCases,
 }: SubmissionResultProps) {
   return (
     <motion.div
@@ -49,14 +49,12 @@ export function SubmissionResult({
               <XCircle size={64} />
             </motion.div>
           )}
-          
+
           <h2 className="text-2xl font-bold text-center">
             {status === "accept" ? "Submission Accepted!" : "Submission Failed"}
           </h2>
-          
-          <p className="text-center text-muted-foreground">
-            {message}
-          </p>
+
+          <p className="text-center text-muted-foreground">{message}</p>
 
           {status === "accept" && (
             <motion.div
@@ -69,15 +67,19 @@ export function SubmissionResult({
                 <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
                   <Clock className="h-5 w-5 text-blue-500" />
                   <div>
-                    <p className="text-sm text-muted-foreground">Execution Time</p>
+                    <p className="text-sm text-muted-foreground">
+                      Execution Time
+                    </p>
                     <p className="font-semibold">{executionTime}ms</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
                   <Coins className="h-5 w-5 text-yellow-500" />
                   <div>
-                    <p className="text-sm text-muted-foreground">Coins Earned</p>
+                    <p className="text-sm text-muted-foreground">
+                      Coins Earned
+                    </p>
                     <p className="font-semibold">+{coinsEarned}</p>
                   </div>
                 </div>
@@ -88,13 +90,13 @@ export function SubmissionResult({
                 <div>
                   <p className="text-sm text-muted-foreground">Test Cases</p>
                   <p className="font-semibold">
-                    {testCasesPassed}/{totalTestCases} passed
+                    {TestCases}/{totalCases} passed
                   </p>
                 </div>
               </div>
             </motion.div>
           )}
-          
+
           <Button
             onClick={onClose}
             variant={status === "accept" ? "default" : "destructive"}
@@ -109,4 +111,4 @@ export function SubmissionResult({
       </Card>
     </motion.div>
   );
-} 
+}

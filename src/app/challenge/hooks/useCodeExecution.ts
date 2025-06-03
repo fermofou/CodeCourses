@@ -8,8 +8,8 @@ interface SubmissionResult {
   message: string;
   executionTime?: number;
   coinsEarned?: number;
-  testCasesPassed?: number;
-  totalTestCases?: number;
+  TestCases?: number;
+  totalCases?: number;
 }
 
 export function useCodeExecution() {
@@ -261,9 +261,9 @@ export function useCodeExecution() {
           status: "accept",
           message: "Your solution passed all test cases! Great job!",
           executionTime: data.executionTime,
-          coinsEarned: data.coinsEarned,
-          testCasesPassed: data.testCasesPassed,
-          totalTestCases: data.totalTestCases,
+          coinsEarned: data.coinsEarned, //esto podemos sacar de otro lad
+          TestCases: data.TestCases,
+          totalCases: data.totalCases,
         });
       } else if (data.status === "deny") {
         setSubmissionResult({
