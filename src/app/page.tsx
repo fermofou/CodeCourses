@@ -121,20 +121,31 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-4">
-                  <Button
-                    size="lg"
-                    className="gap-2"
-                    onClick={() => navigate("/login")}
-                  >
-                    Start now <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => navigate("/challenges")}
-                  >
-                    See challenges
-                  </Button>
+                  <SignedOut>
+                    <Button
+                      size="lg"
+                      className="gap-2"
+                      onClick={() => navigate("/login")}
+                    >
+                      Start now <ArrowRight className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      onClick={() => navigate("/challenges")}
+                    >
+                      See challenges
+                    </Button>
+                  </SignedOut>
+                  <SignedIn>
+                    <Button
+                      size="lg"
+                      className="gap-2"
+                      onClick={() => navigate("/challenges")}
+                    >
+                      See challenges <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </SignedIn>
                 </div>
                 <div className="flex flex-col space-y-12 pt-8">
                   {/* Top stats in a grid */}
