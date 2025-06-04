@@ -130,9 +130,9 @@ export function useCodeExecution({ difficulty }: UseCodeExecutionProps) {
             if (resultData.error && resultData.error !== "None") {
               let cleanError = resultData.error
                 .replace(/STDERR:\s*/g, "")
-                .replace(/^g\+\+\s+.*?\n/g, "")
-                .replace(/^cc\s+.*?\n/g, "")
-                .replace(/^gcc\s+.*?\n/g, "")
+                .replace(/^g\+\+\s+[^\n]*\n?/gm, "")
+                .replace(/^cc\s+[^\n]*\n?/gm, "")
+                .replace(/^gcc\s+[^\n]*\n?/gm, "")
                 .trim();
 
               if (cleanError) {
