@@ -329,9 +329,8 @@ Example Output:
                     .map((entry: LeaderboardEntry, index: number) => (
                       <div
                         key={entry.id}
-                        className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${
-                          index === 0 ? "bg-primary/5 rounded-lg" : ""
-                        }`}
+                        className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${index === 0 ? "bg-primary/5 rounded-lg" : ""
+                          }`}
                       >
                         <div className="flex items-center gap-6">
                           <div className="text-2xl font-bold text-muted-foreground">
@@ -342,9 +341,8 @@ Example Output:
                           </div>
                           <div className="flex items-center gap-3">
                             <div
-                              className={`w-12 h-12 rounded-full overflow-hidden ${
-                                index === 0 ? "bg-zinc-200" : "bg-muted"
-                              }`}
+                              className={`w-12 h-12 rounded-full overflow-hidden ${index === 0 ? "bg-zinc-200" : "bg-muted"
+                                }`}
                             >
                               {entry.image_url ? (
                                 <img

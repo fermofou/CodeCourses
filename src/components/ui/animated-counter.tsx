@@ -52,7 +52,7 @@ function Digit({ place, value }: { place: number; value: number }) {
   return (
     <div
       style={{ height }}
-      className="relative w-[1ch] font-mono tabular-nums bg-[#FDFBF7] text-black overflow-hidden"
+      className="relative w-[1ch] font-mono tabular-nums bg-background text-foreground overflow-hidden"
     >
       {[...Array(10).keys()].map((i) => (
         <Number key={i} mv={animatedValue} number={i} />
@@ -77,7 +77,7 @@ function Number({ mv, number }: { mv: MotionValue; number: number }) {
   return (
     <motion.span
       style={{ y }}
-      className="absolute inset-0 flex items-center justify-center font-mono text-black"
+      className="absolute inset-0 flex items-center justify-center font-mono text-foreground"
     >
       {number}
     </motion.span>
