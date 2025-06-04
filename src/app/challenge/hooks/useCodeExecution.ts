@@ -20,6 +20,7 @@ export function useCodeExecution() {
     message: string;
   } | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
   const [submissionResult, setSubmissionResult] =
@@ -92,7 +93,7 @@ export function useCodeExecution() {
           }
 
           const resultData = await resultResponse.json();
-          console.log("Polling result:", resultData);
+          //console.log("Polling result:", resultData);
           if (
             resultData.status === "completed" ||
             resultData.status === "success" ||
@@ -240,9 +241,6 @@ export function useCodeExecution() {
         probId: String(probId),
       };
 
-      console.log("Sending submission with payload:", payload);
-      setConsoleOutput((prev) => [...prev, "Processing submission..."]);
-
       const response = await fetch("/execute", {
         method: "POST",
         headers: {
@@ -257,29 +255,83 @@ export function useCodeExecution() {
       }
 
       const data = await response.json();
-
-      if (data.status === "accept") {
-        setSubmissionResult({
-          status: "accept",
-          message: "Your solution passed all test cases! Great job!",
-          executionTime: data.executionTime,
-          coinsEarned: data.coinsEarned, //esto podemos sacar de otro lad
-          TestCases: data.TestCases,
-          totalCases: data.totalCases,
-        });
-      } else if (data.status === "deny") {
-        setSubmissionResult({
-          status: "deny",
-          message:
-            data.message ||
-            "Your solution failed some test cases. Please try again.",
-        });
+      if (!data.job_id) {
+        throw new Error("No submission job ID received from server");
       }
 
-      setConsoleOutput((prev) => [
-        ...prev,
-        `Submission ${data.status === "accept" ? "accepted" : "failed"}`,
-      ]);
+      const jobId = data.job_id;
+      setConsoleOutput((prev) => [...prev, "Waiting for submission result..."]);
+
+      const newTimeoutId = setTimeout(() => {
+        setConsoleOutput((prev) => [
+          ...prev,
+          "Submission is taking longer than expected...",
+          "You can try submitting again later.",
+        ]);
+        setResults({
+          success: false,
+          message: "Submission is taking longer than expected",
+        });
+        setIsExecuting(false);
+      }, 30000);
+
+      setTimeoutId(newTimeoutId);
+
+      const pollInterval = setInterval(async () => {
+        try {
+          const resultResponse = await fetch(`/result/${jobId}`);
+          if (!resultResponse.ok) {
+            throw new Error(`Result polling failed: ${resultResponse.status}`);
+          }
+
+          const resultData = await resultResponse.json();
+
+          if (
+            resultData.status === "completed" ||
+            resultData.status === "accept" ||
+            resultData.status === "deny"
+          ) {
+            clearInterval(pollInterval);
+            clearTimeout(newTimeoutId);
+            setTimeoutId(null);
+
+            setSubmissionResult({
+              status: resultData.status === "accept" ? "accept" : "deny",
+              message:
+                resultData.status === "accept"
+                  ? "Your solution passed all test cases! Great job!"
+                  : resultData.message ||
+                    "Your solution failed some test cases. Please try again.",
+              executionTime: resultData.exec_time_ms,
+              coinsEarned: resultData.coinsEarned,
+              TestCases: resultData.TestCases,
+              totalCases: resultData.totalCases,
+            });
+
+            setConsoleOutput((prev) => [
+              ...prev,
+              `Submission ${
+                resultData.status === "accept" ? "accepted" : "failed"
+              }`,
+            ]);
+
+            setIsExecuting(false);
+          }
+        } catch (error) {
+          clearInterval(pollInterval);
+          clearTimeout(newTimeoutId);
+          setTimeoutId(null);
+
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error occurred";
+          setConsoleOutput((prev) => [...prev, `Error: ${errorMessage}`]);
+          setSubmissionResult({
+            status: "deny",
+            message: `Failed to submit code: ${errorMessage}`,
+          });
+          setIsExecuting(false);
+        }
+      }, 1000);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error occurred";
@@ -288,7 +340,6 @@ export function useCodeExecution() {
         status: "deny",
         message: `Failed to submit code: ${errorMessage}`,
       });
-    } finally {
       setIsExecuting(false);
     }
   }, [code, selectedLanguage, timeoutId, user?.id, probId]);
