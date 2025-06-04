@@ -68,25 +68,34 @@ const columns: ColumnsType<ProblemsTableType> = [
       <div style={{ color: status ? "#2CBA5A" : "black" }}>{points} MC</div>
     ),
   },
+
   {
-    title: "Difficulty",
-    dataIndex: "difficulty",
-    key: "difficulty",
-    // Difficulty filter
-    filters: [
-      { text: "Easy", value: 1 },
-      { text: "Medium", value: 2 },
-      { text: "Hard", value: 3 },
-    ],
-    onFilter: (value, record) => record.difficulty === value,
-    render: (_, { difficulty }) => (
-      <div className="flex items-center gap-2">
-        {Array.from({ length: difficulty }).map((_, i) => (
-          <FaStar key={i} />
+  title: "Difficulty",
+  dataIndex: "difficulty",
+  key: "difficulty",
+
+  // Difficulty filter
+  filters: Array.from({ length: 5 }, (_, i) => ({
+    value: i + 1,
+    text: (
+      <span className="inline-block">
+        {Array.from({ length: i + 1 }).map((_, j) => (
+          <FaStar key={j} className="inline mr-0.5" />
         ))}
-      </div>
+      </span>
     ),
-  },
+  })),
+
+  onFilter: (value, record) => record.difficulty === value,
+
+  render: (_, { difficulty }) => (
+    <div className="flex items-center gap-1">
+      {Array.from({ length: difficulty }).map((_, i) => (
+        <FaStar key={i} />
+      ))}
+    </div>
+  ),
+},
 ];
 
 const ChallengeButton = ({

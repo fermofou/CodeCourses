@@ -437,13 +437,13 @@ Example Output:
           </p>
           <div className="flex items-center space-x-4">
             <Link
-              to="#"
+              to="/privacy"
               className="text-sm text-muted-foreground hover:text-primary"
             >
               Terms
             </Link>
             <Link
-              to="#"
+              to="/terms"
               className="text-sm text-muted-foreground hover:text-primary"
             >
               Privacy
