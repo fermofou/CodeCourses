@@ -7,7 +7,10 @@ interface ChallengeDescriptionProps {
   isLoading: boolean;
 }
 
-export function ChallengeDescription({ challenge, isLoading }: ChallengeDescriptionProps) {
+export function ChallengeDescription({
+  challenge,
+  isLoading,
+}: ChallengeDescriptionProps) {
   if (isLoading) {
     return <div className="p-6">Cargando desafío...</div>;
   }
@@ -32,30 +35,32 @@ export function ChallengeDescription({ challenge, isLoading }: ChallengeDescript
             <div className="flex items-center gap-4 mt-2">
               <span
                 className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full ${
-                  challenge.difficulty < 2
+                  challenge.difficulty <= 2
                     ? "bg-green-500/10 text-green-500"
-                    : challenge.difficulty === 2
+                    : challenge.difficulty < 4
                     ? "bg-yellow-500/10 text-yellow-500"
                     : "bg-red-500/10 text-red-500"
                 }`}
               >
                 <Brain className="h-4 w-4" />
-                {challenge.difficulty === 1
+                {challenge.difficulty <= 2
                   ? "Fácil"
-                  : challenge.difficulty === 2
+                  : challenge.difficulty < 4
                   ? "Medio"
                   : "Difícil"}
               </span>
               <span className="inline-flex items-center gap-1.5 text-sm bg-red-500/10 text-red-500 px-3 py-1 rounded-full">
                 <Trophy className="h-4 w-4" />
-                {challenge.difficulty * 100} MC
+                {challenge.difficulty * 20} MC
               </span>
             </div>
           </div>
 
           <Card className="p-6">
             <div className="prose prose-neutral dark:prose-invert max-w-none">
-              <pre className="whitespace-pre-wrap text-sm">{challenge.question}</pre>
+              <pre className="whitespace-pre-wrap text-sm">
+                {challenge.question}
+              </pre>
             </div>
           </Card>
 
@@ -75,7 +80,9 @@ export function ChallengeDescription({ challenge, isLoading }: ChallengeDescript
                       <p className="text-sm font-medium text-muted-foreground">
                         Expected Output:
                       </p>
-                      <pre className="mt-1 text-sm">{testCase.expectedOutput}</pre>
+                      <pre className="mt-1 text-sm">
+                        {testCase.expectedOutput}
+                      </pre>
                     </div>
                   </div>
                 </Card>
@@ -86,4 +93,4 @@ export function ChallengeDescription({ challenge, isLoading }: ChallengeDescript
       </div>
     </>
   );
-} 
+}

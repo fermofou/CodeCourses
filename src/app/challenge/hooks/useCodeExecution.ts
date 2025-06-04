@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { languageOptions, startingCodeTemplates } from "../constants";
 import { useUser } from "@clerk/clerk-react";
 import { getProbId } from "../utils/url";
+import { diff } from "util";
 
 interface SubmissionResult {
   status: "accept" | "deny";
@@ -11,8 +12,10 @@ interface SubmissionResult {
   TestCases?: number;
   totalCases?: number;
 }
-
-export function useCodeExecution() {
+type UseCodeExecutionProps = {
+  difficulty: number;
+};
+export function useCodeExecution({ difficulty }: UseCodeExecutionProps) {
   const [code, setCode] = useState(startingCodeTemplates.javascript);
   const [selectedLanguage, setSelectedLanguage] = useState(languageOptions[0]);
   const [results, setResults] = useState<{
@@ -303,9 +306,9 @@ export function useCodeExecution() {
                   : resultData.message ||
                     "Your solution failed some test cases. Please try again.",
               executionTime: resultData.exec_time_ms,
-              coinsEarned: resultData.coinsEarned,
-              TestCases: resultData.TestCases,
-              totalCases: resultData.totalCases,
+              coinsEarned: difficulty * 20, // Example calculation for coins earned
+              TestCases: resultData.test_cases,
+              totalCases: resultData.total_cases,
             });
 
             setConsoleOutput((prev) => [

@@ -7,7 +7,6 @@ export function useChallengeData() {
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const userID = 6; // TODO: Get this from auth context
-
   useEffect(() => {
     const fetchChallenge = async () => {
       try {
@@ -28,6 +27,7 @@ export function useChallengeData() {
           } catch (e) {
             console.error("Failed to parse test cases:", e);
             dataChallenge.testCases = [];
+            setDifficulty(dataChallenge.difficulty ?? 0); // Fallback to default difficulty
           }
         } else {
           dataChallenge.testCases = dataChallenge.tests || [];
@@ -45,4 +45,4 @@ export function useChallengeData() {
   }, []);
 
   return { challenge, isLoading };
-} 
+}

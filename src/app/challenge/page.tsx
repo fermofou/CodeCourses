@@ -12,6 +12,7 @@ import { useCodeExecution } from "./hooks/useCodeExecution";
 
 export default function ChallengePage() {
   const { challenge, isLoading } = useChallengeData();
+  const difficulty = challenge?.difficulty ?? 0; // fallback to 0 if undefined
   const { isBackendAvailable } = useBackendHealth();
   const {
     code,
@@ -25,7 +26,7 @@ export default function ChallengePage() {
     handleRunCode,
     handleSubmitCode,
     clearSubmissionResult,
-  } = useCodeExecution();
+  } = useCodeExecution({ difficulty });
 
   return (
     <ChallengeContext.Provider value={{ handleRunCode, handleSubmitCode }}>
