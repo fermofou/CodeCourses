@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { Challenge } from "../types";
 import { languageOptions, startingCodeTemplates } from "../constants";
 import { getProbId } from "../utils/url";
+import { useUser } from "@clerk/clerk-react";
 
 export function useChallengeData() {
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const userID = 6; // TODO: Get this from auth context
+  const { user } = useUser();
+  const userID = user?.id;
+
   useEffect(() => {
     const fetchChallenge = async () => {
       try {
@@ -15,6 +18,13 @@ export function useChallengeData() {
           throw new Error("No problem ID found in URL");
         }
 
+        if (!userID) {
+          console.log("No user ID available, waiting for authentication...");
+          setIsLoading(false);
+          return;
+        }
+
+        console.log("Fetching challenge with userID:", userID);
         const response = await fetch(
           `api/challenge?probID=${probID}&userID=${userID}`
         );
@@ -27,7 +37,6 @@ export function useChallengeData() {
           } catch (e) {
             console.error("Failed to parse test cases:", e);
             dataChallenge.testCases = [];
-            setDifficulty(dataChallenge.difficulty ?? 0); // Fallback to default difficulty
           }
         } else {
           dataChallenge.testCases = dataChallenge.tests || [];
@@ -42,7 +51,7 @@ export function useChallengeData() {
     };
 
     fetchChallenge();
-  }, []);
+  }, [userID]);
 
   return { challenge, isLoading };
 }
