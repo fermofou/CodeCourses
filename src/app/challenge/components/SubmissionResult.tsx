@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface SubmissionResultProps {
-  status: "accept" | "deny";
+  status: "accept" | "fail";
   message: string;
   onClose: () => void;
   executionTime?: number;

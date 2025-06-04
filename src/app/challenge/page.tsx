@@ -109,7 +109,7 @@ export default function ChallengePage() {
         {/* Submission Result Modal */}
         {submissionResult && (
           <SubmissionResult
-            status={submissionResult.status === "accept" ? "accept" : "deny"}
+            status={submissionResult.status === "accept" ? "accept" : "fail"}
             message={submissionResult.message}
             onClose={clearSubmissionResult}
             executionTime={submissionResult.executionTime}

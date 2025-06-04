@@ -2,10 +2,9 @@ import { useState, useCallback } from "react";
 import { languageOptions, startingCodeTemplates } from "../constants";
 import { useUser } from "@clerk/clerk-react";
 import { getProbId } from "../utils/url";
-import { diff } from "util";
 
 interface SubmissionResult {
-  status: "accept" | "fail";
+  status: "accept" | "fail" | "error";
   message: string;
   executionTime?: number;
   coinsEarned?: number;
@@ -329,7 +328,7 @@ export function useCodeExecution({ difficulty }: UseCodeExecutionProps) {
             error instanceof Error ? error.message : "Unknown error occurred";
           setConsoleOutput((prev) => [...prev, `Error: ${errorMessage}`]);
           setSubmissionResult({
-            status: "deny",
+            status: "fail",
             message: `Failed to submit code: ${errorMessage}`,
           });
           setIsExecuting(false);
@@ -340,7 +339,7 @@ export function useCodeExecution({ difficulty }: UseCodeExecutionProps) {
         error instanceof Error ? error.message : "Unknown error occurred";
       setConsoleOutput((prev) => [...prev, `Error: ${errorMessage}`]);
       setSubmissionResult({
-        status: "deny",
+        status: "fail",
         message: `Failed to submit code: ${errorMessage}`,
       });
       setIsExecuting(false);
