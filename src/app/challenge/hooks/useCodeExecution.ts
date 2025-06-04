@@ -292,14 +292,14 @@ export function useCodeExecution({ difficulty }: UseCodeExecutionProps) {
           if (
             resultData.status === "completed" ||
             resultData.status === "accept" ||
-            resultData.status === "deny"
+            resultData.status === "fail"
           ) {
             clearInterval(pollInterval);
             clearTimeout(newTimeoutId);
             setTimeoutId(null);
 
             setSubmissionResult({
-              status: resultData.status === "accept" ? "accept" : "deny",
+              status: resultData.status === "accept" ? "accept" : "fail",
               message:
                 resultData.status === "accept"
                   ? "Your solution passed all test cases! Great job!"
