@@ -5,7 +5,7 @@ import { getProbId } from "../utils/url";
 import { diff } from "util";
 
 interface SubmissionResult {
-  status: "accept" | "deny";
+  status: "accept" | "fail";
   message: string;
   executionTime?: number;
   coinsEarned?: number;
