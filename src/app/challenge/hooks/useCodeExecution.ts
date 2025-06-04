@@ -92,6 +92,7 @@ export function useCodeExecution() {
           }
 
           const resultData = await resultResponse.json();
+          console.log("Polling result:", resultData);
           if (
             resultData.status === "completed" ||
             resultData.status === "success" ||
