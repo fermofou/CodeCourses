@@ -361,27 +361,18 @@ Example Output:
                               <span className="font-semibold">
                                 {entry.name}
                               </span>
-                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                <span>Level {entry.level}</span>
-                                <span>•</span>
-                                <span>{entry.points} points</span>
+                              <div className="flex items-center gap-2 text-sm text-primary">
+                                <Coins className="h-4 w-4" />
+                                <span className="font-medium">
+                                  {entry.points} MC
+                                </span>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div className="flex flex-col items-end gap-1">
-                          <div className="flex items-center gap-2">
-                            <Sparkles className="h-4 w-4 text-primary" />
-                            <span className="font-semibold">
-                              {entry.points} XP
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-primary">
-                            <Coins className="h-4 w-4" />
-                            <span className="font-medium">
-                              {entry.points} MC
-                            </span>
-                          </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Target className="h-4 w-4" />
+                          <span className="font-medium">Level {entry.level}</span>
                         </div>
                       </div>
                     ))}
