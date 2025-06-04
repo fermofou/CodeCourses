@@ -109,17 +109,17 @@ export function useCodeExecution({ difficulty }: UseCodeExecutionProps) {
 
             if (resultData.output) {
               let cleanOutput = resultData.output
-                .replace(/Fetching code from:.*?\n/g, "")
-                .replace(/Executing file:.*?\n/g, "")
-                .replace(/Compiling file:.*?\n/g, "")
+                .replace(/Fetching code from:[^\n]*\n?/g, "")
+                .replace(/Executing file:[^\n]*\n?/g, "")
+                .replace(/Compiling file:[^\n]*\n?/g, "")
                 .replace(/Executing compiled program\s*/g, "")
                 .replace(/STDOUT:\s*/g, "")
                 .replace(/STDERR:\s*/g, "")
-                .replace(/^python\s+/g, "")
-                .replace(/^g\+\+\s+.*?\n/g, "")
-                .replace(/^cc\s+.*?\n/g, "")
-                .replace(/^gcc\s+.*?\n/g, "")
-                .replace(/\s+/g, " ")
+                .replace(/^python\s+/gm, "") // use multiline mode
+                .replace(/^g\+\+ .*$/gm, "")
+                .replace(/^cc .*$/gm, "")
+                .replace(/^gcc .*$/gm, "")
+                .replace(/[\t\r\n ]+/g, " ") // reduces any whitespace chars to a single space
                 .trim();
 
               if (cleanOutput) {
