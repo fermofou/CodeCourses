@@ -114,6 +114,7 @@ const Navbar = () => {
         )}
         {/* Updated Auth Section */}
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <SignedOut>
             <Button
               variant="outline"
@@ -148,7 +149,6 @@ const Navbar = () => {
                   </span>
                 </div>
               </div>
-              <ThemeToggle />
               <UserButton
                 afterSignOutUrl="/"
                 appearance={{
