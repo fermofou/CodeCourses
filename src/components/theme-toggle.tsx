@@ -1,9 +1,16 @@
 import { Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "./theme-provider"
+import { useLocation } from "react-router-dom"
 
 export function ThemeToggle() {
     const { theme, setTheme } = useTheme()
+    const location = useLocation()
+
+    // Don't show theme toggle on sign in and sign up pages
+    if (location.pathname === "/login" || location.pathname === "/signup") {
+        return null
+    }
 
     return (
         <Button

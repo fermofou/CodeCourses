@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 
 type Theme = "dark" | "light" | "system"
 
@@ -26,6 +27,7 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
+  const location = useLocation()
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
@@ -33,6 +35,12 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
     root.classList.remove("light", "dark")
+
+    // Force light mode on sign in and sign up pages
+    if (location.pathname === "/login" || location.pathname === "/signup") {
+      root.classList.add("light")
+      return
+    }
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -44,7 +52,7 @@ export function ThemeProvider({
     }
 
     root.classList.add(theme)
-  }, [theme])
+  }, [theme, location.pathname])
 
   const value = {
     theme,
