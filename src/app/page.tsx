@@ -42,7 +42,8 @@ export default function Home() {
         const res = await fetch("/api/leaderboard");
         const data = await res.json();
         console.log("Leaderboard data:", data);
-        setLeaderboard(data);
+        const sortedData = data.sort((a: LeaderboardEntry, b: LeaderboardEntry) => b.level - a.level);
+        setLeaderboard(sortedData);
       } catch (err) {
         console.error("Error fetching leaderboard:", err);
       }

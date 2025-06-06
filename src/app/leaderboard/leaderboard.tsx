@@ -76,7 +76,9 @@ const Leaderboard = () => {
       try {
         const res = await fetch("/api/leaderboard")
         const data = await res.json()
-        setLeaderboard(data)
+        // Sort the data by level in descending order
+        const sortedData = data.sort((a: LeaderboardEntry, b: LeaderboardEntry) => b.level - a.level)
+        setLeaderboard(sortedData)
       } catch (err) {
         console.error("Error al obtener leaderboard:", err)
       }
