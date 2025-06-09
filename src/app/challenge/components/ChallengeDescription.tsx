@@ -38,8 +38,8 @@ export function ChallengeDescription({
   );
 
   useEffect(() => {
-    if (challenge?.id) {
-      fetch(`/api/getLeaderboardProblem?problemId=${challenge.id}`)
+    if (challenge?.problem_id) {
+      fetch(`/api/getLeaderboardProblem?problemId=${challenge.problem_id}`)
         .then((res) => res.json())
         .then((data) => setLeaderboard(data))
         .catch((err) => {
@@ -47,7 +47,7 @@ export function ChallengeDescription({
           setLeaderboard([]);
         });
     }
-  }, [challenge?.id]);
+  }, [challenge?.problem_id]);
 
   return (
     <>

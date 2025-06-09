@@ -1,5 +1,5 @@
 export type Challenge = {
-  id: number;
+  problem_id: number;
   title: string;
   difficulty: number;
   solved: boolean;
@@ -20,4 +20,4 @@ export type LanguageOption = {
 export type ExecutionResult = {
   success: boolean;
   message: string;
-} | null; 
+} | null;
