@@ -42,7 +42,9 @@ export default function Home() {
         const res = await fetch("/api/leaderboard");
         const data = await res.json();
         console.log("Leaderboard data:", data);
-        const sortedData = data.sort((a: LeaderboardEntry, b: LeaderboardEntry) => b.level - a.level);
+        const sortedData = data.sort(
+          (a: LeaderboardEntry, b: LeaderboardEntry) => b.level - a.level
+        );
         setLeaderboard(sortedData);
       } catch (err) {
         console.error("Error fetching leaderboard:", err);
@@ -193,9 +195,11 @@ export default function Home() {
                           <Coins className="h-3 w-3 inline mr-1" />
                           60 MC
                         </span>
-                        <Button variant="outline" size="sm">
-                          Solve
-                        </Button>
+                        <Link to="http://142.93.10.227:5173/challenge?2">
+                          <Button variant="outline" size="sm">
+                            Solve
+                          </Button>
+                        </Link>
                       </div>
                     </div>
 
@@ -341,8 +345,9 @@ Example Output:
                     .map((entry: LeaderboardEntry, index: number) => (
                       <div
                         key={entry.id}
-                        className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${index === 0 ? "bg-primary/5 rounded-lg" : ""
-                          }`}
+                        className={`flex items-center justify-between py-4 px-4 border-b last:border-0 ${
+                          index === 0 ? "bg-primary/5 rounded-lg" : ""
+                        }`}
                       >
                         <div className="flex items-center gap-6">
                           <div className="text-2xl font-bold text-muted-foreground">
@@ -353,8 +358,9 @@ Example Output:
                           </div>
                           <div className="flex items-center gap-3">
                             <div
-                              className={`w-12 h-12 rounded-full overflow-hidden ${index === 0 ? "bg-zinc-200" : "bg-muted"
-                                }`}
+                              className={`w-12 h-12 rounded-full overflow-hidden ${
+                                index === 0 ? "bg-zinc-200" : "bg-muted"
+                              }`}
                             >
                               {entry.image_url ? (
                                 <img
@@ -384,7 +390,9 @@ Example Output:
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Target className="h-4 w-4" />
-                          <span className="font-medium">Level {entry.level}</span>
+                          <span className="font-medium">
+                            Level {entry.level}
+                          </span>
                         </div>
                       </div>
                     ))}

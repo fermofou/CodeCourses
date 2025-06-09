@@ -87,7 +87,7 @@ export function ChallengeDescription({
                       </div>
                       {leaderboard === null ? (
                         <div className="p-3 text-sm text-muted-foreground">
-                          Loading...
+                          Be first to answer!
                         </div>
                       ) : leaderboard.length === 0 ? (
                         <div className="p-3 text-sm text-muted-foreground">
