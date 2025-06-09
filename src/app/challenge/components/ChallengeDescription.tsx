@@ -1,6 +1,21 @@
-import { Brain, Trophy } from "lucide-react";
+import { Brain, Trophy, BarChart } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Challenge } from "../types";
+import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+
+interface LeaderboardEntry {
+  user_name: string;
+  time: number;
+}
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface ChallengeDescriptionProps {
   challenge: Challenge | null;
@@ -18,6 +33,21 @@ export function ChallengeDescription({
   if (!challenge) {
     return <div className="p-6">No se encontró el desafío</div>;
   }
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[] | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (challenge?.id) {
+      fetch(`/api/getLeaderboardProblem?problemId=${challenge.id}`)
+        .then((res) => res.json())
+        .then((data) => setLeaderboard(data))
+        .catch((err) => {
+          console.error("Failed to fetch leaderboard", err);
+          setLeaderboard([]);
+        });
+    }
+  }, [challenge?.id]);
 
   return (
     <>
@@ -31,7 +61,57 @@ export function ChallengeDescription({
       <div className="p-6 overflow-y-auto">
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">{challenge.title}</h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-bold">{challenge.title}</h1>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1.5"
+                  >
+                    <BarChart className="h-4 w-4" />
+                    Standings
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Challenge Standings</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="rounded-md border">
+                      <div className="grid grid-cols-3 gap-4 p-3 font-medium text-sm bg-muted/50">
+                        <div>Rank</div>
+                        <div>User</div>
+                        <div>Time</div>
+                      </div>
+                      {leaderboard === null ? (
+                        <div className="p-3 text-sm text-muted-foreground">
+                          Loading...
+                        </div>
+                      ) : leaderboard.length === 0 ? (
+                        <div className="p-3 text-sm text-muted-foreground">
+                          No entries yet.
+                        </div>
+                      ) : (
+                        leaderboard.map((entry, i) => (
+                          <div
+                            key={i}
+                            className="grid grid-cols-3 gap-4 p-3 border-t text-sm"
+                          >
+                            <div className="font-medium">#{i + 1}</div>
+                            <div>{entry.user_name}</div>
+                            <div className="text-green-600 font-mono">
+                              {(entry.time / 1000).toFixed(3)}s
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
             <div className="flex items-center gap-4 mt-2">
               <span
                 className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full ${
