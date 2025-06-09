@@ -21,6 +21,7 @@ interface UserProfileModalProps {
     points: number;
     mail: string;
     is_admin: boolean;
+    image_url: string;
   } | null;
 }
 
@@ -58,7 +59,7 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
       setLoading(true);
       try {
         console.log('Fetching badges for user:', user.id);
-        const response = await fetch(`http://localhost:8080/admin/user/${user.id}/badges`);
+        const response = await fetch(`http://142.93.10.227:8080/admin/user/${user.id}/badges`);
         if (!response.ok) throw new Error('Failed to fetch badges');
         const data = await response.json();
         console.log('Received badges data:', data);
@@ -97,7 +98,15 @@ const UserProfileModal = ({ isOpen, onClose, user }: UserProfileModalProps) => {
       <div className="p-4">
         <div className="flex items-center space-x-4 mb-6">
           <Avatar size={64} className="border border-gray-200">
-            {user.name.charAt(0)}
+            {user.image_url ? (
+              <img
+                src={user.image_url}
+                alt={`${user.name}'s profile`}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              user.name.charAt(0)
+            )}
           </Avatar>
           <div>
             <h2 className="text-2xl font-bold">{user.name}</h2>

@@ -15,9 +15,16 @@ import ReposPage from "./app/repos/repos";
 import AdminPage from "./app/admin/page";
 import Layout from "./app/layout";
 import SignUpPage from "./app/signup/page";
+import PrivacyPolicy from "./components/privacy";
+import { useUserData } from "./userData";
+import Terms from "./components/terms";
 
 function App() {
   const { isSignedIn, isLoaded } = useAuth();
+
+  const {
+    state: { userData, loading, error },
+  } = useUserData();
 
   // Show loading state while Clerk loads
   if (!isLoaded) {
@@ -69,18 +76,23 @@ function App() {
               )
             }
           />
-          <Route
-            path="/repos"
-            element={
-              !isSignedIn ? <Navigate to="/login" replace /> : <ReposPage />
-            }
-          />
+
           <Route
             path="/admin"
             element={
-              !isSignedIn ? <Navigate to="/login" replace /> : <AdminPage />
+              !isSignedIn ? (
+                <Navigate to="/login" replace />
+              ) : loading ? (
+                <div>Loading...</div>
+              ) : !userData?.admin ? (
+                <Navigate to="/" replace />
+              ) : (
+                <AdminPage />
+              )
             }
           />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
         </Routes>
       </Layout>
     </Router>

@@ -91,16 +91,16 @@ export default function MyPurchases() {
           {purchases.map((purchase) => (
             <div
               key={purchase.id}
-              className="rounded-lg border p-4 bg-white shadow-sm"
+              className="rounded-lg border p-4 bg-white dark:bg-gray-800 shadow-sm dark:border-gray-700"
             >
               <img
                 src={`assets/${purchase.reward_id}.jpg`}
                 alt={purchase.name}
                 className="w-full h-48 object-cover rounded-md mb-3"
               />
-              <h3 className="font-medium mb-2">{purchase.name}</h3>
+              <h3 className="font-medium mb-2 dark:text-white">{purchase.name}</h3>
 
-              <p className="text-sm text-gray-500 mb-2">
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
                 Purchased:{" "}
                 {new Date(purchase.timestamp).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -113,10 +113,10 @@ export default function MyPurchases() {
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     purchase.status === "completed"
-                      ? "bg-green-100 text-green-800"
+                      ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
                       : purchase.status === "pending"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-gray-100 text-gray-800"
+                      ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
                   }`}
                 >
                   {purchase.status}

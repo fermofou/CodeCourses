@@ -47,7 +47,7 @@ const fetchSonarQubeMetrics = async (projectKey: string) => {
 
     // Transform the measures array into an object for easier access
     const metrics = {};
-    data.component.measures.forEach((measure : any) => {
+    data.component.measures.forEach((measure: any) => {
       metrics[measure.metric] = measure.value;
     });
 
@@ -129,9 +129,9 @@ const SonarQubeSetupModal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-card rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-4 text-card-foreground">
           Setup SonarQube for {repository.name}
         </h2>
 
@@ -140,21 +140,19 @@ const SonarQubeSetupModal: React.FC<ModalProps> = ({
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    currentStep === step
-                      ? "bg-blue-500 text-white"
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === step
+                      ? "bg-primary text-primary-foreground"
                       : currentStep > step
-                      ? "bg-green-500 text-white"
-                      : "bg-gray-200"
-                  }`}
+                        ? "bg-green-500 text-white"
+                        : "bg-muted text-muted-foreground"
+                    }`}
                 >
                   {currentStep > step ? "✓" : step}
                 </div>
                 {step < 3 && (
                   <div
-                    className={`h-1 w-12 ${
-                      currentStep > step ? "bg-green-500" : "bg-gray-200"
-                    }`}
+                    className={`h-1 w-12 ${currentStep > step ? "bg-green-500" : "bg-muted"
+                      }`}
                   ></div>
                 )}
               </div>
@@ -301,9 +299,8 @@ const SonarQubeSetupModal: React.FC<ModalProps> = ({
             <button
               onClick={handleComplete}
               disabled={loading}
-              className={`px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+              className={`px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 ${loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
             >
               {loading ? "Completing..." : "Complete Setup"}
             </button>
@@ -341,7 +338,7 @@ const SonarMetricsModal: React.FC<SonarMetricsModalProps> = ({
   };
 
   // Helper function to determine metric status color
-  const getMetricColor = (metric : any, value : any) => {
+  const getMetricColor = (metric: any, value: any) => {
     const numValue = parseFloat(value);
     switch (metric) {
       case "bugs":
@@ -350,35 +347,35 @@ const SonarMetricsModal: React.FC<SonarMetricsModalProps> = ({
         return numValue === 0
           ? "text-green-600"
           : numValue < 5
-          ? "text-yellow-600"
-          : "text-red-600";
+            ? "text-yellow-600"
+            : "text-red-600";
       case "coverage":
         return numValue > 80
           ? "text-green-600"
           : numValue > 60
-          ? "text-yellow-600"
-          : "text-red-600";
+            ? "text-yellow-600"
+            : "text-red-600";
       case "duplicated_lines_density":
         return numValue < 3
           ? "text-green-600"
           : numValue < 10
-          ? "text-yellow-600"
-          : "text-red-600";
+            ? "text-yellow-600"
+            : "text-red-600";
       default:
         return "text-gray-700";
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg p-6 max-w-2xl w-full">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      <div className="bg-card rounded-lg p-6 max-w-2xl w-full">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">
+          <h2 className="text-2xl font-bold text-card-foreground">
             SonarQube Analysis: {repository.name}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-muted-foreground hover:text-foreground"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -467,9 +464,8 @@ const SonarMetricsModal: React.FC<SonarMetricsModalProps> = ({
               <button
                 onClick={handleRunScan}
                 disabled={loading}
-                className={`flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 w-full h-full ${
-                  loading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`flex items-center justify-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 w-full h-full ${loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
               >
                 <RefreshCw className="h-5 w-5 mr-2" />
                 {loading ? "Scanning..." : "Re-run Scan"}

@@ -51,7 +51,7 @@ export default function RewardsPage() {
       <div className="flex flex-1">
         {/* Sidebar: hidden on mobile unless toggled */}
         <div
-          className={`fixed z-40 md:static md:block transition-transform duration-200 bg-white border-r w-64 p-4 ${
+          className={`fixed z-40 md:static md:block transition-transform duration-200 bg-card border-r w-64 p-4 ${
             showSidebar ? "block" : "hidden"
           } md:translate-x-0`}
         >
@@ -65,7 +65,7 @@ export default function RewardsPage() {
         </div>
 
         {/* Main content */}
-        <main className="flex-1">{renderContent()}</main>
+        <main className="flex-1 bg-background">{renderContent()}</main>
       </div>
     </div>
   );

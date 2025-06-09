@@ -18,17 +18,17 @@ export function AnimatedCounter({ value, className = "" }: CounterProps) {
 
   return (
     <div
-      className={`inline-flex bg-[#FDFBF7] rounded-lg p-2 shadow-inner overflow-hidden ${className}`}
+      className={`inline-flex bg-card rounded-lg p-2 shadow-inner overflow-hidden ${className}`}
       style={{
         boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)',
-        border: '1px solid rgba(0,0,0,0.1)',
+        border: '1px solid var(--border)',
       }}
     >
       {places.map((place, i) => (
         <React.Fragment key={i}>
           <Digit place={place} value={value} />
           {i < places.length - 1 && i % 3 === 2 && (
-            <span className="mx-1 self-center font-mono text-black">,</span>
+            <span className="mx-1 self-center font-mono text-foreground">,</span>
           )}
         </React.Fragment>
       ))}
@@ -52,7 +52,7 @@ function Digit({ place, value }: { place: number; value: number }) {
   return (
     <div
       style={{ height }}
-      className="relative w-[1ch] font-mono tabular-nums bg-[#FDFBF7] text-black overflow-hidden"
+      className="relative w-[1ch] font-mono tabular-nums bg-background text-foreground overflow-hidden"
     >
       {[...Array(10).keys()].map((i) => (
         <Number key={i} mv={animatedValue} number={i} />
@@ -77,7 +77,7 @@ function Number({ mv, number }: { mv: MotionValue; number: number }) {
   return (
     <motion.span
       style={{ y }}
-      className="absolute inset-0 flex items-center justify-center font-mono text-black"
+      className="absolute inset-0 flex items-center justify-center font-mono text-foreground"
     >
       {number}
     </motion.span>

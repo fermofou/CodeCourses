@@ -54,8 +54,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/rewards/, "/rewards"),
       },
       "api/challenge": {
-        target: "http://142.93.10.227:8080",
+        target: "http://localhost:8080",
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/challenge/, "/challenge"),
       },
       "/api/badges": {
         target: "http://142.93.10.227:8080",
@@ -66,6 +67,15 @@ export default defineConfig({
         target: "http://142.93.10.227:8080",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/admin\/users/, "/admin/users"),
+      },
+      "/api/getLeaderboardProblem": {
+        target: "http://142.93.10.227:8080",
+        changeOrigin: true,
+        rewrite: (path) =>
+          path.replace(
+            /^\/api\/getLeaderboardProblem/,
+            "/getLeaderboardProblem"
+          ),
       },
       "/api/admin/users/:id": {
         target: "http://142.93.10.227:8080",

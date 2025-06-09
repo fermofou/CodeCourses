@@ -3,8 +3,9 @@ import { SignedIn, UserButton, SignedOut } from "@clerk/clerk-react";
 import { Coins, Trophy, PlayCircle, CheckCircle2, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useContext, useState, useRef, useEffect } from "react";
-import { ChallengeContext } from "@/app/challenge/page";
+import { ChallengeContext } from "@/app/challenge/context/ChallengeContext";
 import { useUserData } from "../userData";
+import { ThemeToggle } from "./theme-toggle";
 
 const Navbar = () => {
   const location = useLocation();
@@ -34,9 +35,9 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <Link
             to="/"
-            className="flex items-center space-x-2 text-black transition-colors hover:text-primary"
+            className="flex items-center space-x-2 text-foreground transition-colors hover:text-primary"
           >
-            <div className="flex items-center justify-center w-8 h-8 border border-black rounded-md">
+            <div className="flex items-center justify-center w-8 h-8 border border-foreground rounded-md">
               <div className="flex items-center">
                 <span className="text-[#6D6C71] text-lg font-bold leading-none">
                   T
@@ -85,26 +86,26 @@ const Navbar = () => {
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <Link
               to="/challenges"
-              className="text-black transition-colors hover:text-primary"
+              className="text-foreground transition-colors hover:text-primary"
             >
               Programming Challenges
             </Link>
             <Link
               to="/leaderboard"
-              className="text-black transition-colors hover:text-primary"
+              className="text-foreground transition-colors hover:text-primary"
             >
               Leaderboard
             </Link>
             <Link
               to="/rewards"
-              className="text-black transition-colors hover:text-primary"
+              className="text-foreground transition-colors hover:text-primary"
             >
               Rewards
             </Link>
             {userData?.admin && (
               <Link
                 to="/admin"
-                className="text-black transition-colors hover:text-primary"
+                className="text-foreground transition-colors hover:text-primary"
               >
                 Admin
               </Link>
@@ -113,6 +114,7 @@ const Navbar = () => {
         )}
         {/* Updated Auth Section */}
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <SignedOut>
             <Button
               variant="outline"
