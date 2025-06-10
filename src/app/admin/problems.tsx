@@ -27,7 +27,9 @@ interface ProblemData {
   question: string;
   testCases?: [
     {
-  testCases?: { expectedOutput: string; input: string; }[];
+      testCases?: { expectedOutput: string; input: string; }[];
+    }
+   ]
 }
 
 const Problems = () => {

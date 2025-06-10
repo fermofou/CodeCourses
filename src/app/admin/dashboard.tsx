@@ -59,71 +59,12 @@ const AdminDashboard = () => {
             />
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={20} sm={12} lg={6}>
           <Card>
             <Statistic
               title="Average level"
               value={stats.averageLevel}
               prefix={<Target className="w-4 h-4" />}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} lg={6}>
-          <Card>
-            <Statistic
-              title="Active sessions"
-              value={stats.activeSessions}
-              prefix={<Activity className="w-4 h-4" />}
-            />
-          </Card>
-        </Col>
-      </Row>
-
-      <Row gutter={[16, 16]} className="mb-6">
-        <Col xs={24} lg={12}>
-          <Card title="Recent activity">
-            <List
-              dataSource={[
-                {
-                  icon: <Trophy className="w-4 h-4 text-blue-600" />,
-                  title: "New Badge",
-                  desc: "Roger achieved 'Problem Solver'",
-                  time: "3 days ago",
-                },
-                {
-                  icon: <Target className="w-4 h-4 text-green-600" />,
-                  title: "Level up",
-                  desc: "Imanol reached level 25",
-                  time: "4 days ago",
-                },
-              ]}
-              renderItem={(item) => (
-                <List.Item className="hover:bg-gray-50 rounded p-2 flex justify-between items-center">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-100 flex items-center justify-center rounded-full">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <p className="font-medium">{item.title}</p>
-                      <p className="text-sm text-gray-500">{item.desc}</p>
-                    </div>
-                  </div>
-                  <span className="text-sm text-gray-500">{item.time}</span>
-                </List.Item>
-              )}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} lg={12}>
-          <Card title="New users">
-            <List
-              dataSource={stats.newUsers || []}
-              renderItem={(user) => (
-                <List.Item>
-                  <Users className="mr-2 text-indigo-600" />
-                  <span className="font-medium">{user.name}</span> — {user.date}
-                </List.Item>
-              )}
             />
           </Card>
         </Col>
