@@ -27,14 +27,11 @@ interface ProblemData {
   question: string;
   testCases?: [
     {
-      expectedOutput: string;
-      input: string;
-    }
-  ];
+  testCases?: { expectedOutput: string; input: string; }[];
 }
 
 const Problems = () => {
-  const [problemsData, setProblemsData] = useState(undefined);
+  const [problemsData, setProblemsData] = useState<ApiProblemType[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -57,10 +54,9 @@ const Problems = () => {
   const [refetch, setRefetch] = useState(false);
   const [deletingID, setDeletingID] = useState<number | null>(null);
   const [zipFile, setZipFile] = useState<File | null>(null);
-  const [searchText, setSearchText] = useState(""); // New state for search
+  const [searchText, setSearchText] = useState("");
   const { isLoaded, user } = useUser();
 
-  // New states for AI improvement confirmation
   const [isAiModalVisible, setIsAiModalVisible] = useState(false);
   const [aiGeneratedText, setAiGeneratedText] = useState("");
   const [originalText, setOriginalText] = useState("");
@@ -83,30 +79,30 @@ const Problems = () => {
       const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
       const prompt = `
-        Eres un generador de problemas de programación contextualizados. Vas a recibir un problema clásico de programación (como búsqueda en matrices, árboles, grafos, dynamic programming, etc.), pero en vez de presentarlo con elementos genéricos, lo transformarás para que esté ambientado en Tech Mahindra.
+        You are a generator of contextualized programming problems. You will receive a classic programming problem (like searching in matrices, trees, graphs, dynamic programming, etc.), but instead of presenting it with generic elements, you will transform it to be set in Tech Mahindra.
 
-        ### 💼 *Tu tarea es:*
+        ### 💼 *Your task is to:*
 
-        1.⁠ ⁠*Identificar los elementos clave del problema original*:
+        1.⁠ ⁠*Identify the key elements of the original problem*:
 
-          * Entidades (islas, nodos, personas, etc.)
-          * Relaciones o interacciones (conexiones, caminos, vecinos, etc.)
-          * Recursos (agua, caminos, tiempo, etc.)
-          * Objetivo (contar, optimizar, buscar, etc.)
+          * Entities (islands, nodes, people, etc.)
+          * Relationships or interactions (connections, paths, neighbors, etc.)
+          * Resources (water, roads, time, etc.)
+          * Objective (count, optimize, search, etc.)
 
-        2.⁠ ⁠*Reemplazar esos elementos por equivalentes dentro del contexto de Tech Mahindra*:
+        2.⁠ ⁠*Replace these elements with equivalents within the Tech Mahindra context*:
 
-          * Islas → Edificios de Tech Mahindra
-          * Agua → Áreas de trabajo, empleados, o zonas de descanso
-          * Personas → CEO, directivos, developers de Tech Mahindra
-          * Árboles → Jerarquías de proyectos o equipos
-          * Grafos → Redes internas, infraestructura de IT
-          * Caminos → Flujos de procesos en proyectos de clientes
-          * Recursos → Tiempo, presupuesto, servidores, etc.
+          * Islands → Tech Mahindra Buildings
+          * Water → Work areas, employees, or break zones
+          * People → CEO, executives, Tech Mahindra developers
+          * Trees → Project or team hierarchies
+          * Graphs → Internal networks, IT infrastructure
+          * Paths → Process flows in client projects
+          * Resources → Time, budget, servers, etc.
 
-        3.⁠ ⁠*Redactar el problema reimaginando el escenario como si fuera un reto real de la empresa Tech Mahindra*, manteniendo la esencia lógica intacta.
+        3.⁠ ⁠*Write the problem re-imagining the scenario as if it were a real challenge for Tech Mahindra*, keeping the logical essence intact.
 
-        El problema original es el siguiente, responde solo con el enunciado reescrito, sin explicaciones adicionales:
+        The original problem is as follows, respond only with the rewritten statement, without additional explanations:
         """${statement}"""
       `;
 
@@ -127,14 +123,11 @@ const Problems = () => {
     setIsGeneratingAi(true);
 
     try {
-      // Save the original text
       setOriginalText(challengeData.question);
 
-      // Get the AI-generated text
       const rewritten = await rewriteStatement(challengeData.question);
       setAiGeneratedText(rewritten);
 
-      // Show the confirmation modal
       setIsAiModalVisible(true);
     } catch (error) {
       console.error("Error generating AI text:", error);
@@ -143,7 +136,6 @@ const Problems = () => {
     }
   };
 
-  // Function to accept AI changes
   const handleAcceptAiChanges = () => {
     setChallengeData((prev) => ({
       ...prev,
@@ -152,7 +144,6 @@ const Problems = () => {
     setIsAiModalVisible(false);
   };
 
-  // Function to decline AI changes
   const handleDeclineAiChanges = () => {
     setIsAiModalVisible(false);
   };
@@ -160,17 +151,17 @@ const Problems = () => {
   useEffect(() => {
     setLoading(true);
     if (userId) {
-      //chat aqui no dejen localhost (IMANOL!)
       fetch(`http://142.93.10.227:8080/problems?userId=${userId}`)
         .then((response) => response.json())
         .then((data: ApiProblemType[]) => {
-          // Map the API data to match our table structure
-          const formattedProblems = data.map((problem) => {
+          const formattedProblems = data.map((problem: ApiProblemType) => {
             return {
+              problem_id: problem.problem_id,
               key: problem.problem_id,
               title: problem.title,
               difficulty: problem.difficulty,
-              tags: problem.tags || ["coding"], // Default tag if not provided
+              solved: problem.solved,
+              tags: problem.tags || ["coding"],
               question: problem.question,
             };
           });
@@ -214,7 +205,7 @@ const Problems = () => {
     setIsDeleting(false);
     setLoadingProblem(true);
     setIsModalVisible(true);
-    await fetchProblem(record.key);
+    await fetchProblem(record.problem_id);
     setLoadingProblem(false);
   };
 
@@ -222,7 +213,7 @@ const Problems = () => {
     setIsEditing(false);
     setIsDeleting(true);
     setLoadingProblem(false);
-    setDeletingID(record.key);
+    setDeletingID(record.problem_id);
     setIsModalVisible(true);
   };
 
@@ -297,7 +288,7 @@ const Problems = () => {
 
       setProblemsData((prevData) =>
         prevData.map((problem) =>
-          problem.key === challengeData.problem_id
+          problem.problem_id === challengeData.problem_id
             ? {
                 ...problem,
                 title: challengeData.title,
@@ -482,7 +473,7 @@ const Problems = () => {
     handleClose();
   };
 
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<ApiProblemType> = [
     {
       title: "Title",
       dataIndex: "title",
@@ -495,7 +486,7 @@ const Problems = () => {
       key: "difficulty",
       width: "20%",
       render: (difficulty: number) => {
-        const stars = {
+        const stars: { [key: number]: string } = {
           1: "★☆☆☆☆",
           2: "★★☆☆☆",
           3: "★★★☆☆",
@@ -509,7 +500,7 @@ const Problems = () => {
       title: <div className="text-center w-full">Action</div>,
       key: "action",
       width: "15%",
-      align: "right", // Esto es para el contenido de las celdas, no afecta el título
+      align: "right",
       render: (_: any, record: any) => (
         <div className="flex justify-center gap-3">
           <Button
@@ -517,17 +508,13 @@ const Problems = () => {
             onClick={() => {
               showEditModal(record);
             }}
-          >
-            Edit
-          </Button>
+          >Edit</Button>
           <Button
             danger
             onClick={() => {
               showDeleteModal(record);
             }}
-          >
-            Delete
-          </Button>
+          >Delete</Button>
         </div>
       ),
     },
@@ -546,22 +533,21 @@ const Problems = () => {
             placeholder="Search problems..."
             style={{ width: 250 }}
             allowClear
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchText(e.target.value)}
           />
         </div>
         <Button
           type="primary"
           icon={<PlusOutlined />}
           onClick={showAddModal}
-          label="Add Problem"
-        />
+        >Add Problem</Button>
       </div>
       <Table
         columns={columns}
         dataSource={problemsData?.filter(
-          (problem) =>
+          (problem: ApiProblemType) =>
             problem.title.toLowerCase().includes(searchText.toLowerCase()) ||
-            problem.tags.some((tag) =>
+            problem.tags?.some((tag: string) =>
               tag.toLowerCase().includes(searchText.toLowerCase())
             )
         )}
@@ -597,7 +583,7 @@ const Problems = () => {
               Title
               <Input
                 value={challengeData.title}
-                onChange={(e: any) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setChallengeData({ ...challengeData, title: e.target.value });
                 }}
                 placeholder="Problem title"
@@ -615,7 +601,7 @@ const Problems = () => {
               <Select
                 placeholder="Select difficulty"
                 value={challengeData.difficulty}
-                onChange={(value) => {
+                onChange={(value: number) => {
                   setChallengeData({ ...challengeData, difficulty: value });
                 }}
                 options={[
@@ -638,7 +624,7 @@ const Problems = () => {
               Description
               <Input.TextArea
                 value={challengeData.question}
-                onChange={(e: any) => {
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                   setChallengeData({
                     ...challengeData,
                     question: e.target.value,
@@ -660,10 +646,7 @@ const Problems = () => {
                 onClick={handleRewrite}
                 loading={isGeneratingAi}
                 style={{ marginBottom: "1rem", width: "fit-content" }}
-              >
-                <FaWandMagicSparkles className="mr-2" />
-                Enhance with AI
-              </Button>
+              ><FaWandMagicSparkles className="mr-2" />Enhance with AI</Button>
             </div>
             <div>
               {(challengeData?.testCases || []).map((testCase, index) => (
@@ -681,7 +664,7 @@ const Problems = () => {
                       rows={2}
                       placeholder="Test input"
                       value={testCase.input}
-                      onChange={(e: any) => {
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                         const updatedTestCases = [
                           ...(challengeData?.testCases || []),
                         ];
@@ -710,7 +693,7 @@ const Problems = () => {
                       rows={2}
                       placeholder="Expected output"
                       value={testCase.expectedOutput}
-                      onChange={(e: any) => {
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                         const updatedTestCases = [
                           ...(challengeData?.testCases || []),
                         ];
@@ -738,9 +721,7 @@ const Problems = () => {
                         testCases: updatedTestCases,
                       });
                     }}
-                  >
-                    Delete Test Case
-                  </Button>
+                  >Delete Test Case</Button>
                 </div>
               ))}
               <Button
@@ -757,9 +738,7 @@ const Problems = () => {
                   });
                 }}
                 block
-              >
-                Add Test Case
-              </Button>
+              >Add Test Case</Button>
             </div>
             {!isEditing && (
               <>
@@ -790,7 +769,6 @@ const Problems = () => {
         )}
       </Modal>
 
-      {/* AI Improvement Confirmation Modal */}
       <Modal
         title="AI Improvement Suggestion"
         visible={isAiModalVisible}
