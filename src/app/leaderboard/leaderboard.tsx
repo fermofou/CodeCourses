@@ -136,7 +136,7 @@ const Leaderboard = () => {
                   >
                     {top3[1].name}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{top3[1].points} pts</p>
+                  
                 </div>
                 <div className="w-28 h-28 bg-gray-300 dark:bg-gray-700 rounded-t-lg flex items-center justify-center mt-2">
                   <span className="text-4xl font-bold text-white">2</span>
@@ -171,7 +171,7 @@ const Leaderboard = () => {
                   >
                     {top3[0].name}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{top3[0].points} pts</p>
+                  
                 </div>
                 <div className="w-32 h-36 bg-yellow-400 rounded-t-lg flex items-center justify-center mt-2">
                   <span className="text-5xl font-bold text-white">1</span>
@@ -205,7 +205,7 @@ const Leaderboard = () => {
                   >
                     {top3[2].name}
                   </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{top3[2].points} pts</p>
+                  
                 </div>
                 <div className="w-28 h-28 bg-amber-700 rounded-t-lg flex items-center justify-center mt-2">
                   <span className="text-4xl font-bold text-white">3</span>
