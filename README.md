@@ -11,9 +11,8 @@
   - [HU-003 - Filtrar Problemas](#hu-003---filtrar-problemas)
   - [HU-004 - Ver Detalles del Problema](#hu-004---ver-detalles-del-problema)
   - [HU-005 - Escribir y Ejecutar Código](#hu-005---escribir-y-ejecutar-código)
-  - [HU-006 - Evaluación de Calidad](#hu-006---evaluación-de-calidad)
-  - [HU-007 - Sistema de Recompensas](#hu-007---sistema-de-recompensas)
-  - [HU-008 - Dashboard de Avances](#hu-008---dashboard-de-avances)
+  - [HU-006 - Sistema de Recompensas](#hu-006---sistema-de-recompensas)
+  - [HU-007 - Dashboard de Avances](#hu-007---dashboard-de-avances)
 
 ---
 
@@ -135,18 +134,10 @@
 - Botón “Ejecutar” que envía a Judge0.
 - Resultados mostrados en la interfaz.
 
----
-
-### HU-006 - Evaluación de Calidad
-**Descripción:** Como usuario, quiero que mi código sea analizado por estándares de calidad.  
-**Criterios de Aceptación:**
-- Código evaluado por SonarQube.
-- Mensajes con recomendaciones si hay errores.
-- Mensaje “completo” si cumple estándares.
 
 ---
 
-### HU-007 - Sistema de Recompensas
+### HU-006 - Sistema de Recompensas
 **Descripción:** Como usuario, quiero recibir XP y puntos  al resolver problemas.  
 **Criterios de Aceptación:**
 - Código válido actualiza puntos para tienda.
@@ -156,7 +147,7 @@
 
 ---
 
-### HU-008 - Dashboard de Avances
+### HU-007 - Dashboard de Avances
 **Descripción:** Como usuario, quiero ver mi avance y el de mis compañeros.  
 **Criterios de Aceptación:**
 - Ver porcentaje de aceptación, problemas resueltos y promedio de equipo.
