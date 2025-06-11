@@ -204,8 +204,7 @@ Esta sección describe la arquitectura de alto nivel de la solución, incluyendo
   Se encarga de autenticación de usuarios.
 * `Github`
   Se encarga de manejo de versiones de código.
----
-
+  
 ---
 
 ## Diagrama de arquitectura
