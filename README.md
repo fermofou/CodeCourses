@@ -46,7 +46,7 @@
 ### Validación y Evaluación de Envíos
 
 #### Editor de Código
-- Uso de componentes como Ace, CodeMirror o integración directa con Judge0.
+- Integración con imagenes de Docker que puedan ejecutar el código en los lenguajes disponibles.
 - Permite escribir, editar y enviar código.
 
 #### Integración con Judge0
