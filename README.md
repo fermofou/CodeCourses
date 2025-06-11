@@ -1,24 +1,32 @@
 # Front-End: Tech Mahindra
 
 ## Link actualizado: http://142.93.10.227:5173/
+
 ## 📑 Índice
 
-- [Requerimientos Funcionales](#requerimientos-funcionales)
-- [Requerimientos No Funcionales](#requerimientos-no-funcionales)
-- [Historias de Usuario](#historias-de-usuario)
-  - [HU-001 - Login de Usuario](#hu-001---login-de-usuario)
-  - [HU-002 - Resolver Problemas de Programación](#hu-002---resolver-problemas-de-programación)
-  - [HU-003 - Filtrar Problemas](#hu-003---filtrar-problemas)
-  - [HU-004 - Ver Detalles del Problema](#hu-004---ver-detalles-del-problema)
-  - [HU-005 - Escribir y Ejecutar Código](#hu-005---escribir-y-ejecutar-código)
-  - [HU-006 - Sistema de Recompensas](#hu-006---sistema-de-recompensas)
-  - [HU-007 - Dashboard de Avances](#hu-007---dashboard-de-avances)
-- [Diagrama de arquitectura](#diagrama-de-arquitectura)
+* [Requerimientos Funcionales](#requerimientos-funcionales)
+* [Requerimientos No Funcionales](#requerimientos-no-funcionales)
+* [Historias de Usuario](#historias-de-usuario)
+
+  * [HU-001 - Login de Usuario](#hu-001---login-de-usuario)
+  * [HU-002 - Resolver Problemas de Programación](#hu-002---resolver-problemas-de-programación)
+  * [HU-003 - Filtrar Problemas](#hu-003---filtrar-problemas)
+  * [HU-004 - Ver Detalles del Problema](#hu-004---ver-detalles-del-problema)
+  * [HU-005 - Escribir y Ejecutar Código](#hu-005---escribir-y-ejecutar-código)
+  * [HU-006 - Sistema de Recompensas](#hu-006---sistema-de-recompensas)
+  * [HU-007 - Dashboard de Avances](#hu-007---dashboard-de-avances)
+* [Arquitectura del Proyecto](#arquitectura-del-proyecto)
+
+  * [Componentes Internos (Clasificados por Capa)](#componentes-internos-clasificados-por-capa)
+
+    * [UI (Interfaz de Usuario)](#1-ui-interfaz-de-usuario)
+    * [Capa de Integración / Servicios](#2-capa-de-integración--servicios)
+    * [Almacenamiento / Persistencia](#3-almacenamiento--persistencia)
+  * [Componentes Externos](#componentes-externos)
+  * [Diagrama de arquitectura](#diagrama-de-arquitectura)
+  * [Tecnologías por Componente (Detalle)](#tecnologías-por-componente-detalle)
 
 ---
-
-
-
 ## Requerimientos Funcionales
 
 ### Gestión de Problemas
@@ -156,9 +164,68 @@
 
 ---
 
+## Arquitectura del Proyecto
+
+Esta sección describe la arquitectura de alto nivel de la solución, incluyendo los componentes internos y externos utilizados, clasificados por capa de aplicación. También se presenta un desglose tecnológico por componente.
+
+---
+
+###  Componentes Internos (Clasificados por Capa)
+
+#### 1. UI (Interfaz de Usuario)
+
+* `Frontend Web (React + Tailwind)`
+  Aplicación web que permite a los usuarios interactuar con el sistema.
+
+#### 2. Capa de Integración / Servicios
+* `API Backend (Go)`
+  Maneja el enrutamiento de solicitudes entre el frontend, la base de datos, y el worker de ejecución de código.
+* `Servicio de ejecución de código (Go + Docker)`
+  Ejecuta código en contenedores seguros por lenguaje.
+* `Servicio de autenticación centralizado (Clerk)`
+  Maneja autenticación y autorización en todos los módulos.
+
+#### 3. Almacenamiento / Persistencia
+
+*  `Base de datos de resultados (PostgreSQL)`
+  Guarda datos de usuario, tienda, resultados de las ejecuciones y datos de los desafíos.
+*  `Redis`
+  Utilizado para colas de ejecución y almacenamiento temporal de trabajos.
+
+---
+
+###  Componentes Externos
+
+* `Docker Hub / Imagenes Docker`
+  Repositorio de imágenes para los contenedores que ejecutan el código.
+* `SonarQube`
+  Analiza la calidad del código fuente del frontend y backend.
+* `Clerk`
+  Se encarga de autenticación de usuarios.
+* `Github`
+  Se encarga de manejo de versiones de código.
+---
+
+---
+
 ## Diagrama de arquitectura
 
 ![Captura de pantalla 2025-06-11 124142](https://github.com/user-attachments/assets/96980e10-7ecb-4683-a019-67c9c034dc5d)
+
+---
+
+###  Tecnologías por Componente (Detalle)
+
+| Componente                    | Tecnología / Lenguaje    |
+| ----------------------------- | ------------------------ |
+| Frontend Web                  | React, TailwindCSS       |
+| API Backend                   | Go                       |
+| Servicio de ejecución         | Go, Docker               |
+| Contenedores de ejecución     | Python, Node.js, C++, C# |
+| Base de datos                 | PostgreSQL               |
+| Cola de trabajos              | Redis                    |
+| Calidad de código             | SonarQube                |
+| Autenticación                 | Clerk                    |
 
 
 
