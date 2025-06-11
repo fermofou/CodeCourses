@@ -13,6 +13,7 @@
   - [HU-005 - Escribir y Ejecutar Código](#hu-005---escribir-y-ejecutar-código)
   - [HU-006 - Sistema de Recompensas](#hu-006---sistema-de-recompensas)
   - [HU-007 - Dashboard de Avances](#hu-007---dashboard-de-avances)
+- [Diagrama de arquitectura](#diagrama-de-arquitectura)
 
 ---
 
@@ -154,4 +155,10 @@
 - Acceder a información de otros usuarios.
 
 ---
+
+## Diagrama de arquitectura
+
+![Captura de pantalla 2025-06-11 124142](https://github.com/user-attachments/assets/96980e10-7ecb-4683-a019-67c9c034dc5d)
+
+
 
