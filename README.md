@@ -111,7 +111,7 @@ psswrd: admin_cc10!
 - Permitir uso de cuenta Google para mayor velocidad.
 - Mensaje de error si son incorrectos o inválidos.
 
-**Caso de uso**
+---
 
 ### HU-002 - Resolver Problemas de Programación
 **Descripción:** Como usuario, quiero poder acceder a los problemas de programación para resolverlos.  
@@ -121,8 +121,7 @@ psswrd: admin_cc10!
 - Seleccionar problema a resolver.
 - Obtener XP y puntos en caso de responder correctamente.
 
-**Caso de uso**
-
+---
 
 ### HU-003 - Filtrar Problemas
 **Descripción:** Como usuario, quiero filtrar problemas por dificultad y etiquetas.  
@@ -130,7 +129,6 @@ psswrd: admin_cc10!
 - Opciones de filtro visibles.
 - Lista actualizada automáticamente.
 - Posibilidad de quitar filtros.
-**Caso de uso**
 ---
 
 ### HU-004 - Ver Detalles del Problema
@@ -139,7 +137,6 @@ psswrd: admin_cc10!
 - Página con descripción al hacer clic.
 - Mostrar dificultad, etiquetas y link original.
 - Botón para regresar.
-**Caso de uso**
 
 ---
 
@@ -147,9 +144,8 @@ psswrd: admin_cc10!
 **Descripción:** Como usuario, quiero escribir y ejecutar mi código para comprobar si funciona.  
 **Criterios de Aceptación:**
 - Editor integrado.
-- Botón “Ejecutar” que envía a Judge0.
+- Botón “Ejecutar” que envía a contenedor en VM.
 - Resultados mostrados en la interfaz.
-**Caso de uso**
 
 
 ---
@@ -161,7 +157,6 @@ psswrd: admin_cc10!
 - Notificación de éxito.
 - Actualización en perfil.
 - Solo puede comprar usuario si alcanza por puntos y quedan productos disponibles.
-**Caso de uso**
 
 ---
 
@@ -170,32 +165,28 @@ psswrd: admin_cc10!
 **Criterios de Aceptación:**
 - Ver porcentaje de aceptación, problemas resueltos y promedio de equipo.
 - Acceder a información de otros usuarios.
-**Caso de uso**
 
 ---
 
 
-
-
-
-### 🌐 Conexión Frontend y Backend
+###  Conexión Frontend y Backend
 
 - Comunicación entre el **frontend (React)** y el **backend (Go)** se hizo a través de peticiones `REST`.
 - El frontend consume rutas para:
   - Login y autenticación
   - Envío y validación de código
   - Registro de avances y estadísticas
-
+  - Compras de recompensas
 ---
 
-### 🗄️ Persistencia con PostgreSQL (ORM)
+###  Persistencia con PostgreSQL (ORM)
 
 - La API en Go utiliza tipos pre-definidos para mapear estructuras en Go a tablas SQL.
 - El backend se conecta correctamente a PostgreSQL mediante configuración segura con stores procedures.
 
 ---
 
-### 📌 Conclusiones
+###  Conclusiones
 
 - El equipo aplicó buenas prácticas en formato, estructura, organización y modularidad.
 - Aunque no se usó Next.js directamente, se respetaron sus principios estructurales.
