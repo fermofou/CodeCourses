@@ -28,8 +28,7 @@ psswrd: admin_cc10!
   * [Componentes Externos](#componentes-externos)
   * [Diagrama de arquitectura](#diagrama-de-arquitectura)
   * [Tecnologías por Componente (Detalle)](#tecnologías-por-componente-detalle)
-  * [Desarrollo M3, M4 y Reto - Buenas Prácticas](#desarrollo-m3-m4-y-reto---buenas-prácticas)
-  * [📸 Evidencia - Daily Meetings y Pruebas](#evidencia---daily-meetings-y-pruebas)
+
 
   
 ---
@@ -103,7 +102,7 @@ psswrd: admin_cc10!
 
 ---
 
-## Historias de Usuario
+## Historias de Usuario con Caso de uso
 
 ### HU-001 - Login de Usuario
 **Descripción:** Como usuario y trabajador de la empresa, quiero poder ingresar a la plataforma.  
@@ -112,7 +111,7 @@ psswrd: admin_cc10!
 - Permitir uso de cuenta Google para mayor velocidad.
 - Mensaje de error si son incorrectos o inválidos.
 
----
+**Caso de uso**
 
 ### HU-002 - Resolver Problemas de Programación
 **Descripción:** Como usuario, quiero poder acceder a los problemas de programación para resolverlos.  
@@ -122,7 +121,8 @@ psswrd: admin_cc10!
 - Seleccionar problema a resolver.
 - Obtener XP y puntos en caso de responder correctamente.
 
----
+**Caso de uso**
+
 
 ### HU-003 - Filtrar Problemas
 **Descripción:** Como usuario, quiero filtrar problemas por dificultad y etiquetas.  
@@ -130,7 +130,7 @@ psswrd: admin_cc10!
 - Opciones de filtro visibles.
 - Lista actualizada automáticamente.
 - Posibilidad de quitar filtros.
-
+**Caso de uso**
 ---
 
 ### HU-004 - Ver Detalles del Problema
@@ -139,6 +139,7 @@ psswrd: admin_cc10!
 - Página con descripción al hacer clic.
 - Mostrar dificultad, etiquetas y link original.
 - Botón para regresar.
+**Caso de uso**
 
 ---
 
@@ -148,6 +149,7 @@ psswrd: admin_cc10!
 - Editor integrado.
 - Botón “Ejecutar” que envía a Judge0.
 - Resultados mostrados en la interfaz.
+**Caso de uso**
 
 
 ---
@@ -159,6 +161,7 @@ psswrd: admin_cc10!
 - Notificación de éxito.
 - Actualización en perfil.
 - Solo puede comprar usuario si alcanza por puntos y quedan productos disponibles.
+**Caso de uso**
 
 ---
 
@@ -167,105 +170,10 @@ psswrd: admin_cc10!
 **Criterios de Aceptación:**
 - Ver porcentaje de aceptación, problemas resueltos y promedio de equipo.
 - Acceder a información de otros usuarios.
+**Caso de uso**
 
 ---
 
-## Arquitectura del Proyecto
-
-Esta sección describe la arquitectura de alto nivel de la solución, incluyendo los componentes internos y externos utilizados, clasificados por capa de aplicación. También se presenta un desglose tecnológico por componente.
-
----
-
-###  Componentes Internos (Clasificados por Capa)
-
-#### 1. UI (Interfaz de Usuario)
-
-* `Frontend Web (React + Tailwind)`
-  Aplicación web que permite a los usuarios interactuar con el sistema.
-
-#### 2. Capa de Integración / Servicios
-* `API Backend (Go)`
-  Maneja el enrutamiento de solicitudes entre el frontend, la base de datos, y el worker de ejecución de código.
-* `Servicio de ejecución de código (Go + Docker)`
-  Ejecuta código en contenedores seguros por lenguaje.
-* `Servicio de autenticación centralizado (Clerk)`
-  Maneja autenticación y autorización en todos los módulos.
-
-#### 3. Almacenamiento / Persistencia
-
-*  `Base de datos de resultados (PostgreSQL)`
-  Guarda datos de usuario, tienda, resultados de las ejecuciones y datos de los desafíos.
-*  `Redis`
-  Utilizado para colas de ejecución y almacenamiento temporal de trabajos.
-
----
-
-###  Componentes Externos
-
-* `Docker Hub / Imagenes Docker`
-  Repositorio de imágenes para los contenedores que ejecutan el código.
-* `SonarQube`
-  Analiza la calidad del código fuente del frontend y backend.
-* `Clerk`
-  Se encarga de autenticación de usuarios.
-* `Github`
-  Se encarga de manejo de versiones de código.
-  
----
-
-## Diagrama de arquitectura
-
-![Captura de pantalla 2025-06-11 124142](https://github.com/user-attachments/assets/96980e10-7ecb-4683-a019-67c9c034dc5d)
-
----
-
-###  Tecnologías por Componente (Detalle)
-
-| Componente                    | Tecnología / Lenguaje    |
-| ----------------------------- | ------------------------ |
-| Frontend Web                  | React, TailwindCSS       |
-| API Backend                   | Go                       |
-| Servicio de ejecución         | Go, Docker               |
-| Contenedores de ejecución     | Python, Node.js, C++, C# |
-| Base de datos                 | PostgreSQL               |
-| Cola de trabajos              | Redis                    |
-| Calidad de código             | SonarQube                |
-| Autenticación                 | Clerk                    |
-
-## 🛠️ Desarrollo M3, M4 y Reto – Buenas Prácticas y Herramientas de Código
-
-Durante el desarrollo del proyecto se implementaron diversas herramientas, convenciones y estructuras para asegurar calidad en el código, coherencia entre componentes y facilidad de mantenimiento.
-
-### ✅ Herramientas de Calidad
-
-#### 🧼 Prettier
-- Se utilizó la extensión de **Prettier** en todos los entornos locales de desarrollo.
-- Se encargó del **formateo automático del código** siguiendo convenciones consistentes: indentación, uso de comillas, punto y coma, y orden en las propiedades de los objetos.
-
-#### 🔎 SonarQube
-- Integrado como herramienta de análisis estático de código.
-- Se ejecutaron escaneos para:
-  - Detectar código duplicado.
-  - Promover el uso de buenas prácticas.
-  - Identificar posibles vulnerabilidades o malas implementaciones.
-- Se resolvieron advertencias relacionadas con la legibilidad, estructura y calidad general del código.
-
-### 🧱 Estructura del Proyecto
-
-Aunque no se utilizó **Next.js**, se siguieron convenciones inspiradas en sus buenas prácticas:
-
-/src
-/pages           → Vistas principales del sistema
-/components      → Componentes reutilizables
-/hooks           → Lógica de React personalizada
-/utils           → Funciones auxiliares y helpers
-/services        → Funciones de conexión con la API
-/styles          → Archivos de estilos globales o específicos
-
-
-- **Props claras y tipadas**
-- **Componentes puros y desacoplados**
-- Separación de lógica visual, lógica de estado y lógica de conexión
 
 
 
