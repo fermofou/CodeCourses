@@ -1,6 +1,6 @@
 import path from "path";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [react()],
@@ -9,6 +9,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./src/test-setup.ts"], // optional: if you want global test setup
+    globals: true, // optional: allows using describe, it, expect globally
+  },
+
   server: {
     host: "0.0.0.0",
     port: 5173,
