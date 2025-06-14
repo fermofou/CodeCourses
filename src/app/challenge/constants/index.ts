@@ -24,11 +24,14 @@ def solution(input):
     
     return result`,
   cpp: `// Write your solution here
-string solution(string input) {
-    // Your code here
-    
-    return result;
-}`,
+#include <iostream>
+using namespace std;
+int main(){
+  std::cout << "Hello, World!" << std::endl;
+  return 0;
+}
+
+  `,
   csharp: `using System;
 
 class Program
