@@ -3,15 +3,27 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import "@testing-library/jest-dom";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 // Adjust the import path as needed; for example, if 'leaderboard' is in 'src/app/leaderboard' relative to the project root:
-import Leaderboard from "../src/app/leaderboard/leaderboard";
+import Leaderboard from "../../src/app/leaderboard/leaderboard";
 
 // Mock useUser para simular usuario logueado
 vi.mock("@clerk/clerk-react", () => ({
   useUser: () => ({ user: { fullName: "Test User", id: "user-1" } }),
 }));
 
-vi.mock("@/components/UserProfileModal", () => ({
-  default: () => <div>UserProfileModal</div>,
+// Mocks básicos para evitar errores durante render
+vi.mock("@clerk/clerk-react", () => ({
+  useUser: () => ({ user: { id: "user-123" } }),
+  ClerkProvider: ({
+    children,
+    routerPush = () => {},
+    routerReplace = () => {},
+    ...rest
+  }: {
+    children: React.ReactNode;
+    routerPush?: (...args: any[]) => void;
+    routerReplace?: (...args: any[]) => void;
+    [key: string]: any;
+  }) => <div>{children}</div>,
 }));
 
 // Mock fetch global para leaderboard API

@@ -3,24 +3,19 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-import Rewards from "../src/app/rewards/rewards";
+import Rewards from "../../src/app/rewards/rewards";
 
-import { UserDataProvider } from "../src/userData"; // asegúrate de que este path sea correcto
+import { UserDataProvider } from "../../src/userData"; // asegúrate de que este path sea correcto
 
 // Mocks básicos para evitar errores durante render
+// Mock completo de Clerk
 vi.mock("@clerk/clerk-react", () => ({
-  useUser: () => ({ user: { id: "user-123" } }),
-  ClerkProvider: ({
-    children,
-    routerPush = () => {},
-    routerReplace = () => {},
-    ...rest
-  }: {
-    children: React.ReactNode;
-    routerPush?: (...args: any[]) => void;
-    routerReplace?: (...args: any[]) => void;
-    [key: string]: any;
-  }) => <div>{children}</div>,
+  useUser: () => ({ isLoaded: true, user: { id: "123" } }),
+  ClerkProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  SignedIn: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  SignedOut: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 function customRender(ui: React.ReactElement) {
