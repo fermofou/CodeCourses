@@ -1,24 +1,27 @@
 # Front-End: Tech Mahindra
 
 ## Link actualizado: http://142.93.10.227:5173/
+#### Cuenta normal: 
+Pueden crear una, solo den sign in con Google.
+#### Cuenta admin:
+email: a01284623@tec.mx
+
+psswrd: admin_cc10!
+
 ## 📑 Índice
 
-- [Requerimientos Funcionales](#requerimientos-funcionales)
-- [Requerimientos No Funcionales](#requerimientos-no-funcionales)
-- [Historias de Usuario](#historias-de-usuario)
-  - [HU-001 - Login de Usuario](#hu-001---login-de-usuario)
-  - [HU-002 - Resolver Problemas de Programación](#hu-002---resolver-problemas-de-programación)
-  - [HU-003 - Filtrar Problemas](#hu-003---filtrar-problemas)
-  - [HU-004 - Ver Detalles del Problema](#hu-004---ver-detalles-del-problema)
-  - [HU-005 - Escribir y Ejecutar Código](#hu-005---escribir-y-ejecutar-código)
-  - [HU-006 - Evaluación de Calidad](#hu-006---evaluación-de-calidad)
-  - [HU-007 - Sistema de Recompensas](#hu-007---sistema-de-recompensas)
-  - [HU-008 - Dashboard de Avances](#hu-008---dashboard-de-avances)
+* [Requerimientos Funcionales](#requerimientos-funcionales)
+* [Requerimientos No Funcionales](#requerimientos-no-funcionales)
+* [Historias de Usuario](#historias-de-usuario)
+  * [HU-001 - Login de Usuario](#hu-001---login-de-usuario)
+  * [HU-002 - Resolver Problemas de Programación](#hu-002---resolver-problemas-de-programación)
+  * [HU-003 - Filtrar Problemas](#hu-003---filtrar-problemas)
+  * [HU-004 - Ver Detalles del Problema](#hu-004---ver-detalles-del-problema)
+  * [HU-005 - Escribir y Ejecutar Código](#hu-005---escribir-y-ejecutar-código)
+  * [HU-006 - Sistema de Recompensas](#hu-006---sistema-de-recompensas)
+  * [HU-007 - Dashboard de Avances](#hu-007---dashboard-de-avances)
 
 ---
-
-
-
 ## Requerimientos Funcionales
 
 ### Gestión de Problemas
@@ -46,7 +49,7 @@
 ### Validación y Evaluación de Envíos
 
 #### Editor de Código
-- Uso de componentes como Ace, CodeMirror o integración directa con Judge0.
+- Integración con imagenes de Docker que puedan ejecutar el código en los lenguajes disponibles.
 - Permite escribir, editar y enviar código.
 
 #### Integración con Judge0
@@ -89,7 +92,7 @@
 
 ---
 
-## Historias de Usuario
+## Historias de Usuario con Caso de uso
 
 ### HU-001 - Login de Usuario
 **Descripción:** Como usuario y trabajador de la empresa, quiero poder ingresar a la plataforma.  
@@ -116,7 +119,6 @@
 - Opciones de filtro visibles.
 - Lista actualizada automáticamente.
 - Posibilidad de quitar filtros.
-
 ---
 
 ### HU-004 - Ver Detalles del Problema
@@ -132,21 +134,13 @@
 **Descripción:** Como usuario, quiero escribir y ejecutar mi código para comprobar si funciona.  
 **Criterios de Aceptación:**
 - Editor integrado.
-- Botón “Ejecutar” que envía a Judge0.
+- Botón “Ejecutar” que envía a contenedor en VM.
 - Resultados mostrados en la interfaz.
 
----
-
-### HU-006 - Evaluación de Calidad
-**Descripción:** Como usuario, quiero que mi código sea analizado por estándares de calidad.  
-**Criterios de Aceptación:**
-- Código evaluado por SonarQube.
-- Mensajes con recomendaciones si hay errores.
-- Mensaje “completo” si cumple estándares.
 
 ---
 
-### HU-007 - Sistema de Recompensas
+### HU-006 - Sistema de Recompensas
 **Descripción:** Como usuario, quiero recibir XP y puntos  al resolver problemas.  
 **Criterios de Aceptación:**
 - Código válido actualiza puntos para tienda.
@@ -156,11 +150,10 @@
 
 ---
 
-### HU-008 - Dashboard de Avances
+### HU-007 - Dashboard de Avances
 **Descripción:** Como usuario, quiero ver mi avance y el de mis compañeros.  
 **Criterios de Aceptación:**
 - Ver porcentaje de aceptación, problemas resueltos y promedio de equipo.
 - Acceder a información de otros usuarios.
 
----
 
