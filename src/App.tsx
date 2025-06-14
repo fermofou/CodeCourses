@@ -11,7 +11,6 @@ import ChallengePage from "./app/challenge/page";
 import ChallengesPage from "./app/challenges/page";
 import RewardsPage from "./app/rewards/page";
 import LeaderboardPage from "./app/leaderboard/page";
-import ReposPage from "./app/repos/repos";
 import AdminPage from "./app/admin/page";
 import Layout from "./app/layout";
 import SignUpPage from "./app/signup/page";
