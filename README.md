@@ -3,7 +3,6 @@
 ## Currently not hosted
 
 ## Cool short demo:
-https://youtu.be/
 [![Watch the demo](https://img.youtube.com/vi/jgEOpzIEV1I/hqdefault.jpg)](https://www.youtube.com/watch?v=jgEOpzIEV1I)
 
 
