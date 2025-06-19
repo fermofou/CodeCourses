@@ -1,6 +1,6 @@
 # Front-End: Code Courses
 
-## Link actualizado: http://142.93.10.227:5173/
+## Currently not hosted/
 #### Cuenta normal: 
 Pueden crear una, solo den sign in con Google.
 #### Cuenta admin:
