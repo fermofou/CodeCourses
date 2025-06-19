@@ -1,12 +1,6 @@
 # Front-End: Code Courses
 
 ## Currently not hosted/
-#### Cuenta normal: 
-Pueden crear una, solo den sign in con Google.
-#### Cuenta admin:
-email: a01284623@tec.mx
-
-psswrd: admin_cc10!
 
 ## 📑 Índice
 
