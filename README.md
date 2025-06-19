@@ -1,4 +1,4 @@
-# Front-End: Tech Mahindra
+# Front-End: Code Courses
 
 ## Link actualizado: http://142.93.10.227:5173/
 #### Cuenta normal: 
