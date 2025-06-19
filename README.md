@@ -2,11 +2,6 @@
 
 ## Currently not hosted
 
-## Cool short demo:
-[![Watch the demo](https://img.youtube.com/vi/jgEOpzIEV1I/hqdefault.jpg)](https://www.youtube.com/watch?v=jgEOpzIEV1I)
-
-
-
 ## Full demo:
 [![Watch the demo](https://img.youtube.com/vi/v5wk9jZ-Slo/hqdefault.jpg)](https://www.youtube.com/watch?v=v5wk9jZ-Slo)
 
