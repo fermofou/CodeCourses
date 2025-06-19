@@ -1,6 +1,6 @@
 # Front-End: Code Courses
 
-## Currently not hosted/
+## Currently not hosted
 
 ## 📑 Índice
 
